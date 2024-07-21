@@ -2,6 +2,7 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import CompilerPluginSupport
 
 let package = Package(
     name: "SmartWorkSchedular",
@@ -11,6 +12,9 @@ let package = Package(
         .library(name: "SmartWorkSchedular", targets: ["SmartWorkSchedular"]),
         .library(name: "SharedUIs", targets: ["SharedUIs"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
+    ],
     targets: [
         .target(
             name: "SmartWorkSchedular"
@@ -18,9 +22,17 @@ let package = Package(
         .target(
             name: "SharedUIs",
             dependencies: [
+                "AppMacros",
             ],
             resources: [
                 .process("Resources"),
+            ]
+        ),
+        .macro(
+            name: "AppMacros",
+            dependencies: [
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ]
         ),
         .testTarget(
