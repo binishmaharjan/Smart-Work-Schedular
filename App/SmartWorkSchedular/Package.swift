@@ -5,6 +5,8 @@ import PackageDescription
 
 let package = Package(
     name: "SmartWorkSchedular",
+    defaultLocalization: "en",
+    platforms: [.iOS(.v17), .macOS(.v12)],
     products: [
         .library(
             name: "SmartWorkSchedular",
