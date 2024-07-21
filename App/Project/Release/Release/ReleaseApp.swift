@@ -2,6 +2,7 @@ import SwiftUI
 import SmartWorkSchedular
 
 @main
-struct ReleaseApp: SmartWorkSchedular.App {
+struct DevelopmentApp: SmartWorkSchedular.App {
     @UIApplicationDelegateAdaptor var appDelegate: AppDelegate
 }
+
