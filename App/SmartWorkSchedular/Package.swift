@@ -11,13 +11,17 @@ let package = Package(
     products: [
         .library(name: "SmartWorkSchedular", targets: ["SmartWorkSchedular"]),
         .library(name: "SharedUIs", targets: ["SharedUIs"]),
+        .library(name: "AppFeature", targets: ["AppFeature"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
     ],
     targets: [
         .target(
-            name: "SmartWorkSchedular"
+            name: "SmartWorkSchedular",
+            dependencies: [
+                "AppFeature",
+            ]
         ),
         .target(
             name: "SharedUIs",
@@ -26,6 +30,12 @@ let package = Package(
             ],
             resources: [
                 .process("Resources"),
+            ]
+        ),
+        .target(
+            name: "AppFeature",
+            dependencies: [
+                "SharedUIs",
             ]
         ),
         .macro(

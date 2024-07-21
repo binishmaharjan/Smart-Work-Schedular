@@ -1,4 +1,5 @@
 import SwiftUI
+import AppFeature
 
 public protocol App: SwiftUI.App {
     var appDelegate: AppDelegate { get }
@@ -7,7 +8,7 @@ public protocol App: SwiftUI.App {
 extension App {
     public var body: some Scene {
         WindowGroup {
-            Text("Hello World From Smart Work Schedular")
+            RootView()
         }
     }
 }
