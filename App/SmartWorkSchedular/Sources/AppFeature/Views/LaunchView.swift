@@ -10,6 +10,9 @@ public struct LaunchView: View {
     
     public var body: some View {
         Text("Launch View")
+            .onAppear {
+                store.send(.onAppear)
+            }
     }
 }
 

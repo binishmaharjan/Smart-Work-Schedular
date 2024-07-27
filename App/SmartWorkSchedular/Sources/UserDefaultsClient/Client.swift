@@ -4,6 +4,7 @@ import Dependencies
 public struct UserDefaultsClient {
     /// Get is tutorial complete
     public var isTutorialComplete: () -> Bool
+    /// Set isTutorialCompleted to true
     public var tutorialCompleted:  () -> Void
 }
 

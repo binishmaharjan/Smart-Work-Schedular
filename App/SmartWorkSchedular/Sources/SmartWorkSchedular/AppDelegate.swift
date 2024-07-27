@@ -16,7 +16,10 @@ public final class AppDelegate: NSObject, UIApplicationDelegate {
     }
     private(set) lazy var viewStore = ViewStore(store, observe: { $0 })
     
-    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    public func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
+    ) -> Bool {
         viewStore.send(.didFinishLaunching)
         
         return true
@@ -37,8 +40,15 @@ struct AppDelegateReducer {
     }
     
     var body: some ReducerOf<Self> {
-        Reduce<State, Action> { state, action in
-            return .none
+        Reduce { state, action in
+            switch action {
+            case .didFinishLaunching, .rootAction:
+                return .none
+            }
+        }
+
+        Scope(state: \.rootState, action: \.rootAction) {
+            Root()
         }
     }
 }

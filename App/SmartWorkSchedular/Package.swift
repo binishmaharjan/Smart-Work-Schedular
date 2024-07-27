@@ -46,6 +46,7 @@ let package = Package(
                 "SharedUIs",
                 "TutorialFeature",
                 "MainTabFeature",
+                "UserDefaultsClient",
             ]
         ),
         .target(

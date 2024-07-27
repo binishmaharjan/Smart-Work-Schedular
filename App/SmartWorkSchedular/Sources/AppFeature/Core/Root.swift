@@ -33,9 +33,18 @@ public struct Root {
             case .onAppear:
                 return .none
                 
+            case .destination(.presented(.launch(.delegate(.showTutorial)))):
+                state.destination = .tutorial(.init())
+                return .none
+                
+            case .destination(.presented(.launch(.delegate(.showMainTab)))):
+                state.destination = .mainTab(.init())
+                return .none
+                
             case .destination:
                 return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
     }
 }

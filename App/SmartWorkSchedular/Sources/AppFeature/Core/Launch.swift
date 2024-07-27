@@ -1,5 +1,6 @@
 import Foundation
 import ComposableArchitecture
+import UserDefaultsClient
 
 @Reducer
 public struct Launch {
@@ -22,12 +23,18 @@ public struct Launch {
     
     public init() { }
     
+    @Dependency(\.userDefaultsClient) private var userDefaultsClient
+    
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
             case .onAppear:
-                // Check if first launch
-                return .none
+                let isTutorialComplete = userDefaultsClient.isTutorialComplete()
+                if isTutorialComplete {
+                    return .send(.delegate(.showMainTab))
+                } else {
+                    return .send(.delegate(.showTutorial))
+                }
                 
             case .delegate:
                 return .none
