@@ -18,6 +18,7 @@ let package = Package(
         .library(name: "TemplatesFeature", targets: ["TemplatesFeature"]),
         .library(name: "EarningsFeature", targets: ["EarningsFeature"]),
         .library(name: "UserDefaultsClient", targets: ["UserDefaultsClient"]),
+        .library(name: "LoggerClient", targets: ["LoggerClient"]),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.12.1"),
@@ -47,6 +48,7 @@ let package = Package(
                 "TutorialFeature",
                 "MainTabFeature",
                 "UserDefaultsClient",
+                "LoggerClient",
             ]
         ),
         .target(
@@ -89,6 +91,12 @@ let package = Package(
         ),
         .target(
             name: "UserDefaultsClient",
+            dependencies: [
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "LoggerClient",
             dependencies: [
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]

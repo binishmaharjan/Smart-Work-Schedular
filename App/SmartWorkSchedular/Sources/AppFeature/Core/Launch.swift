@@ -1,6 +1,7 @@
 import Foundation
 import ComposableArchitecture
 import UserDefaultsClient
+import LoggerClient
 
 @Reducer
 public struct Launch {
@@ -24,11 +25,13 @@ public struct Launch {
     public init() { }
     
     @Dependency(\.userDefaultsClient) private var userDefaultsClient
+    @Dependency(\.loggerClient) private var logger
     
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
             case .onAppear:
+                logger.debug(.init("onAppear"))
                 let isTutorialComplete = userDefaultsClient.isTutorialComplete()
                 if isTutorialComplete {
                     return .send(.delegate(.showMainTab))
