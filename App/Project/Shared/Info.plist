@@ -16,7 +16,7 @@
 		<string>ja</string>
 	</array>
 	<key>CFBundleName</key>
-	<string>Test</string>
+	<string>Smart Schedular</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
