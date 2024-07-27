@@ -17,6 +17,7 @@ let package = Package(
         .library(name: "ScheduleFeature", targets: ["ScheduleFeature"]),
         .library(name: "TemplatesFeature", targets: ["TemplatesFeature"]),
         .library(name: "EarningsFeature", targets: ["EarningsFeature"]),
+        .library(name: "UserDefaultsClient", targets: ["UserDefaultsClient"]),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.12.1"),
@@ -82,6 +83,12 @@ let package = Package(
             name: "EarningsFeature",
             dependencies: [
                 "SharedUIs",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "UserDefaultsClient",
+            dependencies: [
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
