@@ -29,6 +29,7 @@ let package = Package(
             name: "SmartWorkSchedular",
             dependencies: [
                 "AppFeature",
+                "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -58,6 +59,7 @@ let package = Package(
                 "ScheduleFeature",
                 "TemplatesFeature",
                 "EarningsFeature",
+                "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -65,6 +67,7 @@ let package = Package(
             name: "TutorialFeature",
             dependencies: [
                 "SharedUIs",
+                "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -72,6 +75,7 @@ let package = Package(
             name: "ScheduleFeature",
             dependencies: [
                 "SharedUIs",
+                "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -79,6 +83,7 @@ let package = Package(
             name: "TemplatesFeature",
             dependencies: [
                 "SharedUIs",
+                "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -86,6 +91,7 @@ let package = Package(
             name: "EarningsFeature",
             dependencies: [
                 "SharedUIs",
+                "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),

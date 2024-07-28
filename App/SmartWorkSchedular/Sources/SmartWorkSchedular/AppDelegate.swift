@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 import ComposableArchitecture
 import AppFeature
+import LoggerClient
 
 public final class AppDelegate: NSObject, UIApplicationDelegate {
     private var _store: StoreOf<AppDelegateReducer>?
@@ -39,10 +40,17 @@ struct AppDelegateReducer {
         case rootAction(Root.Action)
     }
     
+    @Dependency(\.loggerClient) private var logger
+    
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .didFinishLaunching, .rootAction:
+            case .didFinishLaunching:
+                logger.debug("didFinishLaunching")
+                
+                return .none
+                
+            case .rootAction:
                 return .none
             }
         }

@@ -31,7 +31,8 @@ public struct Launch {
         Reduce<State, Action> { state, action in
             switch action {
             case .onAppear:
-                logger.debug(.init("onAppear"))
+                logger.debug("onAppear")
+                
                 let isTutorialComplete = userDefaultsClient.isTutorialComplete()
                 if isTutorialComplete {
                     return .send(.delegate(.showMainTab))

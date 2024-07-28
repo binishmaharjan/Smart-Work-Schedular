@@ -31,6 +31,9 @@ public struct RootView: View {
                 }
             }
         }
+        .onAppear {
+            store.send(.onAppear)
+        }
     }
 }
 
