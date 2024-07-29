@@ -46,6 +46,9 @@ struct AppDelegateReducer {
         Reduce { state, action in
             switch action {
             case .didFinishLaunching:
+                // Logging
+                logger.setLogEnabled(true)
+                logger.setLogLevel(.debug)
                 logger.debug("didFinishLaunching")
                 
                 return .none

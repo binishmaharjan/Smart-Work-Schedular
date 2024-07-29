@@ -7,10 +7,23 @@ public struct LoggerClient {
     public var info: (LoggerParameter) -> Void
     public var warning: (LoggerParameter) -> Void
     public var error: (LoggerParameter) -> Void
+    
+    internal static var isLogEnabled = false
+    internal static var logLevel: LogLevel = .error
 }
 
 // MARK: Helpers (Creating methods for passing #file and #line)
 extension LoggerClient {
+    /// If Disabled, will not be printed
+    public func setLogEnabled(_ isEnabled: Bool) {
+        Self.isLogEnabled = isEnabled
+    }
+    
+    ///Log with the smaller level will be ignored and not printed
+    public func setLogLevel(_ logLevel: LogLevel) {
+        Self.logLevel = logLevel
+    }
+    
     /// Print debug log
     public func debug(file: String = #file, line: Int = #line, _ message: String) {
         let parameters = LoggerParameter(file: file, line: line, message)
