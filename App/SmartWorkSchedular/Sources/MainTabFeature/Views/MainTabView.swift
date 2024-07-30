@@ -1,9 +1,9 @@
 import SwiftUI
 import ComposableArchitecture
+import SharedUIs
 import ScheduleFeature
 import TemplatesFeature
 import EarningsFeature
-import SharedUIs
 
 public struct MainTabView: View {
     public init(store: StoreOf<MainTab>) {
@@ -13,7 +13,7 @@ public struct MainTabView: View {
     @Bindable private var store: StoreOf<MainTab>
     
     public var body: some View {
-        TabView(selection: $store.state.selectedtab) {
+        TabView(selection: $store.selectedTab) {
             ScheduleView(store: store.scope(state: \.schedule, action: \.schedule))
                 .tag(Tab.schedule)
                 .tabItem {
