@@ -3,6 +3,7 @@ import UIKit
 import ComposableArchitecture
 import AppFeature
 import LoggerClient
+import SharedUIs
 
 public final class AppDelegate: NSObject, UIApplicationDelegate {
     private var _store: StoreOf<AppDelegateReducer>?
@@ -50,6 +51,9 @@ struct AppDelegateReducer {
                 logger.setLogEnabled(true)
                 logger.setLogLevel(.debug)
                 logger.debug("didFinishLaunching")
+                
+                // Fonts
+                CustomFontManager.registerFonts()
                 
                 return .none
                 

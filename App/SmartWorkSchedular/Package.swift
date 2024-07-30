@@ -30,6 +30,7 @@ let package = Package(
             dependencies: [
                 "AppFeature",
                 "LoggerClient",
+                "SharedUIs",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
