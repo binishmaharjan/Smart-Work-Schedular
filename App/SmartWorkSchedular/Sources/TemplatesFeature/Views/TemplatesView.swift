@@ -9,7 +9,7 @@ public struct TemplatesView: View {
     @Bindable private var store: StoreOf<Templates>
     
     public var body: some View {
-        Text("Hello World")
+        Text("Templates View")
     }
 }
 

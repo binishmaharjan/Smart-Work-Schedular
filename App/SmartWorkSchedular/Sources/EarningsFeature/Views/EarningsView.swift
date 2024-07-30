@@ -9,7 +9,7 @@ public struct EarningsView: View {
     @Bindable private var store: StoreOf<Earnings>
     
     public var body: some View {
-        Text("Hello World")
+        Text("Earnings View")
     }
 }
 

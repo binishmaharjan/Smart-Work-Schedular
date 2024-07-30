@@ -13,24 +13,23 @@ public struct MainTabView: View {
     @Bindable private var store: StoreOf<MainTab>
     
     public var body: some View {
-        TabView {
-            Text("View 1")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(#color("background"))
-                .font(.customTitle)
-                .foregroundColor(#color("text_color"))
+        TabView(selection: $store.state.selectedtab) {
+            ScheduleView(store: store.scope(state: \.schedule, action: \.schedule))
+                .tag(Tab.schedule)
                 .tabItem {
-                    Label("Schedule", systemImage: "calendar")
+                    Label(Tab.schedule.title, systemImage: Tab.schedule.icon)
                 }
-            Text("View 2")
-                .font(.title)
+            
+            TemplatesView(store: store.scope(state: \.templates, action: \.templates))
+                .tag(Tab.templates)
                 .tabItem {
-                    Label("Templates", systemImage: "list.star")
+                    Label(Tab.templates.title, systemImage: Tab.templates.icon)
                 }
-            Text("View 3")
-                .font(.title)
+            
+            EarningsView(store: store.scope(state: \.earnings, action: \.earnings))
+                .tag(Tab.earnings)
                 .tabItem {
-                    Label("Earnings", systemImage: "chart.bar.xaxis")
+                    Label(Tab.earnings.title, systemImage: Tab.earnings.icon)
                 }
         }
     }
