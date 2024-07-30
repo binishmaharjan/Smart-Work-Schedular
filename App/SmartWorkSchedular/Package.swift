@@ -38,6 +38,7 @@ let package = Package(
             name: "SharedUIs",
             dependencies: [
                 "AppMacros",
+                "LoggerClient",
             ],
             resources: [
                 .process("Resources"),

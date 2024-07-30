@@ -15,7 +15,10 @@ public struct MainTabView: View {
     public var body: some View {
         TabView {
             Text("View 1")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(#color("background"))
                 .font(.customTitle)
+                .foregroundColor(#color("text_color"))
                 .tabItem {
                     Label("Schedule", systemImage: "calendar")
                 }
@@ -33,11 +36,23 @@ public struct MainTabView: View {
     }
 }
 
-#Preview {
+#Preview("Light Mode") {
     MainTabView(
         store: .init(
             initialState: .init(),
             reducer: MainTab.init
         )
     )
+    .tint(#color("accent_color"))
+}
+
+#Preview("Dark Mode") {
+    MainTabView(
+        store: .init(
+            initialState: .init(),
+            reducer: MainTab.init
+        )
+    )
+    .tint(#color("accent_color"))
+    .preferredColorScheme(.dark)
 }
