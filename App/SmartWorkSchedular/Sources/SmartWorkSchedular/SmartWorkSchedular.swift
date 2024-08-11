@@ -8,7 +8,12 @@ public protocol App: SwiftUI.App {
 extension App {
     public var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(
+                store: appDelegate.store.scope(
+                    state: \.rootState,
+                    action: \.rootAction
+                )
+            )
         }
     }
 }
