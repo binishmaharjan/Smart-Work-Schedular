@@ -1,5 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
+import SharedUIs
 
 public struct EarningsView: View {
     public init(store: StoreOf<Earnings>) {
@@ -10,6 +11,10 @@ public struct EarningsView: View {
     
     public var body: some View {
         Text("Earnings View")
+            .font(.customTitle)
+            .foregroundStyle(#color("text_color"))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(#color("background"))
     }
 }
 
