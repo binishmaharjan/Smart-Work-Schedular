@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "August" : {
+
+    },
     "Earnings" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -34,6 +37,9 @@
           }
         }
       }
+    },
+    "My Work Schedule" : {
+
     },
     "Schedule" : {
       "extractionState" : "manual",
