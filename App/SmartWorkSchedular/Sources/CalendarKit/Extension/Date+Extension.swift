@@ -2,7 +2,7 @@ import Foundation
 
 var gegorianCalendar: Calendar = {
   var calendar = Calendar(identifier: .gregorian)
-    calendar.firstWeekday = 2
+    calendar.firstWeekday = 1
     return calendar
 }()
 

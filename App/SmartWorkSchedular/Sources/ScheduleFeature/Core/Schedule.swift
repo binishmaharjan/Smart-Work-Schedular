@@ -1,6 +1,6 @@
 import Foundation
 import ComposableArchitecture
-import CalendarFeature
+import CalendarKit
 
 @Reducer
 public struct Schedule {
