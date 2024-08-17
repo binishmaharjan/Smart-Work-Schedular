@@ -7,7 +7,7 @@ public struct NavigationItemStyle: ViewModifier {
             .frame(width: 36, height: 36)
             .foregroundColor(#color("text_color"))
             .background(#color("accent_color"))
-            .opacity(0.6)
+            .opacity(1)
             .cornerRadius(10)
     }
 }

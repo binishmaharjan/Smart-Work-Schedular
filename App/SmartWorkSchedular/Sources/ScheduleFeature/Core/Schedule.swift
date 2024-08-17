@@ -1,6 +1,7 @@
 import Foundation
 import ComposableArchitecture
 import CalendarKit
+import SharedUIs
 
 @Reducer
 public struct Schedule {
@@ -8,37 +9,58 @@ public struct Schedule {
     public struct State: Equatable {
         public init() { }
         
-        var selectedDay = Day(date: .now)
-        // Should Change to Identified Array
-        var week: IdentifiedArrayOf<Day> {
-            IdentifiedArray(uniqueElements: selectedDay.daysInWeek.days)
-        }
-        var month: IdentifiedArrayOf<Week> {
-            IdentifiedArray(uniqueElements: selectedDay.daysInMonth.weeks)
-        }
+        var focusDay = Day(date: .now)
+        var displayDays: IdentifiedArrayOf<Day> = []
+        @Shared(.displayMode) var _displayMode: Int = 0
+        var displayMode: DisplayMode { DisplayMode(rawValue: _displayMode) ?? .month }
+        @Shared(.startOfWeekday) var _startOfWeekday: Int = 0
+        var startOfWeekday: Weekday { Weekday(rawValue: _startOfWeekday) ?? .sunday }
     }
     
     public enum Action {
         case onAppear
+        case updateDisplayDates
         case previousButtonPressed
         case nextButtonPressed
+        case monthButtonPressed
+        case weekButtonPressed
+        case dayButtonPressed
     }
     
     public init() { }
+    
+    @Dependency(\.calendarKitClient) private var calendarKitClient
     
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
             case .onAppear:
+                return .send(.updateDisplayDates)
+                
+            case .updateDisplayDates:
+                let displayDays = calendarKitClient.displayDays(state.focusDay)
+                state.displayDays = .init(uniqueElements: displayDays)
                 return .none
                 
             case .previousButtonPressed:
-                state.selectedDay = state.selectedDay.previousMonthDay
-                return .none
+                state.focusDay = calendarKitClient.previousFocusDay(state.focusDay)
+                return .send(.updateDisplayDates)
                 
             case .nextButtonPressed:
-                state.selectedDay = state.selectedDay.nextMonthDay
-                return .none
+                state.focusDay = calendarKitClient.nextFocusDay(state.focusDay)
+                return .send(.updateDisplayDates)
+                
+            case .monthButtonPressed:
+                state._displayMode = 0
+                return .send(.updateDisplayDates)
+                
+            case .weekButtonPressed:
+                state._displayMode = 1
+                return .send(.updateDisplayDates)
+                
+            case .dayButtonPressed:
+                state._displayMode = 2
+                return .send(.updateDisplayDates)
             }
         }
     }

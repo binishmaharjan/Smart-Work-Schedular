@@ -57,7 +57,19 @@ extension CalendarKitClient {
     }
 }
 
-public enum DisplayMode: Int {
+@propertyWrapper
+public struct SharedDisplayMode: Equatable {
+    
+    public init() { }
+    
+    @Shared(.displayMode) private var _displayMode: Int = 0
+    public var wrappedValue: DisplayMode {
+        get { DisplayMode(rawValue: _displayMode)  ?? .month }
+        set { _displayMode = newValue.rawValue }
+    }
+}
+
+public enum DisplayMode: Int, CaseIterable {
     case month = 0
     case week = 1
     case day = 2

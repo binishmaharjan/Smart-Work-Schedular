@@ -11,7 +11,7 @@ public struct NavigationBar: View {
         ZStack {
             HStack(spacing: 8) {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("My Work Schedule")
+                    Text(title)
                         .font(.customSubheadline)
                         .foregroundStyle(#color("text_color"))
                     

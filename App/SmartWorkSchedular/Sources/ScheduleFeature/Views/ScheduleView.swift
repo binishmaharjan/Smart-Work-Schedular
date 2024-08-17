@@ -1,7 +1,7 @@
 import SwiftUI
 import ComposableArchitecture
 import SharedUIs
-import CalendarFeature
+import CalendarKit
 
 public struct ScheduleView: View {
     public init(store: StoreOf<Schedule>) {
@@ -26,20 +26,34 @@ public struct ScheduleView: View {
                 }
                 .buttonStyle(.borderedProminent)
             }
+            HStack() {
+                Button(#localized("月")) {
+                    store.send(.monthButtonPressed)
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button(#localized("週")) {
+                    store.send(.weekButtonPressed)
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button(#localized("日")) {
+                    store.send(.dayButtonPressed)
+                }
+                .buttonStyle(.borderedProminent)
+            }
             
             ScrollView {
-                ForEach(Array(store.month.enumerated()), id: \.element.id) { index, week in
-//                ForEach(store.month) { week in
-                    Text("Week: \(index + 1)")
-                    ForEach(week.days) { day in
-                        Text("\(day.formatted(.dateTest))")
-                    }
+                ForEach(store.displayDays) { day in
+                    Text("\(day.formatted(.dateTest))")
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
+        .padding(.top, 50)
         .background(#color("background"))
+        .overlay(NavigationBar(title: "My Work Schedule"))
         .onAppear { store.send(.onAppear) }
     }
 }
