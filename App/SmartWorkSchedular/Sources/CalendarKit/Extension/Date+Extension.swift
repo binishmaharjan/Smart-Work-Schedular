@@ -1,11 +1,5 @@
 import Foundation
 
-var gegorianCalendar: Calendar = {
-  var calendar = Calendar(identifier: .gregorian)
-    calendar.firstWeekday = 1
-    return calendar
-}()
-
 extension Date {
     /// Returns a start of date for self
     /// Note: Use this for proper date calculation

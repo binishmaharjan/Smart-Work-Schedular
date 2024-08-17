@@ -37,6 +37,16 @@ extension Day {
         date.isYesterDay
     }
     
+    // Returns next day
+    public var nextDay: Day {
+        Day(date: date.nextDate)
+    }
+    
+    // Returns previous day
+    public var previousDay: Day {
+        Day(date: date.previousDate)
+    }
+    
     /// Returns the date of same weekDate from next week
     public var nextWeekDay: Day {
         Day(date: date.nextWeeDate)
