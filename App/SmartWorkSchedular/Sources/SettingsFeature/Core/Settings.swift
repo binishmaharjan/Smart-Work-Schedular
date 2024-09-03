@@ -9,14 +9,21 @@ public struct Settings {
     }
     
     public enum Action {
-        
+        case closeButtonTapped
     }
     
     public init() { }
     
+    @Dependency(\.dismiss) private var dismiss
+    
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
-            return .none
+            switch action {
+            case .closeButtonTapped:
+                return .run { _ in
+                    await dismiss()
+                }
+            }
         }
     }
 }

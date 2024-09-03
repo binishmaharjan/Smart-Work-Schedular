@@ -10,6 +10,11 @@ public struct SettingsView: View {
     
     public var body: some View {
         Text("Settings View")
+        Button {
+            store.send(.closeButtonTapped)
+        } label: {
+            Text("Close")
+        }
     }
 }
 
