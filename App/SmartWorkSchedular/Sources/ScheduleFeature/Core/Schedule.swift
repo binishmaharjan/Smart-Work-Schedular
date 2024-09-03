@@ -17,7 +17,12 @@ public struct Schedule {
         public init() { }
         
         @Presents var destination: Destination.State?
-        var navigationBar: NavigationBar.State = NavigationBar.State(title: "My Work Schedule")
+        var navigationBar: NavigationBar.State = NavigationBar.State(
+            title: "My Work Schedule",
+            subTitle: "September", // TODO:
+            firstTrailingItem: "plus",
+            secondTrailingItem: "line.3.horizontal"
+        )
         
         var focusDay = Day(date: .now)
         var displayDays: IdentifiedArrayOf<Day> = []

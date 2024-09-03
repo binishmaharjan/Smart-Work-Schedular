@@ -17,26 +17,30 @@ public struct NavigationBarView: View {
                         .font(.customSubheadline)
                         .foregroundStyle(#color("text_color"))
                     
-                    Text("August")
+                    Text(store.subTitle ?? "")
                         .font(.customHeadline)
                         .foregroundStyle(#color("accent_color"))
                 }
                 
                 Spacer()
 
-                Button {
-                    store.send(.firstTrailingItemTapped)
-                } label: {
-                    Image(systemName: "plus")
-                        .navigationItemStyle()
+                if let firstTrailingItem = store.firstTrailingItem {
+                    Button {
+                        store.send(.firstTrailingItemTapped)
+                    } label: {
+                        Image(systemName: firstTrailingItem)
+                            .navigationItemStyle()
                         
+                    }
                 }
                 
-                Button {
-                    store.send(.secondTrailingItemTapped)
-                } label: {
-                    Image(systemName: "line.3.horizontal")
-                        .navigationItemStyle()
+                if let secondTrailingItem = store.secondTrailingItem {
+                    Button {
+                        store.send(.secondTrailingItemTapped)
+                    } label: {
+                        Image(systemName: secondTrailingItem)
+                            .navigationItemStyle()
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

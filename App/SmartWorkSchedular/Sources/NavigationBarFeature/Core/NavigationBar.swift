@@ -5,11 +5,17 @@ import ComposableArchitecture
 public struct NavigationBar {
     @ObservableState
     public struct State: Equatable {
-        public init(title: String) {
+        public init(title: String, subTitle: String? = nil, firstTrailingItem: String? = nil, secondTrailingItem: String? = nil) {
             self.title = title
+            self.subTitle = subTitle
+            self.firstTrailingItem = firstTrailingItem
+            self.secondTrailingItem = secondTrailingItem
         }
         
         var title: String
+        var subTitle: String?
+        var firstTrailingItem: String?
+        var secondTrailingItem: String?
     }
     
     public enum Action {
