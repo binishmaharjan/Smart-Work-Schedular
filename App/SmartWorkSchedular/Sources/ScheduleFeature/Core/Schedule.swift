@@ -2,12 +2,16 @@ import Foundation
 import ComposableArchitecture
 import CalendarKit
 import SharedUIs
+import NavigationBarFeature
 
 @Reducer
 public struct Schedule {
     @ObservableState
     public struct State: Equatable {
         public init() { }
+        
+        @Presents var destination: Destination.State?
+        var navigationBar: NavigationBar.State = NavigationBar.State(title: "My Work Schedule")
         
         var focusDay = Day(date: .now)
         var displayDays: IdentifiedArrayOf<Day> = []
@@ -18,6 +22,7 @@ public struct Schedule {
     }
     
     public enum Action {
+        case navigationBar(NavigationBar.Action)
         case onAppear
         case updateDisplayDates
         case previousButtonPressed
@@ -61,7 +66,23 @@ public struct Schedule {
             case .dayButtonPressed:
                 state._displayMode = 2
                 return .send(.updateDisplayDates)
+                
+            case .navigationBar(.delegate(.executeFirstAction)):
+                print("First")
+                return .none
+                
+            case .navigationBar(.delegate(.executeSecondAction)):
+                print("Second")
+                state.destination = .settings(Settings.State())
+                return .none
+                
+            case .destination, .navigationBar:
+                return .none
             }
+        }
+        
+        Scope(state: \.navigationBar, action: \.navigationBar) {
+            NavigationBar()
         }
     }
 }

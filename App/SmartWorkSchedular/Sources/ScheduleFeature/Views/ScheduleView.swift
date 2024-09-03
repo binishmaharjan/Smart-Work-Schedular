@@ -2,6 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 import SharedUIs
 import CalendarKit
+import NavigationBarFeature
 
 public struct ScheduleView: View {
     public init(store: StoreOf<Schedule>) {
@@ -54,6 +55,7 @@ public struct ScheduleView: View {
         .padding(.top, 50)
         .background(#color("background"))
         .overlay(NavigationBar(title: "My Work Schedule"))
+        .overlay(navigationBar)
         .onAppear { store.send(.onAppear) }
     }
 }

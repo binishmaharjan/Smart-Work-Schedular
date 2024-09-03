@@ -17,6 +17,7 @@ let package = Package(
         .library(name: "ScheduleFeature", targets: ["ScheduleFeature"]),
         .library(name: "TemplatesFeature", targets: ["TemplatesFeature"]),
         .library(name: "EarningsFeature", targets: ["EarningsFeature"]),
+        .library(name: "NavigationBarFeature", targets: ["NavigationBarFeature"]),
         .library(name: "CalendarKit", targets: ["CalendarKit"]),
         .library(name: "UserDefaultsClient", targets: ["UserDefaultsClient"]),
         .library(name: "LoggerClient", targets: ["LoggerClient"]),
@@ -80,6 +81,7 @@ let package = Package(
                 "SharedUIs",
                 "CalendarKit",
                 "LoggerClient",
+                "NavigationBarFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -93,6 +95,14 @@ let package = Package(
         ),
         .target(
             name: "EarningsFeature",
+            dependencies: [
+                "SharedUIs",
+                "LoggerClient",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "NavigationBarFeature",
             dependencies: [
                 "SharedUIs",
                 "LoggerClient",
