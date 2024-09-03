@@ -2,10 +2,16 @@ import Foundation
 import ComposableArchitecture
 import CalendarKit
 import SharedUIs
+import SettingsFeature
 import NavigationBarFeature
 
 @Reducer
 public struct Schedule {
+    @Reducer(state: .equatable)
+    public enum Destination {
+        case settings(Settings)
+    }
+    
     @ObservableState
     public struct State: Equatable {
         public init() { }
@@ -22,7 +28,9 @@ public struct Schedule {
     }
     
     public enum Action {
+        case destination(PresentationAction<Destination.Action>)
         case navigationBar(NavigationBar.Action)
+        
         case onAppear
         case updateDisplayDates
         case previousButtonPressed
@@ -80,6 +88,7 @@ public struct Schedule {
                 return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
         
         Scope(state: \.navigationBar, action: \.navigationBar) {
             NavigationBar()
