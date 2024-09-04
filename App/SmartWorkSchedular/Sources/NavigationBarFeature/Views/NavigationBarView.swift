@@ -47,6 +47,7 @@ public struct NavigationBarView: View {
             .padding(.horizontal, 20)
             .padding(.top, 8)
         }
+        .toolbar(.hidden)
     }
 }
 

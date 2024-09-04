@@ -79,7 +79,6 @@ let package = Package(
         .target(
             name: "ScheduleFeature",
             dependencies: [
-                "SharedUIs",
                 "CalendarKit",
                 "LoggerClient",
                 "SettingsFeature",
@@ -106,8 +105,8 @@ let package = Package(
         .target(
             name: "SettingsFeature",
             dependencies: [
-                "SharedUIs",
                 "LoggerClient",
+                "NavigationBarFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),

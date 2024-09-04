@@ -13,49 +13,51 @@ public struct ScheduleView: View {
     @Bindable private var store: StoreOf<Schedule>
     
     public var body: some View {
-        VStack {
-            HStack(spacing: 0) {
-                Button(#localized("Prev")) {
-                    store.send(.previousButtonPressed)
-                }
-                .buttonStyle(.borderedProminent)
+        NavigationView {
+            VStack {
+//                HStack(spacing: 0) {
+//                    Button(#localized("Prev")) {
+//                        store.send(.previousButtonPressed)
+//                    }
+//                    .buttonStyle(.borderedProminent)
+//                    
+//                    Text(#localized("Some Text"))
+//                        .frame(maxWidth: .infinity)
+//                    
+//                    Button(#localized("Next")) {
+//                        store.send(.nextButtonPressed)
+//                    }
+//                    .buttonStyle(.borderedProminent)
+//                }
+//                HStack() {
+//                    Button(#localized("月")) {
+//                        store.send(.monthButtonPressed)
+//                    }
+//                    .buttonStyle(.borderedProminent)
+//                    
+//                    Button(#localized("週")) {
+//                        store.send(.weekButtonPressed)
+//                    }
+//                    .buttonStyle(.borderedProminent)
+//                    
+//                    Button(#localized("日")) {
+//                        store.send(.dayButtonPressed)
+//                    }
+//                    .buttonStyle(.borderedProminent)
+//                }
                 
-                Text(#localized("Some Text"))
-                    .frame(maxWidth: .infinity)
-                
-                Button(#localized("Next")) {
-                    store.send(.nextButtonPressed)
+                ScrollView {
+                    ForEach(store.displayDays) { day in
+                        Text("\(day.formatted(.dateTest))")
+                    }
                 }
-                .buttonStyle(.borderedProminent)
             }
-            HStack() {
-                Button(#localized("月")) {
-                    store.send(.monthButtonPressed)
-                }
-                .buttonStyle(.borderedProminent)
-                
-                Button(#localized("週")) {
-                    store.send(.weekButtonPressed)
-                }
-                .buttonStyle(.borderedProminent)
-                
-                Button(#localized("日")) {
-                    store.send(.dayButtonPressed)
-                }
-                .buttonStyle(.borderedProminent)
-            }
-            
-            ScrollView {
-                ForEach(store.displayDays) { day in
-                    Text("\(day.formatted(.dateTest))")
-                }
-            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding()
+            .padding(.top, 50) // Takes space for navigation bar
+            .background(#color("background"))
+            .overlay(navigationBar)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding()
-        .padding(.top, 50)
-        .background(#color("background"))
-        .overlay(navigationBar)
         .onAppear { store.send(.onAppear) }
         .fullScreenCover(
             item: $store.scope(state: \.destination?.settings, action: \.destination.settings),

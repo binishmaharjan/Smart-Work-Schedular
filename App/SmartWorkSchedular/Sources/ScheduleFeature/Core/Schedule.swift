@@ -21,7 +21,7 @@ public struct Schedule {
             title: "My Work Schedule",
             subTitle: "September", // TODO:
             firstTrailingItem: "plus",
-            secondTrailingItem: "line.3.horizontal"
+            secondTrailingItem: "gearshape.fill"
         )
         
         var focusDay = Day(date: .now)
