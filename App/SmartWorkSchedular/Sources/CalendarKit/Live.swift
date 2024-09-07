@@ -19,14 +19,13 @@ extension CalendarKitClient {
         // MARK: Shared Properties // TODO: Convert it into property wrapper or macros
         @Shared(.displayMode) var _displayMode: Int = 0
         var displayMode: DisplayMode { DisplayMode(rawValue: _displayMode) ?? .month }
-        @Shared(.startOfWeekday) var _startOfWeekday: Int = 0
-        var startOfWeekday: Weekday { Weekday(rawValue: _startOfWeekday) ?? .sunday }
+        @Shared(.appStorage("sharedStateStartOfWeekday")) var startOfWeekday = Weekday.sunday
         
-        // TODO: Update the calendar if it has changed
-        // Find the way to update when startOfWeekday changes
-        if gegorianCalendar.firstWeekday != startOfWeekday.rawValue {
-            gegorianCalendar.firstWeekday = startOfWeekday.rawValue
-        }
+//        // TODO: Update the calendar if it has changed
+//        // Find the way to update when startOfWeekday changes
+//        if gegorianCalendar.firstWeekday != startOfWeekday.rawValue {
+//            gegorianCalendar.firstWeekday = startOfWeekday.rawValue
+//        }
         
         return CalendarKitClient(
             displayDays: { focusDay in

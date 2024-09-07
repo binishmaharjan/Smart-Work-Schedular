@@ -13,7 +13,7 @@ public struct StartWeekOnView: View {
         VStack {
             List {
                 ForEach(store.weekdays) { weekday in
-                    LabeledContent(weekday.title) {
+                    LabeledContent(weekday.name) {
                         Button {
                             store.send(.selected(weekday))
                         } label: {

@@ -13,9 +13,7 @@ public struct StartWeekOn {
     public struct State: Equatable {
         public init() { }
         
-        @Shared(.startOfWeekday) var _startOfWeekday: Int = 0
-        var startOfWeekday: Weekday { Weekday(rawValue: _startOfWeekday) ?? .sunday }
-        
+        @Shared(.appStorage("sharedStateStartOfWeekday")) var startOfWeekday = Weekday.sunday
         var weekdays: IdentifiedArrayOf<Weekday> = .init(uniqueElements: Weekday.allCases)
     }
     
@@ -29,7 +27,7 @@ public struct StartWeekOn {
         Reduce<State, Action> { state, action in
             switch action {
             case .selected(let weekday):
-                state._startOfWeekday = weekday.rawValue
+                state.startOfWeekday = weekday
                 return .none
             }
         }

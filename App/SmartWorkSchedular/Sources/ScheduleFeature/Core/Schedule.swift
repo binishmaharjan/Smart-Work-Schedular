@@ -28,8 +28,7 @@ public struct Schedule {
         var displayDays: IdentifiedArrayOf<Day> = []
         @Shared(.displayMode) var _displayMode: Int = 0
         var displayMode: DisplayMode { DisplayMode(rawValue: _displayMode) ?? .month }
-        @Shared(.startOfWeekday) var _startOfWeekday: Int = 0
-        var startOfWeekday: Weekday { Weekday(rawValue: _startOfWeekday) ?? .sunday }
+        @Shared(.appStorage("sharedStateStartOfWeekday")) var startOfWeekday = Weekday.sunday
     }
     
     public enum Action: BindableAction {
@@ -58,7 +57,7 @@ public struct Schedule {
             case .onAppear:
                 return .send(.updateDisplayDates)
                 
-            case .binding(\._startOfWeekday):
+            case .binding(\.startOfWeekday):
                 print("Changed To: \(state.startOfWeekday)")
                 return .none
                 
