@@ -107,6 +107,7 @@ let package = Package(
             dependencies: [
                 "LoggerClient",
                 "NavigationBarFeature",
+                "CalendarKit",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),

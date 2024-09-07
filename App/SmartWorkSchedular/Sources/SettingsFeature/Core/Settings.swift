@@ -5,10 +5,16 @@ import SharedUIs
 
 @Reducer
 public struct Settings {
+    @Reducer(state: .equatable)
+    public enum Destination {
+        case startWeekOn(StartWeekOn)
+    }
+    
     @ObservableState
     public struct State: Equatable {
         public init() { }
         
+        @Presents var destination: Destination.State?
         var navigationBar: NavigationBar.State = NavigationBar.State(
             title: "",
             subTitle: #localized("Settings"), // TODO:
@@ -17,7 +23,10 @@ public struct Settings {
     }
     
     public enum Action {
+        case destination(PresentationAction<Destination.Action>)
         case navigationBar(NavigationBar.Action)
+        
+        case startWeekOnMenuTapped
     }
     
     public init() { }
@@ -32,10 +41,15 @@ public struct Settings {
                     await dismiss()
                 }
                 
-            case .navigationBar:
+            case .startWeekOnMenuTapped:
+                state.destination = .startWeekOn(StartWeekOn.State())
+                return .none
+                
+            case .navigationBar, .destination:
                 return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
         
         Scope(state: \.navigationBar, action: \.navigationBar) {
             NavigationBar()

@@ -32,9 +32,10 @@ public struct Schedule {
         var startOfWeekday: Weekday { Weekday(rawValue: _startOfWeekday) ?? .sunday }
     }
     
-    public enum Action {
+    public enum Action: BindableAction {
         case destination(PresentationAction<Destination.Action>)
         case navigationBar(NavigationBar.Action)
+        case binding(BindingAction<State>)
         
         case onAppear
         case updateDisplayDates
@@ -50,10 +51,16 @@ public struct Schedule {
     @Dependency(\.calendarKitClient) private var calendarKitClient
     
     public var body: some ReducerOf<Self> {
+        BindingReducer()
+        
         Reduce<State, Action> { state, action in
             switch action {
             case .onAppear:
                 return .send(.updateDisplayDates)
+                
+            case .binding(\._startOfWeekday):
+                print("Changed To: \(state.startOfWeekday)")
+                return .none
                 
             case .updateDisplayDates:
                 let displayDays = calendarKitClient.displayDays(state.focusDay)
@@ -89,7 +96,7 @@ public struct Schedule {
                 state.destination = .settings(Settings.State())
                 return .none
                 
-            case .destination, .navigationBar:
+            case .destination, .navigationBar, .binding:
                 return .none
             }
         }

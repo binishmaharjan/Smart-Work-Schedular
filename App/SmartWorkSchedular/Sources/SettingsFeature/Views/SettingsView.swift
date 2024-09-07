@@ -11,14 +11,14 @@ public struct SettingsView: View {
     @Bindable private var store: StoreOf<Settings>
     
     public var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 List {
                     Section {
                         ForEach(0..<2) { index in
                             if index == 0 {
                                 Button {
-                                    print("Start Week On Pressed")
+                                    store.send(.startWeekOnMenuTapped)
                                 } label: {
                                     Text("Start Week On")
                                 }
@@ -37,6 +37,10 @@ public struct SettingsView: View {
                 .listStyle(.insetGrouped)
                 .padding(.vertical)
                 .padding(.top, 50) // Takes space for navigation bar
+                .navigationDestination(
+                    item: $store.scope(state: \.destination?.startWeekOn, action: \.destination.startWeekOn),
+                    destination: StartWeekOnView.init(store:)
+                )
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .overlay(navigationBar)

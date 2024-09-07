@@ -22,6 +22,12 @@ extension CalendarKitClient {
         @Shared(.startOfWeekday) var _startOfWeekday: Int = 0
         var startOfWeekday: Weekday { Weekday(rawValue: _startOfWeekday) ?? .sunday }
         
+        // TODO: Update the calendar if it has changed
+        // Find the way to update when startOfWeekday changes
+        if gegorianCalendar.firstWeekday != startOfWeekday.rawValue {
+            gegorianCalendar.firstWeekday = startOfWeekday.rawValue
+        }
+        
         return CalendarKitClient(
             displayDays: { focusDay in
                 switch displayMode {

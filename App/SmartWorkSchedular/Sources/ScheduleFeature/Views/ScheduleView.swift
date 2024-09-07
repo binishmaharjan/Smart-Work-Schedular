@@ -13,39 +13,8 @@ public struct ScheduleView: View {
     @Bindable private var store: StoreOf<Schedule>
     
     public var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
-//                HStack(spacing: 0) {
-//                    Button(#localized("Prev")) {
-//                        store.send(.previousButtonPressed)
-//                    }
-//                    .buttonStyle(.borderedProminent)
-//                    
-//                    Text(#localized("Some Text"))
-//                        .frame(maxWidth: .infinity)
-//                    
-//                    Button(#localized("Next")) {
-//                        store.send(.nextButtonPressed)
-//                    }
-//                    .buttonStyle(.borderedProminent)
-//                }
-//                HStack() {
-//                    Button(#localized("月")) {
-//                        store.send(.monthButtonPressed)
-//                    }
-//                    .buttonStyle(.borderedProminent)
-//                    
-//                    Button(#localized("週")) {
-//                        store.send(.weekButtonPressed)
-//                    }
-//                    .buttonStyle(.borderedProminent)
-//                    
-//                    Button(#localized("日")) {
-//                        store.send(.dayButtonPressed)
-//                    }
-//                    .buttonStyle(.borderedProminent)
-//                }
-                
                 ScrollView {
                     ForEach(store.displayDays) { day in
                         Text("\(day.formatted(.dateTest))")
