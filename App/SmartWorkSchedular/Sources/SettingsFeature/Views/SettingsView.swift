@@ -24,7 +24,7 @@ public struct SettingsView: View {
                                 }
                             } else {
                                 Button {
-                                    print("Appearance On Pressed")
+                                    store.send(.appearanceTapped)
                                 } label: {
                                     Text("Appearance")
                                 }
@@ -40,6 +40,10 @@ public struct SettingsView: View {
                 .navigationDestination(
                     item: $store.scope(state: \.destination?.startWeekOn, action: \.destination.startWeekOn),
                     destination: StartWeekOnView.init(store:)
+                )
+                .navigationDestination(
+                    item: $store.scope(state: \.destination?.appearance, action: \.destination.appearance),
+                    destination: AppearanceView.init(store:)
                 )
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

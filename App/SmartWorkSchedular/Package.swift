@@ -20,6 +20,7 @@ let package = Package(
         .library(name: "SettingsFeature", targets: ["SettingsFeature"]),
         .library(name: "NavigationBarFeature", targets: ["NavigationBarFeature"]),
         .library(name: "CalendarKit", targets: ["CalendarKit"]),
+        .library(name: "AppearanceKit", targets: ["AppearanceKit"]),
         .library(name: "UserDefaultsClient", targets: ["UserDefaultsClient"]),
         .library(name: "LoggerClient", targets: ["LoggerClient"]),
     ],
@@ -108,6 +109,7 @@ let package = Package(
                 "LoggerClient",
                 "NavigationBarFeature",
                 "CalendarKit",
+                "AppearanceKit",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -122,7 +124,13 @@ let package = Package(
         .target(
             name: "CalendarKit",
             dependencies: [
-                "SharedUIs",
+                "LoggerClient",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "AppearanceKit",
+            dependencies: [
                 "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]

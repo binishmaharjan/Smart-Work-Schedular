@@ -8,6 +8,7 @@ public struct Settings {
     @Reducer(state: .equatable)
     public enum Destination {
         case startWeekOn(StartWeekOn)
+        case appearance(Appearance)
     }
     
     @ObservableState
@@ -27,6 +28,7 @@ public struct Settings {
         case navigationBar(NavigationBar.Action)
         
         case startWeekOnMenuTapped
+        case appearanceTapped
     }
     
     public init() { }
@@ -43,6 +45,10 @@ public struct Settings {
                 
             case .startWeekOnMenuTapped:
                 state.destination = .startWeekOn(StartWeekOn.State())
+                return .none
+                
+            case .appearanceTapped:
+                state.destination = .appearance(Appearance.State())
                 return .none
                 
             case .navigationBar, .destination:
