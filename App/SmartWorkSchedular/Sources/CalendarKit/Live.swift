@@ -16,9 +16,8 @@ extension CalendarKitClient: DependencyKey {
 extension CalendarKitClient {
     public static func live() -> CalendarKitClient {
         
-        // MARK: Shared Properties // TODO: Convert it into property wrapper or macros
-        @Shared(.displayMode) var _displayMode: Int = 0
-        var displayMode: DisplayMode { DisplayMode(rawValue: _displayMode) ?? .month }
+        // MARK: Shared Properties
+        @Shared(.appStorage("sharedStateDisplayMode")) var displayMode = DisplayMode.month
         @Shared(.appStorage("sharedStateStartOfWeekday")) var startOfWeekday = Weekday.sunday
         
 //        // TODO: Update the calendar if it has changed
@@ -62,22 +61,14 @@ extension CalendarKitClient {
     }
 }
 
-@propertyWrapper
-public struct SharedDisplayMode: Equatable {
+public enum DisplayMode: String, RawRepresentable, CaseIterable, Identifiable {
+    case month
+    case week
+    case day
     
-    public init() { }
+    public var id: Self { self }
     
-    @Shared(.displayMode) private var _displayMode: Int = 0
-    public var wrappedValue: DisplayMode {
-        get { DisplayMode(rawValue: _displayMode)  ?? .month }
-        set { _displayMode = newValue.rawValue }
-    }
-}
-
-public enum DisplayMode: Int, CaseIterable {
-    case month = 0
-    case week = 1
-    case day = 2
+    public var name: String { rawValue.capitalized }
 }
 
 extension PersistenceReaderKey where Self == AppStorageKey<Int> {

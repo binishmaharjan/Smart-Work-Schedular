@@ -26,8 +26,7 @@ public struct Schedule {
         
         var focusDay = Day(date: .now)
         var displayDays: IdentifiedArrayOf<Day> = []
-        @Shared(.displayMode) var _displayMode: Int = 0
-        var displayMode: DisplayMode { DisplayMode(rawValue: _displayMode) ?? .month }
+        @Shared(.appStorage("sharedStateDisplayMode")) var displayMode = DisplayMode.month
         @Shared(.appStorage("sharedStateStartOfWeekday")) var startOfWeekday = Weekday.sunday
     }
     
@@ -75,15 +74,16 @@ public struct Schedule {
                 return .send(.updateDisplayDates)
                 
             case .monthButtonPressed:
-                state._displayMode = 0
+                state.displayMode = .month
+
                 return .send(.updateDisplayDates)
                 
             case .weekButtonPressed:
-                state._displayMode = 1
+                state.displayMode = .week
                 return .send(.updateDisplayDates)
                 
             case .dayButtonPressed:
-                state._displayMode = 2
+                state.displayMode = .day
                 return .send(.updateDisplayDates)
                 
             case .navigationBar(.delegate(.executeFirstAction)):
