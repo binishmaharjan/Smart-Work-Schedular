@@ -5,19 +5,19 @@ import ComposableArchitecture
 import LoggerClient
 
 // MARK: Dependency (liveValue)
-extension AppearanceKitClient: DependencyKey {
+extension ThemeKitClient: DependencyKey {
     public static let liveValue = Self.live()
 }
 
 // MARK: - Live Implementation
-extension AppearanceKitClient {
-    public static func live() -> AppearanceKitClient {
+extension ThemeKitClient {
+    public static func live() -> ThemeKitClient {
         // MARK: Shared Properties
-        @Shared(.appearanceMode) var apperance = AppearanceMode.system
+        @Shared(.appScheme) var apperance = AppScheme.system
         // MARK: Dependicies
         @Dependency(\.loggerClient) var logger
         
-        return AppearanceKitClient(
+        return ThemeKitClient(
             updateAppearance: { mode in
                 logger.debug("updateAppearance(to:) - \(mode)")
                 apperance = mode

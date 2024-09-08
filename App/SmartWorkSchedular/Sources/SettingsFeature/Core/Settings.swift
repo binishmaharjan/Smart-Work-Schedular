@@ -8,7 +8,7 @@ public struct Settings {
     @Reducer(state: .equatable)
     public enum Destination {
         case startWeekOn(StartWeekOn)
-        case appearance(Appearance)
+        case appearance(ThemePicker)
     }
     
     @ObservableState
@@ -48,7 +48,7 @@ public struct Settings {
                 return .none
                 
             case .appearanceTapped:
-                state.destination = .appearance(Appearance.State())
+                state.destination = .appearance(ThemePicker.State())
                 return .none
                 
             case .navigationBar, .destination:

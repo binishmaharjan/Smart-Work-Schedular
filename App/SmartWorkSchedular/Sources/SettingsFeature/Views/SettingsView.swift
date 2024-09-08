@@ -43,7 +43,7 @@ public struct SettingsView: View {
                 )
                 .navigationDestination(
                     item: $store.scope(state: \.destination?.appearance, action: \.destination.appearance),
-                    destination: AppearanceView.init(store:)
+                    destination: ThemePickerView.init(store:)
                 )
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

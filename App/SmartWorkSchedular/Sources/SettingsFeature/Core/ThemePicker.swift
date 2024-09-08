@@ -1,25 +1,25 @@
 import Foundation
 import ComposableArchitecture
-import AppearanceKit
+import ThemeKit
 
 @Reducer
-public struct Appearance {
+public struct ThemePicker {
     @ObservableState
     public struct State: Equatable {
         public init() { }
         
-        @SharedReader(.appearanceMode) var currentMode = AppearanceMode.system
-        var modes: IdentifiedArrayOf<AppearanceMode> = .init(uniqueElements: AppearanceMode.allCases)
+        @SharedReader(.appScheme) var currentMode = AppScheme.system
+        var modes: IdentifiedArrayOf<AppScheme> = .init(uniqueElements: AppScheme.allCases)
     }
     
     public enum Action {
         case onAppear
-        case modeSelected(AppearanceMode)
+        case modeSelected(AppScheme)
     }
     
     public init() { }
 
-    @Dependency(\.appearanceKitClient) private var apperanceKitClient
+    @Dependency(\.themeKitClient) private var themeKitClient
     
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
@@ -28,7 +28,7 @@ public struct Appearance {
                 return .none
                 
             case .modeSelected(let mode):
-                apperanceKitClient.updateAppearance(to: mode)
+                themeKitClient.updateAppearance(to: mode)
                 return .none
             }
         }

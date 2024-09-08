@@ -2,12 +2,12 @@ import SwiftUI
 import ComposableArchitecture
 import SharedUIs
 
-public struct AppearanceView: View {
-    public init(store: StoreOf<Appearance>) {
+public struct ThemePickerView: View {
+    public init(store: StoreOf<ThemePicker>) {
         self.store = store
     }
     
-    @Bindable private var store: StoreOf<Appearance>
+    @Bindable private var store: StoreOf<ThemePicker>
     
     public var body: some View {
         VStack {
@@ -33,10 +33,10 @@ public struct AppearanceView: View {
 }
 
 #Preview {
-    AppearanceView(
+    ThemePickerView(
         store: .init(
             initialState: .init(),
-            reducer: Appearance.init
+            reducer: ThemePicker.init
         )
     )
 }
