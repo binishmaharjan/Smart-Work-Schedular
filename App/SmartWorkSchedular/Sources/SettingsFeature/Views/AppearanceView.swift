@@ -28,6 +28,7 @@ public struct AppearanceView: View {
             .navigationTitle(#localized("Appearance"))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear { store.send(.onAppear) }
     }
 }
 

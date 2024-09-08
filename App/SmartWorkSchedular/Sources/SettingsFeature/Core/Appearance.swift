@@ -8,17 +8,17 @@ public struct Appearance {
     public struct State: Equatable {
         public init() { }
         
-        @SharedReader(.appStorage("apperance")) var currentMode = Mode.system
-        var modes: IdentifiedArrayOf<Mode> = .init(uniqueElements: Mode.allCases)
+        @SharedReader(.appearanceMode) var currentMode = AppearanceMode.system
+        var modes: IdentifiedArrayOf<AppearanceMode> = .init(uniqueElements: AppearanceMode.allCases)
     }
     
     public enum Action {
         case onAppear
-        case modeSelected(Mode)
+        case modeSelected(AppearanceMode)
     }
     
     public init() { }
-    // Pass to Client, Update inside the specified module(update calendar)
+
     @Dependency(\.appearanceKitClient) private var apperanceKitClient
     
     public var body: some ReducerOf<Self> {

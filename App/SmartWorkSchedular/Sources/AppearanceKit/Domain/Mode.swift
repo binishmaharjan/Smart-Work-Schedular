@@ -1,6 +1,6 @@
 import Foundation
 
-public enum Mode: String, RawRepresentable, Identifiable, CaseIterable {
+public enum AppearanceMode: String, RawRepresentable, Identifiable, CaseIterable {
     case system = "system"
     case light = "light"
     case dark = "dark"

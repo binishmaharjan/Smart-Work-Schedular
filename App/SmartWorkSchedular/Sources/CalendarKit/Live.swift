@@ -17,8 +17,8 @@ extension CalendarKitClient {
     public static func live() -> CalendarKitClient {
         
         // MARK: Shared Properties
-        @Shared(.appStorage("sharedStateDisplayMode")) var displayMode = DisplayMode.month
-        @Shared(.appStorage("sharedStateStartOfWeekday")) var startOfWeekday = Weekday.sunday
+        @Shared(.displayMode) var displayMode = DisplayMode.month
+        @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
         
 //        // TODO: Update the calendar if it has changed
 //        // Find the way to update when startOfWeekday changes
@@ -58,25 +58,5 @@ extension CalendarKitClient {
                 }
             }
         )
-    }
-}
-
-public enum DisplayMode: String, RawRepresentable, CaseIterable, Identifiable {
-    case month
-    case week
-    case day
-    
-    public var id: Self { self }
-    
-    public var name: String { rawValue.capitalized }
-}
-
-extension PersistenceReaderKey where Self == AppStorageKey<Int> {
-    public static var displayMode: AppStorageKey<Int> {
-        appStorage("sharedStateDisplayMode")
-    }
-    
-    public static var startOfWeekday: AppStorageKey<Int> {
-        appStorage("sharedStateStartOfWeekday")
     }
 }

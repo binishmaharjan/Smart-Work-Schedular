@@ -26,8 +26,8 @@ public struct Schedule {
         
         var focusDay = Day(date: .now)
         var displayDays: IdentifiedArrayOf<Day> = []
-        @Shared(.appStorage("sharedStateDisplayMode")) var displayMode = DisplayMode.month
-        @Shared(.appStorage("sharedStateStartOfWeekday")) var startOfWeekday = Weekday.sunday
+        @Shared(.displayMode) var displayMode = DisplayMode.month
+        @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
     }
     
     public enum Action: BindableAction {

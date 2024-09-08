@@ -11,7 +11,7 @@ extension AppearanceKitClient: DependencyKey {
 // MARK: - Live Implementation
 extension AppearanceKitClient {
     public static func live() -> AppearanceKitClient {
-        @Shared(.appStorage("apperance")) var apperance = Mode.system
+        @Shared(.appearanceMode) var apperance = AppearanceMode.system
         
         return AppearanceKitClient(
             updateAppearance: { mode in
