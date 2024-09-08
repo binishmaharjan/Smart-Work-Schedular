@@ -28,7 +28,7 @@ public struct Appearance {
                 return .none
                 
             case .modeSelected(let mode):
-                apperanceKitClient.updateAppearance(mode)
+                apperanceKitClient.updateAppearance(to: mode)
                 return .none
             }
         }

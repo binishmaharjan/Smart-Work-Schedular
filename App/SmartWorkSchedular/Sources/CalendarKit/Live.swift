@@ -1,10 +1,13 @@
 import Foundation
 import ComposableArchitecture
+import LoggerClient
 
 // MARK: The Main Calendar instance
 var gegorianCalendar: Calendar = {
-  var calendar = Calendar(identifier: .gregorian)
-    calendar.firstWeekday = 1
+    @SharedReader(.startOfWeekday) var startOfWeekday = Weekday.sunday
+    
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.firstWeekday = startOfWeekday.index
     return calendar
 }()
 
@@ -15,19 +18,16 @@ extension CalendarKitClient: DependencyKey {
 
 extension CalendarKitClient {
     public static func live() -> CalendarKitClient {
-        
         // MARK: Shared Properties
         @Shared(.displayMode) var displayMode = DisplayMode.month
         @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
-        
-//        // TODO: Update the calendar if it has changed
-//        // Find the way to update when startOfWeekday changes
-//        if gegorianCalendar.firstWeekday != startOfWeekday.rawValue {
-//            gegorianCalendar.firstWeekday = startOfWeekday.rawValue
-//        }
+        // MARK: Dependicies
+        @Dependency(\.loggerClient) var logger
         
         return CalendarKitClient(
             displayDays: { focusDay in
+                logger.debug("displayDays(from:) | DisplayMode: \(displayMode) | \(focusDay)")
+                
                 switch displayMode {
                 case .day:
                     return [focusDay]
@@ -38,6 +38,8 @@ extension CalendarKitClient {
                 }
             },
             nextFocusDay: { currentFocusDay in
+                logger.debug("nextFocusDay(from:) | DisplayMode: \(displayMode) | \(currentFocusDay)")
+                
                 switch displayMode {
                 case .month:
                     return currentFocusDay.nextMonthDay
@@ -48,6 +50,8 @@ extension CalendarKitClient {
                 }
             },
             previousFocusDay: { currentFocusDay in
+                logger.debug("previousFocusDay(from:) | DisplayMode: \(displayMode) | \(currentFocusDay)")
+                
                 switch displayMode {
                 case .month:
                     return currentFocusDay.previousMonthDay
@@ -56,6 +60,12 @@ extension CalendarKitClient {
                 case .day:
                     return currentFocusDay.previousDay
                 }
+            },
+            updateStartWeekdayOn: { weekday in
+                logger.debug("updateStartWeekdayOn(to:) - \(weekday)")
+                
+                startOfWeekday = weekday
+                gegorianCalendar.firstWeekday = weekday.index
             }
         )
     }

@@ -4,7 +4,7 @@ import DependenciesMacros
 
 @DependencyClient
 public struct AppearanceKitClient {
-    public var updateAppearance: (AppearanceMode) -> Void
+    public var updateAppearance: (_ to: AppearanceMode) -> Void
 }
 
 // MARK: Dependency Values

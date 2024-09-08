@@ -87,11 +87,9 @@ public struct Schedule {
                 return .send(.updateDisplayDates)
                 
             case .navigationBar(.delegate(.executeFirstAction)):
-                print("First")
                 return .none
                 
             case .navigationBar(.delegate(.executeSecondAction)):
-                print("Second")
                 state.destination = .settings(Settings.State())
                 return .none
                 

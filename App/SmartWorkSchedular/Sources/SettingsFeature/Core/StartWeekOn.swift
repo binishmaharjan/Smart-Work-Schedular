@@ -13,7 +13,7 @@ public struct StartWeekOn {
     public struct State: Equatable {
         public init() { }
         
-        @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
+        @SharedReader(.startOfWeekday) var startOfWeekday = Weekday.sunday
         var weekdays: IdentifiedArrayOf<Weekday> = .init(uniqueElements: Weekday.allCases)
     }
     
@@ -23,11 +23,13 @@ public struct StartWeekOn {
     
     public init() { }
     
+    @Dependency(\.calendarKitClient) private var calendarKitClient
+    
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
             case .selected(let weekday):
-                state.startOfWeekday = weekday
+                calendarKitClient.updateStartWeekdayOn(to: weekday)
                 return .none
             }
         }
