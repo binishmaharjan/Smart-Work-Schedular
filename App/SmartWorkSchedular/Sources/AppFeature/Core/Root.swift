@@ -1,8 +1,10 @@
 import Foundation
+import UIKit
 import ComposableArchitecture
 import TutorialFeature
 import MainTabFeature
 import LoggerClient
+import ThemeKit
 
 @Reducer
 public struct Root {
@@ -26,9 +28,23 @@ public struct Root {
         case onAppear
     }
     
-    public init() { }
+    public init() { 
+        // MARK: Shared Properties
+        @Shared(.appScheme) var appScheme = AppScheme.system
+        
+        if let window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.keyWindow {
+            if appScheme == .dark {
+                window.overrideUserInterfaceStyle = .dark
+            } else if appScheme == .light {
+                window.overrideUserInterfaceStyle = .light
+            } else {
+                window.overrideUserInterfaceStyle = .unspecified
+            }
+        }
+    }
     
     @Dependency(\.loggerClient) private var logger
+    @Dependency(\.themeKitClient) private var themeKitClient
     
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in

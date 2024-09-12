@@ -27,8 +27,8 @@ public struct ThemePicker {
             case .onAppear:
                 return .none
                 
-            case .modeSelected(let mode):
-                themeKitClient.updateAppearance(to: mode)
+            case .modeSelected(let appScheme):
+                themeKitClient.updateAppScheme(to: appScheme)
                 return .none
             }
         }

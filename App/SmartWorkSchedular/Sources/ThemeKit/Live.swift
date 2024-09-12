@@ -13,14 +13,23 @@ extension ThemeKitClient: DependencyKey {
 extension ThemeKitClient {
     public static func live() -> ThemeKitClient {
         // MARK: Shared Properties
-        @Shared(.appScheme) var apperance = AppScheme.system
+        @Shared(.appScheme) var appScheme = AppScheme.system
         // MARK: Dependicies
         @Dependency(\.loggerClient) var logger
         
         return ThemeKitClient(
-            updateAppearance: { mode in
-                logger.debug("updateAppearance(to:) - \(mode)")
-                apperance = mode
+            updateAppScheme: { newAppScheme in
+                logger.debug("updateAppearance(to:) - \(newAppScheme)")
+                appScheme = newAppScheme
+                if let window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.keyWindow {
+                    if appScheme == .dark {
+                        window.overrideUserInterfaceStyle = .dark
+                    } else if appScheme == .light {
+                        window.overrideUserInterfaceStyle = .light
+                    } else {
+                        window.overrideUserInterfaceStyle = .unspecified
+                    }
+                }
             }
         )
     }

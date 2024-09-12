@@ -35,6 +35,7 @@ let package = Package(
                 "AppFeature",
                 "LoggerClient",
                 "SharedUIs",
+                "ThemeKit",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
