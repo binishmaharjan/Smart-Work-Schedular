@@ -5,6 +5,7 @@ import DependenciesMacros
 @DependencyClient
 public struct ThemeKitClient {
     public var updateAppScheme: (_ to: AppScheme) -> Void
+    public var applyInitialAppScheme: () -> Void
 }
 
 // MARK: Dependency Values
@@ -23,6 +24,7 @@ extension ThemeKitClient: TestDependencyKey {
 
 extension ThemeKitClient {
     public static let noop = Self(
-        updateAppScheme: { _ in }
+        updateAppScheme: { _ in },
+        applyInitialAppScheme: { }
     )
 }

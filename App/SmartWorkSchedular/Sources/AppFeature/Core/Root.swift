@@ -28,20 +28,7 @@ public struct Root {
         case onAppear
     }
     
-    public init() { 
-        // MARK: Shared Properties
-        @Shared(.appScheme) var appScheme = AppScheme.system
-        
-        if let window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.keyWindow {
-            if appScheme == .dark {
-                window.overrideUserInterfaceStyle = .dark
-            } else if appScheme == .light {
-                window.overrideUserInterfaceStyle = .light
-            } else {
-                window.overrideUserInterfaceStyle = .unspecified
-            }
-        }
-    }
+    public init() { }
     
     @Dependency(\.loggerClient) private var logger
     @Dependency(\.themeKitClient) private var themeKitClient
@@ -51,6 +38,7 @@ public struct Root {
             switch action {
             case .onAppear:
                 logger.debug("onAppear")
+                themeKitClient.applyInitialAppScheme()
                 
                 return .none
                 

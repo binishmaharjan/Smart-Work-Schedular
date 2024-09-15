@@ -21,16 +21,24 @@ extension ThemeKitClient {
             updateAppScheme: { newAppScheme in
                 logger.debug("updateAppearance(to:) - \(newAppScheme)")
                 appScheme = newAppScheme
-                if let window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.keyWindow {
-                    if appScheme == .dark {
-                        window.overrideUserInterfaceStyle = .dark
-                    } else if appScheme == .light {
-                        window.overrideUserInterfaceStyle = .light
-                    } else {
-                        window.overrideUserInterfaceStyle = .unspecified
-                    }
-                }
+                changeAppScheme(to: appScheme)
+            },
+            applyInitialAppScheme: {
+                logger.debug("applyInitialAppScheme(to:) - \(appScheme)")
+                changeAppScheme(to: appScheme)
             }
         )
+    }
+    
+    private static func changeAppScheme(to appScheme: AppScheme) {
+        if let window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.keyWindow {
+            if appScheme == .dark {
+                window.overrideUserInterfaceStyle = .dark
+            } else if appScheme == .light {
+                window.overrideUserInterfaceStyle = .light
+            } else {
+                window.overrideUserInterfaceStyle = .unspecified
+            }
+        }
     }
 }
