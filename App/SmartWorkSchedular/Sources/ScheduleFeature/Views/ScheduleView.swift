@@ -32,13 +32,10 @@ public struct ScheduleView: View {
                 GeometryReader { proxy in
                     LazyVGrid(columns: columns, spacing: 0) {
                         ForEach(store.displayDays) { day in
-                            Text(day.formatted(.dateTime.day()))
-                                .frame(height: (proxy.size.height / 5), alignment: .top)
-                                .frame(maxWidth: .infinity)
+                            MonthItemView(day: day)
+                                .frame(height: (proxy.size.height / 5))
                         }
                     }
-                    .font(.customCaption)
-                    .foregroundStyle(#color("text_color"))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
