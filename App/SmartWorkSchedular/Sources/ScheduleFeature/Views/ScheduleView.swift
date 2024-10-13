@@ -11,19 +11,40 @@ public struct ScheduleView: View {
     }
     
     @Bindable private var store: StoreOf<Schedule>
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
     public var body: some View {
         NavigationStack {
-            VStack {
-                ScrollView {
-                    ForEach(store.displayDays) { day in
-                        Text("\(day.formatted(.dateTest))")
+            VStack(spacing: 0) {
+                LazyVGrid(columns: columns) {
+                    Text("Sun")
+                    Text("Mon")
+                    Text("Tue")
+                    Text("Wed")
+                    Text("Thu")
+                    Text("Fri")
+                    Text("Sat")
+                }
+                .padding(.bottom, 8)
+                .font(.customSubheadline)
+                .foregroundStyle(#color("text_color"))
+                
+                GeometryReader { proxy in
+                    LazyVGrid(columns: columns, spacing: 0) {
+                        ForEach(store.displayDays) { day in
+                            Text(day.formatted(.dateTime.day()))
+                                .frame(height: (proxy.size.height / 5), alignment: .top)
+                                .frame(maxWidth: .infinity)
+                        }
                     }
+                    .font(.customCaption)
+                    .foregroundStyle(#color("text_color"))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding()
             .padding(.top, 50) // Takes space for navigation bar
+            .padding(.top, 8)
             .background(#color("background"))
             .overlay(navigationBar)
         }

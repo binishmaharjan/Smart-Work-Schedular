@@ -19,7 +19,7 @@ public struct Schedule {
         @Presents var destination: Destination.State?
         var navigationBar: NavigationBar.State = NavigationBar.State(
             title: "My Work Schedule",
-            subTitle: "September", // TODO:
+            subTitle: "October", // TODO:
             firstTrailingItem: "plus",
             secondTrailingItem: "gearshape.fill"
         )
@@ -56,7 +56,7 @@ public struct Schedule {
             case .onAppear:
                 return .send(.updateDisplayDates)
                 
-            case .binding(\.startOfWeekday):
+            case .binding(\.startOfWeekday): // <- find the changed timing
                 print("Changed To: \(state.startOfWeekday)")
                 return .none
                 
