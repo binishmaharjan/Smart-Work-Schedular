@@ -22,6 +22,21 @@ extension Date {
         gegorianCalendar.isDateInTomorrow(self)
     }
     
+    /// Determines if the date is in this year
+    public var isInThisYear: Bool {
+        isEqual(to: .now, toGranularity: .year, in: gegorianCalendar)
+    }
+    
+    /// Determines if the date is in this month
+    public var isInThisMonth: Bool {
+        isEqual(to: .now, toGranularity: .month, in: gegorianCalendar)
+    }
+    
+    /// Determines if the date is in same week
+    public var isInThisWeek: Bool {
+        isEqual(to: .now, toGranularity: .weekOfYear, in: gegorianCalendar)
+    }
+    
     /// Determines if the self is yesterday
     public var isYesterDay: Bool {
         gegorianCalendar.isDateInYesterday(self)
@@ -73,5 +88,16 @@ extension Date {
             return self
         }
         return nextWeekDate
+    }
+}
+
+// MARK: Helper
+extension Date {
+    private func isEqual(
+        to date: Date,
+        toGranularity component: Calendar.Component,
+        in calendar: Calendar = .current
+    ) -> Bool {
+        calendar.isDate(self, equalTo: date, toGranularity: component)
     }
 }

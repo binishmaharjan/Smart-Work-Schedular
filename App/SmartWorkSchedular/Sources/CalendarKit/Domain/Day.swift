@@ -21,7 +21,7 @@ extension Day {
     public var isToday: Bool {
         date.isToday
     }
-    
+
     /// Determines if the give date is same as self
     public func isSameDay(as day: Day) -> Bool {
         date.isSameDate(as: day.date)
@@ -35,6 +35,21 @@ extension Day {
     /// Determines if the self is yesterday
     public var isYesterDay: Bool {
         date.isYesterDay
+    }
+    
+    /// Determines if the day is in this year
+    public var isInThisYear: Bool {
+        date.isInThisYear
+    }
+    
+    /// Determines if the day is in this month
+    public var isInThisMonth: Bool {
+        date.isInThisMonth
+    }
+    
+    /// Determines if the day is in same week
+    public var isInThisWeek: Bool {
+        date.isInThisYear
     }
     
     // Returns next day
