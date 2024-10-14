@@ -29,7 +29,7 @@ public struct MonthPanelView: View {
             GeometryReader { proxy in
                 LazyVGrid(columns: columns, spacing: 0) {
                     ForEach(store.displayDays) { day in
-                        MonthItemView(day: day)
+                        MonthItemView(originDay: store.originDay, day: day)
                             .frame(height: (proxy.size.height / 5))
                     }
                 }
@@ -41,7 +41,7 @@ public struct MonthPanelView: View {
 #Preview {
     MonthPanelView(
         store: .init(
-            initialState: .init(originDay: .init(date: .now), displayDays: []),
+            initialState: .init(displayMode: .month, originDay: .init(date: .now), displayDays: []),
             reducer: SchedulePanel.init
         )
     )

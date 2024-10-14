@@ -6,11 +6,13 @@ import CalendarKit
 public struct SchedulePanel {
     @ObservableState
     public struct State: Equatable, Identifiable {
-        public init(originDay: Day, displayDays: [Day]) {
+        public init(displayMode: DisplayMode, originDay: Day, displayDays: [Day]) {
+            self.displayMode = displayMode
             self.originDay = originDay
             self.displayDays = IdentifiedArray(uniqueElements: displayDays)
         }
         
+        var displayMode: DisplayMode
         var originDay: Day
         var displayDays: IdentifiedArrayOf<Day>
         

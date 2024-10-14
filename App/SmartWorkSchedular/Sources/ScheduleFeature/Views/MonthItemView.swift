@@ -3,10 +3,12 @@ import CalendarKit
 import SharedUIs
 
 struct MonthItemView: View {
-    init(day: Day) {
+    init(originDay: Day, day: Day) {
+        self.originDay = originDay
         self.day = day
     }
     
+    private var originDay: Day
     private var day: Day
     
     var body: some View {
@@ -17,7 +19,7 @@ struct MonthItemView: View {
 
             Text(day.formatted(.dateTime.day()))
                 .font(.customCaption)
-                .foregroundStyle(day.isInThisMonth ? #color("text_color") : #color("sub_text_color"))
+                .foregroundStyle(day.isInSameMonth(as: originDay) ? #color("text_color") : #color("sub_text_color"))
             
             Spacer()
         }
@@ -26,6 +28,6 @@ struct MonthItemView: View {
 
 #Preview {
     MonthItemView(
-        day: .init(date: .now)
+        originDay: .init(date: .now), day: .init(date: .now)
     )
 }

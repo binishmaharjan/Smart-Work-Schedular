@@ -67,6 +67,7 @@ public struct Schedule {
                 let prevMonth = calendarKitClient.displayDays(from: state.focusDay.previousMonthDay)
                 state.schedulePanels.append(
                     SchedulePanel.State(
+                        displayMode: state.displayMode,
                         originDay: state.focusDay.previousMonthDay,
                         displayDays: prevMonth
                     )
@@ -76,6 +77,7 @@ public struct Schedule {
                 let thisMonth = calendarKitClient.displayDays(from: state.focusDay)
                 state.schedulePanels.append(
                     SchedulePanel.State(
+                        displayMode: state.displayMode,
                         originDay: state.focusDay,
                         displayDays: thisMonth
                     )
@@ -85,6 +87,7 @@ public struct Schedule {
                 let nextMonth = calendarKitClient.displayDays(from: state.focusDay.nextMonthDay)
                 state.schedulePanels.append(
                     SchedulePanel.State(
+                        displayMode: state.displayMode,
                         originDay: state.focusDay.nextMonthDay,
                         displayDays: nextMonth
                     )

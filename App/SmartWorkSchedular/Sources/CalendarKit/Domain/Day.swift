@@ -44,14 +44,29 @@ extension Day {
         date.isYesterDay
     }
     
+    /// Determines if the day is in same year as the date
+    public func isInSameYear(as day: Day) -> Bool {
+        date.isInSameYear(as: day.date)
+    }
+    
     /// Determines if the day is in this year
     public var isInThisYear: Bool {
         date.isInThisYear
     }
     
+    /// Determines if the day is in same month as the date
+    public func isInSameMonth(as day: Day) -> Bool {
+        date.isInSameMonth(as: day.date)
+    }
+    
     /// Determines if the day is in this month
     public var isInThisMonth: Bool {
         date.isInThisMonth
+    }
+    
+    /// Determines if the day is in same week as the date
+    public func isInSameWeek(as day: Day) -> Bool {
+        date.isInSameWeek(as: day.date)
     }
     
     /// Determines if the day is in same week
