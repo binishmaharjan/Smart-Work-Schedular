@@ -17,8 +17,8 @@ public struct ScheduleView: View {
     public var body: some View {
         NavigationStack {
             TabView(selection: $currentSelected) {
-                ForEach(store.displayDays.indices, id: \.self) { index in
-                    MonthView(store: store, index: index)
+                ForEach(store.scope(state: \.schedulePanels, action: \.schedulePanels)) { store in
+                    MonthPanelView(store: store)
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -51,44 +51,4 @@ extension ScheduleView {
             reducer: Schedule.init
         )
     )
-}
-
-
-struct MonthView: View {
-    
-    init(store: StoreOf<Schedule>, index: Int) {
-        self.store = store
-        self.index = index
-    }
-    
-    @Bindable private var store: StoreOf<Schedule>
-    private let index: Int
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            LazyVGrid(columns: columns) {
-                Text("Sun")
-                Text("Mon")
-                Text("Tue")
-                Text("Wed")
-                Text("Thu")
-                Text("Fri")
-                Text("Sat")
-            }
-            .padding(.bottom, 8)
-            .font(.customSubheadline)
-            .foregroundStyle(#color("text_color"))
-            
-            GeometryReader { proxy in
-                let displayDays = store.displayDays[index]
-                LazyVGrid(columns: columns, spacing: 0) {
-                    ForEach(displayDays) { day in
-                        MonthItemView(day: day)
-                            .frame(height: (proxy.size.height / 5))
-                    }
-                }
-            }
-        }
-    }
 }

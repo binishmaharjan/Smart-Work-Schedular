@@ -24,6 +24,7 @@ public struct Schedule {
             secondTrailingItem: "gearshape.fill"
         )
         
+        var schedulePanels: IdentifiedArrayOf<SchedulePanel.State> = []
         var focusDay = Day(date: .now)
         var displayDays: IdentifiedArrayOf<[Day]> = []
         @Shared(.displayMode) var displayMode = DisplayMode.month
@@ -34,6 +35,7 @@ public struct Schedule {
         case destination(PresentationAction<Destination.Action>)
         case navigationBar(NavigationBar.Action)
         case binding(BindingAction<State>)
+        case schedulePanels(IdentifiedActionOf<SchedulePanel>)
         
         case onAppear
         case updateDisplayDates
@@ -61,9 +63,33 @@ public struct Schedule {
                 return .none
                 
             case .updateDisplayDates:
-                state.displayDays.append(calendarKitClient.displayDays(state.focusDay.previousMonthDay))
-                state.displayDays.append(calendarKitClient.displayDays(state.focusDay))
-                state.displayDays.append(calendarKitClient.displayDays(state.focusDay.nextMonthDay))
+                // Initially set previous month as first
+                let prevMonth = calendarKitClient.displayDays(from: state.focusDay.previousMonthDay)
+                state.schedulePanels.append(
+                    SchedulePanel.State(
+                        originDay: state.focusDay.previousMonthDay,
+                        displayDays: prevMonth
+                    )
+                )
+                
+                // Initially set this month as second
+                let thisMonth = calendarKitClient.displayDays(from: state.focusDay)
+                state.schedulePanels.append(
+                    SchedulePanel.State(
+                        originDay: state.focusDay,
+                        displayDays: thisMonth
+                    )
+                )
+                
+                // Initially set next month as third
+                let nextMonth = calendarKitClient.displayDays(from: state.focusDay.nextMonthDay)
+                state.schedulePanels.append(
+                    SchedulePanel.State(
+                        originDay: state.focusDay.nextMonthDay,
+                        displayDays: nextMonth
+                    )
+                )
+                
                 return .none
                 
             case .previousButtonPressed:
@@ -94,11 +120,14 @@ public struct Schedule {
                 state.destination = .settings(Settings.State())
                 return .none
                 
-            case .destination, .navigationBar, .binding:
+            case .destination, .navigationBar, .binding, .schedulePanels:
                 return .none
             }
         }
         .ifLet(\.$destination, action: \.destination)
+        .forEach(\.schedulePanels, action: \.schedulePanels) {
+            SchedulePanel()
+        }
         
         Scope(state: \.navigationBar, action: \.navigationBar) {
             NavigationBar()
