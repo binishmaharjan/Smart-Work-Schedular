@@ -25,7 +25,7 @@ public struct Schedule {
         )
         
         var focusDay = Day(date: .now)
-        var displayDays: IdentifiedArrayOf<Day> = []
+        var displayDays: IdentifiedArrayOf<[Day]> = []
         @Shared(.displayMode) var displayMode = DisplayMode.month
         @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
     }
@@ -61,8 +61,9 @@ public struct Schedule {
                 return .none
                 
             case .updateDisplayDates:
-                let displayDays = calendarKitClient.displayDays(state.focusDay)
-                state.displayDays = .init(uniqueElements: displayDays)
+                state.displayDays.append(calendarKitClient.displayDays(state.focusDay.previousMonthDay))
+                state.displayDays.append(calendarKitClient.displayDays(state.focusDay))
+                state.displayDays.append(calendarKitClient.displayDays(state.focusDay.nextMonthDay))
                 return .none
                 
             case .previousButtonPressed:

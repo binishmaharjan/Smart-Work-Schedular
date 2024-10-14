@@ -9,6 +9,13 @@ public struct Day: Identifiable, Equatable {
     public var date: Date
 }
 
+// MARK: Identifiable
+extension Array: Identifiable where Element == Day {
+    public var id: String {
+        return map { $0.id }.reduce("", +)
+    }
+}
+
 // MARK: Helpers
 extension Day {
     /// Returns a start of date for self
