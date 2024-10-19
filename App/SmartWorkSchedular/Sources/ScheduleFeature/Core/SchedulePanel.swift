@@ -15,6 +15,9 @@ public struct SchedulePanel {
         var displayMode: DisplayMode
         var originDay: Day
         var displayDays: IdentifiedArrayOf<Day>
+        var numberOfWeeks: Int {
+            displayDays.count / 7
+        }
         
         public var id: String { // TODO: Think of the id
             UUID().uuidString

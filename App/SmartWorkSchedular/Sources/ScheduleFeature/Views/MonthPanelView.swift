@@ -17,7 +17,7 @@ public struct MonthPanelView: View {
                 LazyVGrid(columns: columns, spacing: 0) {
                     ForEach(store.displayDays) { day in
                         MonthItemView(originDay: store.originDay, day: day)
-                            .frame(height: (proxy.size.height / 5))
+                            .frame(height: (proxy.size.height / CGFloat(store.numberOfWeeks)))
                     }
                 }
             }
