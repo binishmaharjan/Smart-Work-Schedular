@@ -16,12 +16,23 @@ public struct ScheduleView: View {
     
     public var body: some View {
         NavigationStack {
-            TabView(selection: $currentSelected) {
-                ForEach(store.scope(state: \.schedulePanels, action: \.schedulePanels)) { store in
-                    MonthPanelView(store: store)
+            VStack {
+                LazyVGrid(columns: columns) {
+                    ForEach(store.weekdays, id: \.self) { weekday in
+                        Text(weekday)
+                    }
                 }
+                .padding(.bottom, 8)
+                .font(.customSubheadline)
+                .foregroundStyle(#color("text_color"))
+                
+                TabView(selection: $currentSelected) {
+                    ForEach(store.scope(state: \.schedulePanels, action: \.schedulePanels)) { store in
+                        MonthPanelView(store: store)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
             .padding(.top, 50) // Takes space for navigation bar
             .padding(.top, 8)
             .background(#color("background"))

@@ -13,15 +13,6 @@ public struct MonthPanelView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            LazyVGrid(columns: columns) {
-                ForEach(store.displayDays.weekdays, id: \.self) { weekday in
-                    Text(weekday)
-                }
-            }
-            .padding(.bottom, 8)
-            .font(.customSubheadline)
-            .foregroundStyle(#color("text_color"))
-            
             GeometryReader { proxy in
                 LazyVGrid(columns: columns, spacing: 0) {
                     ForEach(store.displayDays) { day in

@@ -27,6 +27,7 @@ public struct Schedule {
         var schedulePanels: IdentifiedArrayOf<SchedulePanel.State> = []
         var focusDay = Day(date: .now)
         var displayDays: IdentifiedArrayOf<[Day]> = []
+        var weekdays: [String] = []
         @Shared(.displayMode) var displayMode = DisplayMode.month
         @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
     }
@@ -56,6 +57,9 @@ public struct Schedule {
         Reduce<State, Action> { state, action in
             switch action {
             case .onAppear:
+                // initialize weekdays
+                state.weekdays = calendarKitClient.weekDays()
+                
                 return .send(.updateDisplayDates)
                 
             case .binding(\.startOfWeekday): // <- find the changed timing

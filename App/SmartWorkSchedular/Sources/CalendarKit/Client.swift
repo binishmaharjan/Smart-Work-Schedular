@@ -9,6 +9,7 @@ public struct CalendarKitClient {
     public var nextFocusDay: (_ from: Day) -> Day = { _ in .init(date: .now) }
     public var previousFocusDay: (_ from: Day) -> Day = { _ in .init(date: .now) }
     public var updateStartWeekdayOn: (_ to: Weekday) -> Void
+    public var weekDays: () -> [String] = { [] }
 }
 
 // MARK: Dependency Values
@@ -28,6 +29,7 @@ extension CalendarKitClient: TestDependencyKey {
         displayDays:  { _ in [] },
         nextFocusDay: { _ in .init(date: .now) },
         previousFocusDay: { _ in .init(date: .now) },
-        updateStartWeekdayOn: { _ in }
+        updateStartWeekdayOn: { _ in },
+        weekDays: { [] }
     )
 }

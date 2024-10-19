@@ -7,6 +7,7 @@ var gegorianCalendar: Calendar = {
     @SharedReader(.startOfWeekday) var startOfWeekday = Weekday.sunday
     
     var calendar = Calendar(identifier: .gregorian)
+    calendar.locale = Locale.current
     calendar.firstWeekday = startOfWeekday.index
     return calendar
 }()
@@ -66,6 +67,9 @@ extension CalendarKitClient {
                 
                 startOfWeekday = weekday
                 gegorianCalendar.firstWeekday = weekday.index
+            },
+            weekDays: {
+                gegorianCalendar.shortWeekdaySymbols
             }
         )
     }
