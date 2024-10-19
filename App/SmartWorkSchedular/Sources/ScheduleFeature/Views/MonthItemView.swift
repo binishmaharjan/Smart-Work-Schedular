@@ -17,7 +17,7 @@ struct MonthItemView: View {
                 .fill(#color("sub_text_color").opacity(0.5))
                 .frame(height: 1)
 
-            Text(day.formatted(.dateTime.day()))
+            Text(day.formatted(.calendarDay))
                 .font(.customCaption)
                 .foregroundStyle(day.isInSameMonth(as: originDay) ? #color("text_color") : #color("sub_text_color"))
             

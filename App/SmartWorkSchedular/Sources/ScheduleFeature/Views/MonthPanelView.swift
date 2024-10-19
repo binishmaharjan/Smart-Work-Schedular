@@ -14,13 +14,9 @@ public struct MonthPanelView: View {
     public var body: some View {
         VStack(spacing: 0) {
             LazyVGrid(columns: columns) {
-                Text("Sun")
-                Text("Mon")
-                Text("Tue")
-                Text("Wed")
-                Text("Thu")
-                Text("Fri")
-                Text("Sat")
+                ForEach(store.displayDays.weekdays, id: \.self) { weekday in
+                    Text(weekday)
+                }
             }
             .padding(.bottom, 8)
             .font(.customSubheadline)
