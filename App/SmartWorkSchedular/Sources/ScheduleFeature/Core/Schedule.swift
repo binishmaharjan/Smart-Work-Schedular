@@ -16,29 +16,37 @@ public struct Schedule {
     public struct State: Equatable {
         public init() { }
         
+        // Shared State
+        @Shared(.displayMode) var displayMode = DisplayMode.month
+        @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
+        // Data State
         @Presents var destination: Destination.State?
+        var schedulePanels: IdentifiedArrayOf<SchedulePanel.State> = []
+        var focusDay = Day(date: .now)
+        var displayDays: IdentifiedArrayOf<[Day]> = []
+        var weekdays: [String] = []
+        // View State
+        var selectedPosition: Int = 1
+    
         var navigationBar: NavigationBar.State = NavigationBar.State(
             title: "My Work Schedule",
             subTitle: "October", // TODO:
             firstTrailingItem: "plus",
             secondTrailingItem: "gearshape.fill"
         )
-        
-        var schedulePanels: IdentifiedArrayOf<SchedulePanel.State> = []
-        var focusDay = Day(date: .now)
-        var displayDays: IdentifiedArrayOf<[Day]> = []
-        var weekdays: [String] = []
-        @Shared(.displayMode) var displayMode = DisplayMode.month
-        @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
     }
     
-    public enum Action: BindableAction {
+    public enum Action: BindableAction, ViewAction {
+        public enum View {
+            case onAppear
+        }
+        
         case destination(PresentationAction<Destination.Action>)
         case navigationBar(NavigationBar.Action)
         case binding(BindingAction<State>)
         case schedulePanels(IdentifiedActionOf<SchedulePanel>)
+        case view(View)
         
-        case onAppear
         case updateDisplayDates
         case previousButtonPressed
         case nextButtonPressed
@@ -56,7 +64,7 @@ public struct Schedule {
         
         Reduce<State, Action> { state, action in
             switch action {
-            case .onAppear:
+            case .view(.onAppear):
                 // initialize weekdays
                 state.weekdays = calendarKitClient.weekDays()
                 

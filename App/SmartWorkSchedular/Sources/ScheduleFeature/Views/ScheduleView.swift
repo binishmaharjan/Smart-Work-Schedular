@@ -5,14 +5,15 @@ import CalendarKit
 import SettingsFeature
 import NavigationBarFeature
 
+@ViewAction(for: Schedule.self)
 public struct ScheduleView: View {
     public init(store: StoreOf<Schedule>) {
         self.store = store
     }
     
-    @Bindable private var store: StoreOf<Schedule>
+    @Bindable public var store: StoreOf<Schedule>
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
-    @State private var currentSelected = 1
+//    @State private var currentSelected = 1
     
     public var body: some View {
         NavigationStack {
@@ -26,8 +27,11 @@ public struct ScheduleView: View {
                 .font(.customSubheadline)
                 .foregroundStyle(#color("text_color"))
 
-                TabView(selection: $currentSelected) {
-                    ForEach(Array(store.scope(state: \.schedulePanels, action: \.schedulePanels).enumerated()), id: \.element.id) { index, store in
+                TabView(selection: $store.selectedPosition) {
+                    ForEach(
+                        Array(store.scope(state: \.schedulePanels, action: \.schedulePanels).enumerated()),
+                        id: \.element.id
+                    ) { index, store in
                         MonthPanelView(store: store)
                             .tag(index)
                     }
@@ -39,7 +43,7 @@ public struct ScheduleView: View {
             .background(#color("background"))
             .overlay(navigationBar)
         }
-        .onAppear { store.send(.onAppear) }
+        .onAppear { send(.onAppear) }
         .fullScreenCover(
             item: $store.scope(state: \.destination?.settings, action: \.destination.settings),
             content: SettingsView.init(store:)
