@@ -25,41 +25,8 @@ public struct ScheduleView: View {
                 .padding(.bottom, 8)
                 .font(.customSubheadline)
                 .foregroundStyle(#color("text_color"))
-                
-//                ScrollView(.horizontal) {
-//                    LazyHStack {
-//                        ForEach(store.scope(state: \.schedulePanels, action: \.schedulePanels)) { store in
-//                            MonthPanelView(store: store)
-//                                
-//                        }
-//                    }
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                    .scrollTargetLayout()
-//                }.scrollTargetBehavior(.viewAligned)
-//                PageViewController(
-//                    pages: pages.map { page in
-//                        page
-//                            .cornerRadius(8, corners: .allCorners)
-//                            .appShadow(opacity: 0.08)
-//                            .overlay {
-//                                RoundedRectangle(cornerRadius: 8)
-//                                    .inset(by: 0.5)
-//                                    .stroke(Color.app(.mainWhite), lineWidth: 1)
-//                            }
-//                            .padding(.horizontal, horizontalPadding)
-//                            .padding(.bottom, 12)
-//                    },
-//                    currentPage: $currentPage
-//                )
-//                PageViewController(pages:
-//                                    ) { store in
-//                    MonthPanelView(store: store)
-//                }
-                
+
                 TabView(selection: $currentSelected) {
-//                    ForEach(store.scope(state: \.schedulePanels, action: \.schedulePanels)) { store in
-//                        MonthPanelView(store: store)
-//                    }
                     ForEach(Array(store.scope(state: \.schedulePanels, action: \.schedulePanels).enumerated()), id: \.element.id) { index, store in
                         MonthPanelView(store: store)
                             .tag(index)
@@ -98,7 +65,23 @@ extension ScheduleView {
     )
 }
 
+/* PageViewController Example
 import UIKit
+PageViewController(
+    pages: pages.map { page in
+        page
+            .cornerRadius(8, corners: .allCorners)
+            .appShadow(opacity: 0.08)
+            .overlay {
+                RoundedRectangle(cornerRadius: 8)
+                    .inset(by: 0.5)
+                    .stroke(Color.app(.mainWhite), lineWidth: 1)
+            }
+            .padding(.horizontal, horizontalPadding)
+            .padding(.bottom, 12)
+    },
+    currentPage: $currentPage
+)
 
 struct PageViewController<Page: View>: UIViewControllerRepresentable {
     let pages: [Page]
@@ -175,3 +158,4 @@ struct PageViewController<Page: View>: UIViewControllerRepresentable {
         }
     }
 }
+ */
