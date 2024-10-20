@@ -26,7 +26,8 @@ public struct Schedule {
         var displayDays: IdentifiedArrayOf<[Day]> = []
         var weekdays: [String] = []
         // View State
-        var selectedPosition: Int = 1
+        var currentPage: Int = 1
+        var needsToCreateNewWeek = false
     
         var navigationBar: NavigationBar.State = NavigationBar.State(
             title: "My Work Schedule",
@@ -39,6 +40,7 @@ public struct Schedule {
     public enum Action: BindableAction, ViewAction {
         public enum View {
             case onAppear
+            case scrollEndReached
         }
         
         case destination(PresentationAction<Destination.Action>)
@@ -69,6 +71,44 @@ public struct Schedule {
                 state.weekdays = calendarKitClient.weekDays()
                 
                 return .send(.updateDisplayDates)
+                
+            case .view(.scrollEndReached):
+                guard state.schedulePanels.indices.contains(state.currentPage) else {
+                    return .none
+                }
+                if state.currentPage == 0 {
+                    // inserting new dates at index 0 and remove last item
+                    let currentFirstOriginDate = state.schedulePanels[0].originDay
+                    let newOriginDate = currentFirstOriginDate.previousMonthDay
+                    state.schedulePanels.insert(
+                        SchedulePanel.State(
+                            displayMode: state.displayMode,
+                            originDay: newOriginDate,
+                            displayDays: calendarKitClient.displayDays(from: newOriginDate)
+                        ),
+                        at: 0
+                    )
+                    
+                    state.schedulePanels.removeLast()
+                    state.currentPage = 1
+                    
+                }
+                if state.currentPage == (state.schedulePanels.count - 1) {
+                    // append new dates at last index and remove firs item
+                    let currentLastOriginDate = state.schedulePanels[state.schedulePanels.count - 1].originDay
+                    let newOriginDate = currentLastOriginDate.nextMonthDay
+                    state.schedulePanels.append(
+                        SchedulePanel.State(
+                            displayMode: state.displayMode,
+                            originDay: newOriginDate,
+                            displayDays: calendarKitClient.displayDays(from: newOriginDate)
+                        )
+                    )
+                    
+                    state.schedulePanels.removeFirst()
+                    state.currentPage = state.schedulePanels.count - 2
+                }
+                return .none
                 
             case .binding(\.startOfWeekday): // <- find the changed timing
                 print("Changed To: \(state.startOfWeekday)")

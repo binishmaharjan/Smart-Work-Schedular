@@ -18,25 +18,10 @@ public struct ScheduleView: View {
     public var body: some View {
         NavigationStack {
             VStack {
-                LazyVGrid(columns: columns) {
-                    ForEach(store.weekdays, id: \.self) { weekday in
-                        Text(weekday)
-                    }
-                }
+                weekdays()
                 .padding(.bottom, 8)
-                .font(.customSubheadline)
-                .foregroundStyle(#color("text_color"))
 
-                TabView(selection: $store.selectedPosition) {
-                    ForEach(
-                        Array(store.scope(state: \.schedulePanels, action: \.schedulePanels).enumerated()),
-                        id: \.element.id
-                    ) { index, store in
-                        MonthPanelView(store: store)
-                            .tag(index)
-                    }
-                }
-                .tabViewStyle(.page(indexDisplayMode: .never))
+                calendarPanel()
             }
             .padding(.top, 50) // Takes space for navigation bar
             .padding(.top, 8)
@@ -48,6 +33,12 @@ public struct ScheduleView: View {
             item: $store.scope(state: \.destination?.settings, action: \.destination.settings),
             content: SettingsView.init(store:)
         )
+        .onChange(of: store.currentPage, initial: false) { oldValue, newvalue in
+            // create week if the page reaches first/last page
+            if newvalue == 0 || newvalue == (store.schedulePanels.count - 1) {
+                store.needsToCreateNewWeek = true
+            }
+        }
     }
 }
 
@@ -57,6 +48,48 @@ extension ScheduleView {
         NavigationBarView(
             store: store.scope(state: \.navigationBar, action: \.navigationBar)
         )
+    }
+    
+    @ViewBuilder
+    private func weekdays() -> some View {
+        LazyVGrid(columns: columns) {
+            ForEach(store.weekdays, id: \.self) { weekday in
+                Text(weekday)
+            }
+        }
+        .font(.customSubheadline)
+        .foregroundStyle(#color("text_color"))
+    }
+    
+    @ViewBuilder
+    private func calendarPanel() -> some View {
+        TabView(selection: $store.currentPage) {
+            ForEach(
+                Array(store.scope(state: \.schedulePanels, action: \.schedulePanels).enumerated()),
+                id: \.element.id
+            ) { index, schedulePanelStore in
+                MonthPanelView(store: schedulePanelStore)
+                    .tag(index)
+                    .background {
+                        GeometryReader { proxy in
+                            let minX = proxy.frame(in: .global).minX
+                            
+                            Color.clear
+                                .preference(key: OffsetPreferenceKey.self, value: minX)
+                                .onPreferenceChange(OffsetPreferenceKey.self) { value in
+                                    // when offset reaches 0 and if createWeek is toggled  then
+                                    // simplty generate next set of dates
+                                    if value == 0 && store.needsToCreateNewWeek {
+                                        send(.scrollEndReached)
+                                        store.needsToCreateNewWeek = false
+                                    }
+                                }
+                            
+                        }
+                    }
+            }
+        }
+        .tabViewStyle(.page(indexDisplayMode: .never))
     }
 }
 
@@ -69,6 +102,12 @@ extension ScheduleView {
     )
 }
 
+public struct OffsetPreferenceKey: PreferenceKey {
+    public static var defaultValue: CGFloat = 0
+    public static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
 /* PageViewController Example
 import UIKit
 PageViewController(
