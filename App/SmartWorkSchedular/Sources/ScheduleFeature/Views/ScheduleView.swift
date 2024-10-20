@@ -12,7 +12,7 @@ public struct ScheduleView: View {
     
     @Bindable private var store: StoreOf<Schedule>
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
-    @State private var currentSelected = 0
+    @State private var currentSelected = 1
     
     public var body: some View {
         NavigationStack {
@@ -26,9 +26,43 @@ public struct ScheduleView: View {
                 .font(.customSubheadline)
                 .foregroundStyle(#color("text_color"))
                 
+//                ScrollView(.horizontal) {
+//                    LazyHStack {
+//                        ForEach(store.scope(state: \.schedulePanels, action: \.schedulePanels)) { store in
+//                            MonthPanelView(store: store)
+//                                
+//                        }
+//                    }
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                    .scrollTargetLayout()
+//                }.scrollTargetBehavior(.viewAligned)
+//                PageViewController(
+//                    pages: pages.map { page in
+//                        page
+//                            .cornerRadius(8, corners: .allCorners)
+//                            .appShadow(opacity: 0.08)
+//                            .overlay {
+//                                RoundedRectangle(cornerRadius: 8)
+//                                    .inset(by: 0.5)
+//                                    .stroke(Color.app(.mainWhite), lineWidth: 1)
+//                            }
+//                            .padding(.horizontal, horizontalPadding)
+//                            .padding(.bottom, 12)
+//                    },
+//                    currentPage: $currentPage
+//                )
+//                PageViewController(pages:
+//                                    ) { store in
+//                    MonthPanelView(store: store)
+//                }
+                
                 TabView(selection: $currentSelected) {
-                    ForEach(store.scope(state: \.schedulePanels, action: \.schedulePanels)) { store in
+//                    ForEach(store.scope(state: \.schedulePanels, action: \.schedulePanels)) { store in
+//                        MonthPanelView(store: store)
+//                    }
+                    ForEach(Array(store.scope(state: \.schedulePanels, action: \.schedulePanels).enumerated()), id: \.element.id) { index, store in
                         MonthPanelView(store: store)
+                            .tag(index)
                     }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
@@ -62,4 +96,82 @@ extension ScheduleView {
             reducer: Schedule.init
         )
     )
+}
+
+import UIKit
+
+struct PageViewController<Page: View>: UIViewControllerRepresentable {
+    let pages: [Page]
+    @Binding var currentPage: Int
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    func makeUIViewController(context: Context) -> UIPageViewController {
+        let pageViewController = UIPageViewController(
+            transitionStyle: .scroll,
+            navigationOrientation: .horizontal
+        )
+        pageViewController.view.backgroundColor = .clear
+        pageViewController.dataSource = context.coordinator
+        pageViewController.delegate = context.coordinator
+
+        return pageViewController
+    }
+
+    func updateUIViewController(_ pageViewController: UIPageViewController, context: Context) {
+        pageViewController.setViewControllers(
+            [context.coordinator.controllers[currentPage]],
+            direction: .forward,
+            animated: true
+        )
+    }
+
+    final class Coordinator: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+        let parent: PageViewController
+        let controllers: [UIViewController]
+
+        init(_ pageViewController: PageViewController) {
+            parent = pageViewController
+            controllers = parent.pages.map { UIHostingController(rootView: $0) }
+
+            controllers.forEach {
+                $0.view.backgroundColor = .clear
+            }
+        }
+
+        func pageViewController(
+            _ pageViewController: UIPageViewController,
+            viewControllerBefore viewController: UIViewController
+        ) -> UIViewController? {
+            guard let index = controllers.firstIndex(of: viewController) else {
+                return nil
+            }
+            return controllers[index - 1]
+        }
+
+        func pageViewController(
+            _ pageViewController: UIPageViewController,
+            viewControllerAfter viewController: UIViewController
+        ) -> UIViewController? {
+            guard let index = controllers.firstIndex(of: viewController) else {
+                return nil
+            }
+            return controllers[index + 1]
+        }
+
+        func pageViewController(
+            _ pageViewController: UIPageViewController,
+            didFinishAnimating finished: Bool,
+            previousViewControllers: [UIViewController],
+            transitionCompleted completed: Bool
+        ) {
+            if completed,
+               let visibleViewController = pageViewController.viewControllers?.first,
+               let index = controllers.firstIndex(of: visibleViewController) {
+                parent.currentPage = index
+            }
+        }
+    }
 }
