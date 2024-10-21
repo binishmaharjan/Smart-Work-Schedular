@@ -37,19 +37,19 @@ extension Font {
     /// FontSize: 34.0, Weight: Bold
     public static let customLargeTitle = custom(.bold, relativeTo: .largeTitle)
     /// FontSize: 28.0, Weight: SemiBold
-    public static let customTitle = custom(.semiBold, relativeTo: .title)
+    public static let customTitle = custom(.bold, relativeTo: .title)
     /// FontSize: 22.0, Weight: SemiBold
     public static let customTitle2 = custom(.semiBold, relativeTo: .title2)
     /// FontSize: 20.0, Weight: SemiBold
     public static let customTitle3 = custom(.semiBold, relativeTo: .title3)
     /// FontSize: 17.0, Weight: SemiBold
-    public static let customHeadline = custom(.semiBold, relativeTo: .headline)
+    public static let customHeadline = custom(.bold, relativeTo: .headline)
     /// FontSize: 17.0, Weight: Regular
     public static let customBody = custom(.regular, relativeTo: .body)
     /// FontSize: 16.0, Weight: Light
     public static let customCallout = custom(.light, relativeTo: .callout)
     /// FontSize: 15.0, Weight: Regular
-    public static let customSubheadline = custom(.regular, relativeTo: .subheadline)
+    public static let customSubheadline = custom(.semiBold, relativeTo: .subheadline)
     /// FontSize: 13.0, Weight: Light
     public static let customFootnote = custom(.light, relativeTo: .footnote)
     /// FontSize: 12.0, Weight: Regular

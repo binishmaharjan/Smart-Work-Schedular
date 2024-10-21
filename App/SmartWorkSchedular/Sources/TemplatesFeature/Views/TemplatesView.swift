@@ -1,5 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
+import SharedUIs
 
 public struct TemplatesView: View {
     public init(store: StoreOf<Templates>) {
@@ -10,6 +11,10 @@ public struct TemplatesView: View {
     
     public var body: some View {
         Text("Templates View")
+            .font(.customTitle)
+            .foregroundStyle(#color("text_color"))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(#color("background"))
     }
 }
 

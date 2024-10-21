@@ -1,8 +1,10 @@
 import Foundation
+import UIKit
 import ComposableArchitecture
 import TutorialFeature
 import MainTabFeature
 import LoggerClient
+import ThemeKit
 
 @Reducer
 public struct Root {
@@ -29,12 +31,14 @@ public struct Root {
     public init() { }
     
     @Dependency(\.loggerClient) private var logger
+    @Dependency(\.themeKitClient) private var themeKitClient
     
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
             case .onAppear:
                 logger.debug("onAppear")
+                themeKitClient.applyInitialAppScheme()
                 
                 return .none
                 

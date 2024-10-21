@@ -6,6 +6,8 @@ struct AppPlugins: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         Localized.self,
         Color.self,
-        Image.self
+        Image.self,
+        SharedPeer.self,
+        SharedAccessor.self
     ]
 }
