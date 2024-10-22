@@ -27,6 +27,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.14.0"),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.2"),
+        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", exact: "0.57.0"),
     ],
     targets: [
         .target(
@@ -37,7 +38,8 @@ let package = Package(
                 "SharedUIs",
                 "ThemeKit",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-            ]
+            ],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
         ),
         .target(
             name: "SharedUIs",
