@@ -39,7 +39,9 @@ let package = Package(
                 "ThemeKit",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ],
-            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+            ]
         ),
         .target(
             name: "SharedUIs",
@@ -49,6 +51,9 @@ let package = Package(
             ],
             resources: [
                 .process("Resources"),
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
             ]
         ),
         .target(

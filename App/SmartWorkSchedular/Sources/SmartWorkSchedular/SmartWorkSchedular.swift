@@ -1,5 +1,5 @@
-import SwiftUI
 import AppFeature
+import SwiftUI
 
 public protocol App: SwiftUI.App {
     var appDelegate: AppDelegate { get }

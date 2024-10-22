@@ -1,7 +1,5 @@
 import Foundation
 
-public extension Bundle {
-
-    static var sharedUIs: Bundle { .module }
+extension Bundle {
+    public static var sharedUIs: Bundle { .module }
 }
-

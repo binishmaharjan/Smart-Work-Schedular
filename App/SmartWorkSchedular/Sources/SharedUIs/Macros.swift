@@ -15,4 +15,3 @@ public macro sharedPeer(_ rawValueType: Any.Type) = #externalMacro(module: "AppM
 
 @attached(accessor)
 public macro sharedAccessor() = #externalMacro(module: "AppMacros", type: "SharedAccessor")
-
