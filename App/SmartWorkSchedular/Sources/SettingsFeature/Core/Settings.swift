@@ -1,5 +1,5 @@
-import Foundation
 import ComposableArchitecture
+import Foundation
 import NavigationBarFeature
 import SharedUIs
 
@@ -16,9 +16,9 @@ public struct Settings {
         public init() { }
         
         @Presents var destination: Destination.State?
-        var navigationBar: NavigationBar.State = NavigationBar.State(
+        var navigationBar = NavigationBar.State(
             title: "",
-            subTitle: #localized("Settings"), // TODO:
+            subTitle: #localized("Settings"),
             secondTrailingItem: "xmark"
         )
     }

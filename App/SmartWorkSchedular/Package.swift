@@ -137,6 +137,9 @@ let package = Package(
                 "CalendarKit",
                 "ThemeKit",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
             ]
         ),
         .target(

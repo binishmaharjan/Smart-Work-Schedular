@@ -1,7 +1,7 @@
-import SwiftUI
-import SharedUIs
 import ComposableArchitecture
 import NavigationBarFeature
+import SharedUIs
+import SwiftUI
 
 public struct SettingsView: View {
     public init(store: StoreOf<Settings>) {
@@ -70,7 +70,7 @@ extension SettingsView {
     )
 }
 
-//List {
+// List {
 //    ForEach(store.groupedAnniversariesList, id: \.self) { groupedAnniversaries in
 //        Section {
 //            ForEach(groupedAnniversaries.anniversaries, id: \.self) { anniversary in
@@ -96,4 +96,4 @@ extension SettingsView {
 //        }
 //        .textCase(nil)
 //    }
-//}
+// }
