@@ -1,9 +1,9 @@
-import SwiftUI
 import ComposableArchitecture
-import SharedUIs
-import ScheduleFeature
-import TemplatesFeature
 import EarningsFeature
+import ScheduleFeature
+import SharedUIs
+import SwiftUI
+import TemplatesFeature
 
 public struct MainTabView: View {
     public init(store: StoreOf<MainTab>) {
