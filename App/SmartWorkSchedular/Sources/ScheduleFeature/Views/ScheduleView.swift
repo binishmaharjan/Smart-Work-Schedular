@@ -1,9 +1,9 @@
-import SwiftUI
-import ComposableArchitecture
-import SharedUIs
 import CalendarKit
-import SettingsFeature
+import ComposableArchitecture
 import NavigationBarFeature
+import SettingsFeature
+import SharedUIs
+import SwiftUI
 
 @ViewAction(for: Schedule.self)
 public struct ScheduleView: View {
@@ -33,7 +33,7 @@ public struct ScheduleView: View {
             item: $store.scope(state: \.destination?.settings, action: \.destination.settings),
             content: SettingsView.init(store:)
         )
-        .onChange(of: store.currentPage, initial: false) { oldValue, newvalue in
+        .onChange(of: store.currentPage, initial: false) { _, newvalue in
             // create week if the page reaches first/last page
             if newvalue == 0 || newvalue == (store.schedulePanels.count - 1) {
                 store.needsToCreateNewWeek = true
@@ -84,7 +84,6 @@ extension ScheduleView {
                                         store.needsToCreateNewWeek = false
                                     }
                                 }
-                            
                         }
                     }
             }
@@ -102,12 +101,6 @@ extension ScheduleView {
     )
 }
 
-public struct OffsetPreferenceKey: PreferenceKey {
-    public static var defaultValue: CGFloat = 0
-    public static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
-    }
-}
 /* PageViewController Example
 import UIKit
 PageViewController(
@@ -193,12 +186,10 @@ struct PageViewController<Page: View>: UIViewControllerRepresentable {
             previousViewControllers: [UIViewController],
             transitionCompleted completed: Bool
         ) {
-            if completed,
-               let visibleViewController = pageViewController.viewControllers?.first,
-               let index = controllers.firstIndex(of: visibleViewController) {
+            if completed, let visibleViewController = pageViewController.viewControllers?.first, let index = controllers.firstIndex(of: visibleViewController) {
                 parent.currentPage = index
             }
         }
     }
 }
- */
+*/

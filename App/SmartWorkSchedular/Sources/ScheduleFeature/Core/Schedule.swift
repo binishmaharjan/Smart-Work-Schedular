@@ -1,9 +1,9 @@
-import Foundation
-import ComposableArchitecture
 import CalendarKit
-import SharedUIs
-import SettingsFeature
+import ComposableArchitecture
+import Foundation
 import NavigationBarFeature
+import SettingsFeature
+import SharedUIs
 
 @Reducer
 public struct Schedule {
@@ -29,9 +29,9 @@ public struct Schedule {
         var currentPage: Int = 1
         var needsToCreateNewWeek = false
     
-        var navigationBar: NavigationBar.State = NavigationBar.State(
+        var navigationBar = NavigationBar.State(
             title: "My Work Schedule",
-            subTitle: "October", // TODO:
+            subTitle: "October",
             firstTrailingItem: "plus",
             secondTrailingItem: "gearshape.fill"
         )
@@ -76,6 +76,7 @@ public struct Schedule {
                 guard state.schedulePanels.indices.contains(state.currentPage) else {
                     return .none
                 }
+                
                 if state.currentPage == 0 {
                     // inserting new dates at index 0 and remove last item
                     let currentFirstOriginDate = state.schedulePanels[0].originDay
@@ -91,8 +92,8 @@ public struct Schedule {
                     
                     state.schedulePanels.removeLast()
                     state.currentPage = 1
-                    
                 }
+                
                 if state.currentPage == (state.schedulePanels.count - 1) {
                     // append new dates at last index and remove firs item
                     let currentLastOriginDate = state.schedulePanels[state.schedulePanels.count - 1].originDay
