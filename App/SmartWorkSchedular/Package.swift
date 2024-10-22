@@ -113,6 +113,9 @@ let package = Package(
                 "SharedUIs",
                 "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
             ]
         ),
         .target(

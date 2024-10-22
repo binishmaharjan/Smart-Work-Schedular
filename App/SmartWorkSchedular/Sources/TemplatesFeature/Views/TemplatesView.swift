@@ -1,6 +1,6 @@
-import SwiftUI
 import ComposableArchitecture
 import SharedUIs
+import SwiftUI
 
 public struct TemplatesView: View {
     public init(store: StoreOf<Templates>) {
