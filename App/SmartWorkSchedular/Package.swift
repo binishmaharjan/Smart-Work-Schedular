@@ -64,6 +64,9 @@ let package = Package(
                 "MainTabFeature",
                 "UserDefaultsClient",
                 "LoggerClient",
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
             ]
         ),
         .target(
