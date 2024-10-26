@@ -184,6 +184,8 @@ extension Schedule {
             
             state.schedulePanels.removeLast()
             state.currentPage = 1
+            // update focusDay
+            state.focusDay = newOriginDate
         }
         
         if state.currentPage == (state.schedulePanels.count - 1) {
@@ -200,6 +202,8 @@ extension Schedule {
             
             state.schedulePanels.removeFirst()
             state.currentPage = state.schedulePanels.count - 2
+            // update focusDay
+            state.focusDay = newOriginDate
         }
         return .none
     }
