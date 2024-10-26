@@ -115,13 +115,13 @@ extension Day {
     /// Returns all days in the week
     public var daysInWeek: Week {
         var days: [Day] = []
-        let weekInterval = gegorianCalendar.dateInterval(of: .weekOfMonth, for: date)
+        let weekInterval = gregorianCalendar.dateInterval(of: .weekOfMonth, for: date)
         guard let startOfWeek = weekInterval?.start else {
             return Week(days: [])
         }
         
         (0..<7) .forEach { index in
-            if let day = gegorianCalendar.date(byAdding: .day, value: index, to: startOfWeek) {
+            if let day = gregorianCalendar.date(byAdding: .day, value: index, to: startOfWeek) {
                 days.append(Day(date: day))
             }
         }
@@ -136,12 +136,12 @@ extension Day {
     public var daysInMonth: Month {
         var weeks: [Week] = []
         // get start date of the month
-        let monthInterval = gegorianCalendar.dateInterval(of: .month, for: date)
+        let monthInterval = gregorianCalendar.dateInterval(of: .month, for: date)
         guard let startOfMonth = monthInterval?.start else {
             return Month(weeks: [])
         }
         // get the end date of the month
-        let nextMonthInterval = gegorianCalendar.dateInterval(of: .month, for: date.nextMonthDate)
+        let nextMonthInterval = gregorianCalendar.dateInterval(of: .month, for: date.nextMonthDate)
         guard let startOfNextmonth = nextMonthInterval?.start else {
             return Month(weeks: [])
         }

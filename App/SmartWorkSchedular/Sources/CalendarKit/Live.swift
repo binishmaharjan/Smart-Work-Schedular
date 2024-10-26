@@ -3,7 +3,7 @@ import Foundation
 import LoggerClient
 
 // MARK: The Main Calendar instance
-var gegorianCalendar: Calendar = {
+var gregorianCalendar: Calendar = {
     @SharedReader(.startOfWeekday) var startOfWeekday = Weekday.sunday
     
     var calendar = Calendar(identifier: .gregorian)
@@ -22,7 +22,7 @@ extension CalendarKitClient {
         // MARK: Shared Properties
         @Shared(.displayMode) var displayMode = DisplayMode.month
         @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
-        // MARK: Dependicies
+        // MARK: Dependencies
         @Dependency(\.loggerClient) var logger
         
         return CalendarKitClient(
@@ -72,10 +72,15 @@ extension CalendarKitClient {
                 logger.debug("updateStartWeekdayOn(to:) - \(weekday)")
                 
                 startOfWeekday = weekday
-                gegorianCalendar.firstWeekday = weekday.index
+                gregorianCalendar.firstWeekday = weekday.index
             },
             weekDays: {
-                gegorianCalendar.shortWeekdaySymbols
+                // get the short weekday symbol, starts at sun
+                let shortWeekdays = gregorianCalendar.shortWeekdaySymbols
+                // get the start index from the calendar
+                let startIndex = gregorianCalendar.firstWeekday - 1
+                // rearrange the weekday to start from specific first weekday
+                return Array(shortWeekdays[startIndex...] + shortWeekdays[..<startIndex])
             }
         )
     }

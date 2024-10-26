@@ -24,7 +24,6 @@ public struct Schedule {
         @Presents var destination: Destination.State?
         var schedulePanels: IdentifiedArrayOf<SchedulePanel.State> = []
         var focusDay = Day(date: .now)
-        var displayDays: IdentifiedArrayOf<[Day]> = []
         var weekdays: [String] = []
         // View State
         var currentPage: Int = 1
@@ -50,18 +49,16 @@ public struct Schedule {
         case schedulePanels(IdentifiedActionOf<SchedulePanel>)
         case view(View)
         
+        case observeStartWeekOn
+        case observerDisplayMode
         case startWeekOnUpdated(Weekday)
         case displayModeUpdated(DisplayMode)
-        case previousButtonPressed
-        case nextButtonPressed
-        case monthButtonPressed
-        case weekButtonPressed
-        case dayButtonPressed
     }
     
     public init() { }
     
     @Dependency(\.calendarKitClient) private var calendarKitClient
+    @Dependency(\.loggerClient) private var logger
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -69,51 +66,61 @@ public struct Schedule {
         Reduce<State, Action> { state, action in
             switch action {
             case .view(.onAppear):
+                logger.debug("view: onAppear")
+                
                 // initialize weekdays
                 state.weekdays = calendarKitClient.weekDays()
                 
-                // observe change in the startOfWeekDay
-                _ = state.$startOfWeekday.publisher.map(Action.startWeekOnUpdated)
-                _ = state.$displayMode.publisher.map(Action.displayModeUpdated)
+                guard state.schedulePanels.isEmpty else {
+                    return .none
+                }
                 
-                return createInitialDisplayDate(state: &state)
+                // create display dates
+                createInitialDisplayDate(state: &state)
+                
+                return .run { send in
+                    await send(.observeStartWeekOn)
+                    await send(.observerDisplayMode)
+                }
                 
             case .view(.scrollEndReached):
+                logger.debug("view: scrollEndReached")
+                
                 return createNextDisplayDate(state: &state)
                 
+            case .observeStartWeekOn:
+                logger.debug("observeStartWeekOn")
+                
+                return .publisher {
+                    state.$startOfWeekday.publisher.map(Action.startWeekOnUpdated)
+                }
+                
+            case .observerDisplayMode:
+                logger.debug("observerDisplayMode")
+                
+                return .publisher {
+                    state.$displayMode.publisher.map(Action.displayModeUpdated)
+                }
+                
             case .startWeekOnUpdated(let weekday):
-                print("Start Week Updated To: \(weekday)")
+                logger.debug("startWeekOnUpdated: \(weekday)")
+                
+                createInitialDisplayDate(state: &state)
                 return .none
                 
             case .displayModeUpdated(let displayMode):
-                print("Display Mode Updated To: \(displayMode)")
+                logger.debug("displayModeUpdated: \(displayMode)")
+                
                 return .none
                 
-            case .previousButtonPressed:
-                state.focusDay = calendarKitClient.previousFocusDay(state.focusDay)
-                return createInitialDisplayDate(state: &state)
-                
-            case .nextButtonPressed:
-                state.focusDay = calendarKitClient.nextFocusDay(state.focusDay)
-                return createInitialDisplayDate(state: &state)
-                
-            case .monthButtonPressed:
-                state.displayMode = .month
-
-                return createInitialDisplayDate(state: &state)
-                
-            case .weekButtonPressed:
-                state.displayMode = .week
-                return createInitialDisplayDate(state: &state)
-                
-            case .dayButtonPressed:
-                state.displayMode = .day
-                return createInitialDisplayDate(state: &state)
-                
             case .navigationBar(.delegate(.executeFirstAction)):
+                logger.debug("navigationBar: delegate: executeFirstAction")
+                
                 return .none
                 
             case .navigationBar(.delegate(.executeSecondAction)):
+                logger.debug("navigationBar: delegate: executeSecondAction")
+                
                 state.destination = .calendarMode(CalendarMode.State())
                 return .none
                 
@@ -134,7 +141,10 @@ public struct Schedule {
 
 // MARK: Effects
 extension Schedule {
-    private func createInitialDisplayDate(state: inout State) -> Effect<Action> {
+    private func createInitialDisplayDate(state: inout State) {
+        // clear current displayDays
+        state.schedulePanels.removeAll()
+        
         // Initially set previous month as first
         let prevMonth = calendarKitClient.displayDays(from: state.focusDay.previousMonthDay)
         state.schedulePanels.append(
@@ -164,8 +174,6 @@ extension Schedule {
                 displayDays: nextMonth
             )
         )
-        
-        return .none
     }
     
     private func createNextDisplayDate(state: inout State) -> Effect<Action> {
@@ -210,6 +218,7 @@ extension Schedule {
             // update focusDay
             state.focusDay = newOriginDate
         }
+        
         return .none
     }
 }

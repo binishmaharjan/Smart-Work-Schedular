@@ -35,7 +35,7 @@ public struct CalendarMode {
                 guard displayMode != state.displayMode else {
                     return .none
                 }
-                logger.debug("displayMode Chaged to: \(displayMode)")
+                logger.debug("displayMode Changed to: \(displayMode)")
                 
                 state.displayMode = displayMode
                 return .run { _ in
