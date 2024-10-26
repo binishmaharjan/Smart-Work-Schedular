@@ -12,8 +12,9 @@ public struct ScheduleView: View {
     }
     
     @Bindable public var store: StoreOf<Schedule>
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     @State private var sheetHeight: CGFloat = .zero
+    @State private var needsToCreateNewDays = false
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
     public var body: some View {
         NavigationStack {
@@ -37,10 +38,10 @@ public struct ScheduleView: View {
             item: $store.scope(state: \.destination?.settings, action: \.destination.settings),
             content: SettingsView.init(store:)
         )
-        .onChange(of: store.currentPage, initial: false) { _, newvalue in
+        .onChange(of: store.currentPage, initial: false) { _, newValue in
             // create week if the page reaches first/last page
-            if newvalue == 0 || newvalue == (store.schedulePanels.count - 1) {
-                store.needsToCreateNewWeek = true
+            if newValue == 0 || newValue == (store.schedulePanels.count - 1) {
+                needsToCreateNewDays = true
             }
         }
     }
@@ -72,7 +73,7 @@ extension ScheduleView {
                 Array(store.scope(state: \.schedulePanels, action: \.schedulePanels).enumerated()),
                 id: \.element.id
             ) { index, schedulePanelStore in
-                MonthPanelView(store: schedulePanelStore)
+                schedulePanel(for: schedulePanelStore)
                     .tag(index)
                     .background {
                         GeometryReader { proxy in
@@ -82,10 +83,10 @@ extension ScheduleView {
                                 .preference(key: OffsetPreferenceKey.self, value: minX)
                                 .onPreferenceChange(OffsetPreferenceKey.self) { value in
                                     // when offset reaches 0 and if createWeek is toggled  then
-                                    // simplty generate next set of dates
-                                    if value == 0 && store.needsToCreateNewWeek {
+                                    // simply generate next set of dates
+                                    if value == 0 && needsToCreateNewDays {
                                         send(.scrollEndReached)
-                                        store.needsToCreateNewWeek = false
+                                        needsToCreateNewDays = false
                                     }
                                 }
                         }
@@ -93,6 +94,26 @@ extension ScheduleView {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
+    }
+    
+    private func schedulePanel(for store: StoreOf<SchedulePanel>) -> some View {
+        switch store.displayMode {
+        case .month:
+            return AnyView(MonthPanelView(store: store))
+            
+        case .week:
+            return AnyView(MonthPanelView(store: store))
+            
+        case .day:
+            return AnyView(
+                VStack {
+                    Text("Day View")
+                    ForEach(store.displayDays) { day in
+                        Text(day.formatted(.calendarDay))
+                    }
+                }
+            )
+        }
     }
     
     private func calendarMode(store: StoreOf<CalendarMode>) -> some View {

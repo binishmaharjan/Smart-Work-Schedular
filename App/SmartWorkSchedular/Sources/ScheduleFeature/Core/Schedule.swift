@@ -23,11 +23,14 @@ public struct Schedule {
         // Data State
         @Presents var destination: Destination.State?
         var schedulePanels: IdentifiedArrayOf<SchedulePanel.State> = []
-        var focusDay = Day(date: .now)
+        var focusDay = Day(date: .now) {
+            didSet {
+                print("🍎: \(focusDay.date.startOfDate)")
+            }
+        }
         var weekdays: [String] = []
         // View State
         var currentPage: Int = 1
-        var needsToCreateNewWeek = false
     
         var navigationBar = NavigationBar.State(
             title: "My Work Schedule",
@@ -86,7 +89,8 @@ public struct Schedule {
             case .view(.scrollEndReached):
                 logger.debug("view: scrollEndReached")
                 
-                return createNextDisplayDate(state: &state)
+                createNextDisplayDate(state: &state)
+                return .none
                 
             case .observeStartWeekOn:
                 logger.debug("observeStartWeekOn")
@@ -111,6 +115,7 @@ public struct Schedule {
             case .displayModeUpdated(let displayMode):
                 logger.debug("displayModeUpdated: \(displayMode)")
                 
+                createInitialDisplayDate(state: &state)
                 return .none
                 
             case .navigationBar(.delegate(.executeFirstAction)):
@@ -139,86 +144,106 @@ public struct Schedule {
     }
 }
 
-// MARK: Effects
+// MARK: Effects & Methods
 extension Schedule {
     private func createInitialDisplayDate(state: inout State) {
         // clear current displayDays
         state.schedulePanels.removeAll()
         
         // Initially set previous month as first
-        let prevMonth = calendarKitClient.displayDays(from: state.focusDay.previousMonthDay)
+        let previousOriginDay = calendarKitClient.previousFocusDay(from: state.focusDay)
+        let previousDisplayDays = calendarKitClient.displayDays(from: previousOriginDay)
         state.schedulePanels.append(
             SchedulePanel.State(
                 displayMode: state.displayMode,
                 originDay: state.focusDay.previousMonthDay,
-                displayDays: prevMonth
+                displayDays: previousDisplayDays
             )
         )
         
         // Initially set this month as second
-        let thisMonth = calendarKitClient.displayDays(from: state.focusDay)
+        let displayDays = calendarKitClient.displayDays(from: state.focusDay)
         state.schedulePanels.append(
             SchedulePanel.State(
                 displayMode: state.displayMode,
                 originDay: state.focusDay,
-                displayDays: thisMonth
+                displayDays: displayDays
             )
         )
         
         // Initially set next month as third
-        let nextMonth = calendarKitClient.displayDays(from: state.focusDay.nextMonthDay)
+        let nextOriginDay = calendarKitClient.nextFocusDay(from: state.focusDay)
+        let nextDisplayDays = calendarKitClient.displayDays(from: nextOriginDay)
         state.schedulePanels.append(
             SchedulePanel.State(
                 displayMode: state.displayMode,
                 originDay: state.focusDay.nextMonthDay,
-                displayDays: nextMonth
+                displayDays: nextDisplayDays
             )
         )
     }
     
-    private func createNextDisplayDate(state: inout State) -> Effect<Action> {
+    private func createNextDisplayDate(state: inout State) {
         // safe guard for index
         guard state.schedulePanels.indices.contains(state.currentPage) else {
-            return .none
+            return
         }
         
+        // inserting new dates at index 0 and remove last item
         if state.currentPage == 0 {
-            // inserting new dates at index 0 and remove last item
-            let currentFirstOriginDate = state.schedulePanels[0].originDay
-            let newOriginDate = currentFirstOriginDate.previousMonthDay
+            // get first page origin day
+            let currentFirstOriginDay = state.schedulePanels[0].originDay
+            // get new origin day from first day, to add as first page
+            let newOriginDay = calendarKitClient.previousFocusDay(from: currentFirstOriginDay)
+            print("🍎 Current : \(currentFirstOriginDay.date.startOfDate)")
+            print("🍎 Previous: \(newOriginDay.date.startOfDate)")
+            // create new display days
+            let newDisplayDays = calendarKitClient.displayDays(from: newOriginDay)
+            // add new created display days and add at first page
             state.schedulePanels.insert(
                 SchedulePanel.State(
                     displayMode: state.displayMode,
-                    originDay: newOriginDate,
-                    displayDays: calendarKitClient.displayDays(from: newOriginDate)
+                    originDay: newOriginDay,
+                    displayDays: newDisplayDays
                 ),
                 at: 0
             )
             
+            // remove last page
             state.schedulePanels.removeLast()
+            // adjust index
             state.currentPage = 1
-            // update focusDay
-            state.focusDay = newOriginDate
+            // update originDay to current middle page, i.e previous first day
+            // since previous first day was changed to middle page
+            state.focusDay = currentFirstOriginDay
         }
         
+        // append new dates at last index and remove firs item
         if state.currentPage == (state.schedulePanels.count - 1) {
-            // append new dates at last index and remove firs item
-            let currentLastOriginDate = state.schedulePanels[state.schedulePanels.count - 1].originDay
-            let newOriginDate = currentLastOriginDate.nextMonthDay
+            // get last page origin day
+            let currentLastOriginDay = state.schedulePanels[state.schedulePanels.count - 1].originDay
+            // get new origin day from last day, to add as first page
+            let newOriginDay = calendarKitClient.nextFocusDay(from: currentLastOriginDay)
+            print("🍎 Current : \(currentLastOriginDay.date.startOfDate)")
+            print("🍎 Next: \(newOriginDay.date.startOfDate)")
+            // create new display days
+            let newDisplayDays = calendarKitClient.displayDays(from: newOriginDay)
+            // add new created display days and add at last page
             state.schedulePanels.append(
                 SchedulePanel.State(
                     displayMode: state.displayMode,
-                    originDay: newOriginDate,
-                    displayDays: calendarKitClient.displayDays(from: newOriginDate)
+                    originDay: newOriginDay,
+                    displayDays: newDisplayDays
                 )
             )
             
+            // remove first page
             state.schedulePanels.removeFirst()
+            // adjust index
             state.currentPage = state.schedulePanels.count - 2
-            // update focusDay
-            state.focusDay = newOriginDate
+            // update originDay to current middle page, i.e previous last day
+            // since previous last day was changed to middle page
+            state.focusDay = currentLastOriginDay
         }
-        
-        return .none
     }
 }
