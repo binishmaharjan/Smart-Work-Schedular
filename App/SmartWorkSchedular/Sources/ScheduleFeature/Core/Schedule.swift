@@ -49,7 +49,6 @@ public struct Schedule {
         case schedulePanels(IdentifiedActionOf<SchedulePanel>)
         case view(View)
         
-        case createInitialDisplayDate
         case startWeekOnUpdated(Weekday)
         case previousButtonPressed
         case nextButtonPressed
@@ -70,8 +69,9 @@ public struct Schedule {
             case .view(.onAppear):
                 // initialize weekdays
                 state.weekdays = calendarKitClient.weekDays()
-                
-                return .send(.createInitialDisplayDate)
+                // observe change in the startOfWeekDay
+                _ = state.$startOfWeekday.publisher.map(Action.startWeekOnUpdated)
+                return createInitialDisplayDate(state: &state)
                 
             case .view(.scrollEndReached):
                 return createNextDisplayDate(state: &state)
@@ -80,33 +80,30 @@ public struct Schedule {
                 print("Changed To: \(state.startOfWeekday)")
                 return .none
                 
-            case .createInitialDisplayDate:
-                return createInitialDisplayDate(state: &state)
-                
             case .startWeekOnUpdated(let weekday):
                 print("Start Week Updated To: \(weekday)")
                 return .none
                 
             case .previousButtonPressed:
                 state.focusDay = calendarKitClient.previousFocusDay(state.focusDay)
-                return .send(.createInitialDisplayDate)
+                return createInitialDisplayDate(state: &state)
                 
             case .nextButtonPressed:
                 state.focusDay = calendarKitClient.nextFocusDay(state.focusDay)
-                return .send(.createInitialDisplayDate)
+                return createInitialDisplayDate(state: &state)
                 
             case .monthButtonPressed:
                 state.displayMode = .month
 
-                return .send(.createInitialDisplayDate)
+                return createInitialDisplayDate(state: &state)
                 
             case .weekButtonPressed:
                 state.displayMode = .week
-                return .send(.createInitialDisplayDate)
+                return createInitialDisplayDate(state: &state)
                 
             case .dayButtonPressed:
                 state.displayMode = .day
-                return .send(.createInitialDisplayDate)
+                return createInitialDisplayDate(state: &state)
                 
             case .navigationBar(.delegate(.executeFirstAction)):
                 return .none

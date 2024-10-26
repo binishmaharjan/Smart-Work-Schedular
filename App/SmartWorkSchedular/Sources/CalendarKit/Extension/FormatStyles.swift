@@ -16,7 +16,7 @@ public enum DateFormatStyle {
     public struct CalendarDay: FormatStyle {
         public func format(_ value: Date) -> String {
             let formatter = DateFormatter()
-            formatter.dateFormat = "d"
+            formatter.dateFormat = "MM,d"
             return formatter.string(from: value.startOfDate)
         }
     }
