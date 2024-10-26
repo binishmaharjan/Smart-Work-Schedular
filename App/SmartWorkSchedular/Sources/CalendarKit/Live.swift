@@ -1,5 +1,5 @@
-import Foundation
 import ComposableArchitecture
+import Foundation
 import LoggerClient
 
 // MARK: The Main Calendar instance
@@ -32,8 +32,10 @@ extension CalendarKitClient {
                 switch displayMode {
                 case .day:
                     return [focusDay]
+                    
                 case .week:
                     return focusDay.daysInWeek.days
+                    
                 case .month:
                     return focusDay.daysInMonth.weeks.flatMap(\.days)
                 }
@@ -44,8 +46,10 @@ extension CalendarKitClient {
                 switch displayMode {
                 case .month:
                     return currentFocusDay.nextMonthDay
+                    
                 case .week:
                     return currentFocusDay.nextWeekDay
+                    
                 case .day:
                     return currentFocusDay.nextDay
                 }
@@ -56,8 +60,10 @@ extension CalendarKitClient {
                 switch displayMode {
                 case .month:
                     return currentFocusDay.previousMonthDay
+                    
                 case .week:
                     return currentFocusDay.previousWeekDay
+                    
                 case .day:
                     return currentFocusDay.previousDay
                 }

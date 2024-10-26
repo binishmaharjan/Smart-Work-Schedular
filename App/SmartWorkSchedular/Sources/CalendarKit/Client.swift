@@ -1,6 +1,6 @@
-import Foundation
 import Dependencies
 import DependenciesMacros
+import Foundation
 
 @DependencyClient
 public struct CalendarKitClient {
@@ -26,7 +26,7 @@ extension CalendarKitClient: TestDependencyKey {
     public static var previewValue = Self.noop
     
     public static var noop = CalendarKitClient(
-        displayDays:  { _ in [] },
+        displayDays: { _ in [] },
         nextFocusDay: { _ in .init(date: .now) },
         previousFocusDay: { _ in .init(date: .now) },
         updateStartWeekdayOn: { _ in },

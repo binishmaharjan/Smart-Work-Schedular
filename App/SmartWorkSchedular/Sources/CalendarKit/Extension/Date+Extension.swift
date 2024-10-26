@@ -12,39 +12,19 @@ extension Date {
         gegorianCalendar.isDateInToday(self)
     }
     
-    /// Determines if the give date is same as self
-    public func isSameDate(as date: Date) -> Bool {
-        gegorianCalendar.isDate(self, inSameDayAs: date)
-    }
-    
     /// Determines if the self is tomorrow
     public var isTomorrow: Bool {
         gegorianCalendar.isDateInTomorrow(self)
-    }
-    
-    /// Determines if the date is in same year as the date
-    public func isInSameYear(as date: Date) -> Bool {
-        isEqual(to: date, toGranularity: .year, in: gegorianCalendar)
     }
     
     /// Determines if the date is in this year
     public var isInThisYear: Bool {
         isEqual(to: .now, toGranularity: .year, in: gegorianCalendar)
     }
-    
-    /// Determines if the date is in same month as the date
-    public func isInSameMonth(as date: Date) -> Bool {
-        isEqual(to: date, toGranularity: .month, in: gegorianCalendar)
-    }
             
     /// Determines if the date is in this month
     public var isInThisMonth: Bool {
         isEqual(to: .now, toGranularity: .month, in: gegorianCalendar)
-    }
-    
-    /// Determines if the date is in same week as the date
-    public func isInSameWeek(as date: Date) -> Bool {
-        isEqual(to: date, toGranularity: .weekOfYear, in: gegorianCalendar)
     }
     
     /// Determines if the date is in same week
@@ -103,6 +83,26 @@ extension Date {
             return self
         }
         return nextWeekDate
+    }
+    
+    /// Determines if the give date is same as self
+    public func isSameDate(as date: Date) -> Bool {
+        gegorianCalendar.isDate(self, inSameDayAs: date)
+    }
+    
+    /// Determines if the date is in same year as the date
+    public func isInSameYear(as date: Date) -> Bool {
+        isEqual(to: date, toGranularity: .year, in: gegorianCalendar)
+    }
+    
+    /// Determines if the date is in same week as the date
+    public func isInSameWeek(as date: Date) -> Bool {
+        isEqual(to: date, toGranularity: .weekOfYear, in: gegorianCalendar)
+    }
+    
+    /// Determines if the date is in same month as the date
+    public func isInSameMonth(as date: Date) -> Bool {
+        isEqual(to: date, toGranularity: .month, in: gegorianCalendar)
     }
 }
 

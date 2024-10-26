@@ -50,6 +50,7 @@ public struct Schedule {
         case view(View)
         
         case updateDisplayDates
+        case startWeekOnUpdated(Weekday)
         case previousButtonPressed
         case nextButtonPressed
         case monthButtonPressed
@@ -146,6 +147,10 @@ public struct Schedule {
                     )
                 )
                 
+                return .none
+                
+            case .startWeekOnUpdated(let weekday):
+                print("Start Week Updated To: \(weekday)")
                 return .none
                 
             case .previousButtonPressed:

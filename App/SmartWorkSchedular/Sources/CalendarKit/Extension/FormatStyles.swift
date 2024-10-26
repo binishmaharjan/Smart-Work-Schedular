@@ -11,23 +11,13 @@ public struct DateIdentifierFormat: FormatStyle {
     }
 }
 
-extension FormatStyle where Self == DateIdentifierFormat {
-    /// Format Style for date as identifier
-    public static var dateIdentifier: DateIdentifierFormat { .init() }
-}
-
 // MARK: Day Format
 public struct CalendarDayFormat: FormatStyle {
     public func format(_ value: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat =  "d"
+        formatter.dateFormat = "d"
         return formatter.string(from: value.startOfDate)
     }
-}
-
-extension FormatStyle where Self == CalendarDayFormat {
-    /// Format Style to display day in calendar
-    public static var calendarDay: CalendarDayFormat { .init() }
 }
 
 // MARK: Weekday Format
@@ -36,6 +26,16 @@ public struct WeekDayFormat: FormatStyle {
         let formatter = Date.FormatStyle().weekday()
         return formatter.format(value.startOfDate)
     }
+}
+
+extension FormatStyle where Self == DateIdentifierFormat {
+    /// Format Style for date as identifier
+    public static var dateIdentifier: DateIdentifierFormat { .init() }
+}
+
+extension FormatStyle where Self == CalendarDayFormat {
+    /// Format Style to display day in calendar
+    public static var calendarDay: CalendarDayFormat { .init() }
 }
 
 extension FormatStyle where Self == WeekDayFormat {

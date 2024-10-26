@@ -1,5 +1,5 @@
-import Foundation
 import ComposableArchitecture
+import Foundation
 
 // MARK: AppStorage Key
 extension AppStorageKey where Value == AppScheme {
@@ -10,4 +10,3 @@ extension AppStorageKey where Value == AppScheme {
 extension PersistenceReaderKey where Self == AppStorageKey<AppScheme> {
     public static var appScheme: Self { AppStorageKey.appScheme }
 }
-

@@ -5,8 +5,7 @@ public struct Week: Identifiable {
         self.days = days
     }
     
-    public var id: UUID = UUID()
-    public var hashValue: Int { Int(firstDayOfWeek.date.timeIntervalSinceNow) }
+    public var id = UUID()
     public var days: [Day]
 }
 

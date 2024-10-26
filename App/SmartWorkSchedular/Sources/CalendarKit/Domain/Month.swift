@@ -5,7 +5,7 @@ public struct Month: Identifiable {
         self.weeks = weeks
     }
     
-    public var id: UUID = UUID()
+    public var id = UUID()
     public var weeks: [Week]
 }
 

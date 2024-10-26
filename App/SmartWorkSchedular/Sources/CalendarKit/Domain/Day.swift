@@ -12,7 +12,7 @@ public struct Day: Identifiable, Equatable {
 // MARK: Identifiable
 extension Array: Identifiable where Element == Day {
     public var id: String {
-        return map { $0.id }.reduce("", +)
+        map { $0.id }.reduce("", +)
     }
 }
 
@@ -28,11 +28,6 @@ extension Day {
     public var isToday: Bool {
         date.isToday
     }
-
-    /// Determines if the give date is same as self
-    public func isSameDay(as day: Day) -> Bool {
-        date.isSameDate(as: day.date)
-    }
     
     /// Determines if the self is tomorrow
     public var isTomorrow: Bool {
@@ -44,29 +39,14 @@ extension Day {
         date.isYesterDay
     }
     
-    /// Determines if the day is in same year as the date
-    public func isInSameYear(as day: Day) -> Bool {
-        date.isInSameYear(as: day.date)
-    }
-    
     /// Determines if the day is in this year
     public var isInThisYear: Bool {
         date.isInThisYear
     }
     
-    /// Determines if the day is in same month as the date
-    public func isInSameMonth(as day: Day) -> Bool {
-        date.isInSameMonth(as: day.date)
-    }
-    
     /// Determines if the day is in this month
     public var isInThisMonth: Bool {
         date.isInThisMonth
-    }
-    
-    /// Determines if the day is in same week as the date
-    public func isInSameWeek(as day: Day) -> Bool {
-        date.isInSameWeek(as: day.date)
     }
     
     /// Determines if the day is in same week
@@ -104,9 +84,29 @@ extension Day {
         Day(date: date.previousMonthDate)
     }
     
+    /// Determines if the give date is same as self
+    public func isSameDay(as day: Day) -> Bool {
+        date.isSameDate(as: day.date)
+    }
+    
+    /// Determines if the day is in same month as the date
+    public func isInSameMonth(as day: Day) -> Bool {
+        date.isInSameMonth(as: day.date)
+    }
+    
+    /// Determines if the day is in same week as the date
+    public func isInSameWeek(as day: Day) -> Bool {
+        date.isInSameWeek(as: day.date)
+    }
+    
+    /// Determines if the day is in same year as the date
+    public func isInSameYear(as day: Day) -> Bool {
+        date.isInSameYear(as: day.date)
+    }
+    
     /// Returns the date as formatted string
     public func formatted<F>(_ format: F) -> F.FormatOutput where F : FormatStyle, F.FormatInput == Date , F.FormatOutput == String {
-        return date.formatted(format)
+        date.formatted(format)
     }
 }
 
