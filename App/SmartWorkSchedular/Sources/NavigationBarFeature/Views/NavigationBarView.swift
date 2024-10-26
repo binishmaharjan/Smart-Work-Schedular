@@ -1,6 +1,6 @@
-import SwiftUI
 import ComposableArchitecture
 import SharedUIs
+import SwiftUI
 
 public struct NavigationBarView: View {
     public init(store: StoreOf<NavigationBar>) {
@@ -30,7 +30,6 @@ public struct NavigationBarView: View {
                     } label: {
                         Image(systemName: firstTrailingItem)
                             .navigationItemStyle()
-                        
                     }
                 }
                 

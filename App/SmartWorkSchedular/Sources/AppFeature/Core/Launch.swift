@@ -1,7 +1,7 @@
-import Foundation
 import ComposableArchitecture
-import UserDefaultsClient
+import Foundation
 import LoggerClient
+import UserDefaultsClient
 
 @Reducer
 public struct Launch {
@@ -28,7 +28,7 @@ public struct Launch {
     @Dependency(\.loggerClient) private var logger
     
     public var body: some ReducerOf<Self> {
-        Reduce<State, Action> { state, action in
+        Reduce<State, Action> { _, action in
             switch action {
             case .onAppear:
                 logger.debug("onAppear")

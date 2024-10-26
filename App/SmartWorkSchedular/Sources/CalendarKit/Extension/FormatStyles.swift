@@ -1,44 +1,46 @@
 import Foundation
 
 // MARK: Date Identifier Format
-public struct DateIdentifierFormat: FormatStyle {
-    public func format(_ value: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.doesRelativeDateFormatting = false
-        formatter.timeStyle = .short
-        formatter.dateStyle = .full
-        return formatter.string(from: value.startOfDate)
+public enum DateFormatStyle {
+    public struct DateIdentifier: FormatStyle {
+        public func format(_ value: Date) -> String {
+            let formatter = DateFormatter()
+            formatter.doesRelativeDateFormatting = false
+            formatter.timeStyle = .short
+            formatter.dateStyle = .full
+            return formatter.string(from: value.startOfDate)
+        }
+    }
+
+    // MARK: Day Format
+    public struct CalendarDay: FormatStyle {
+        public func format(_ value: Date) -> String {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "d"
+            return formatter.string(from: value.startOfDate)
+        }
+    }
+
+    // MARK: Weekday Format
+    public struct WeekDay: FormatStyle {
+        public func format(_ value: Date) -> String {
+            let formatter = Date.FormatStyle().weekday()
+            return formatter.format(value.startOfDate)
+        }
     }
 }
 
-extension FormatStyle where Self == DateIdentifierFormat {
+extension FormatStyle where Self == DateFormatStyle.DateIdentifier {
     /// Format Style for date as identifier
-    public static var dateIdentifier: DateIdentifierFormat { .init() }
+    public static var dateIdentifier: DateFormatStyle.DateIdentifier { .init() }
 }
 
-// MARK: Day Format
-public struct CalendarDayFormat: FormatStyle {
-    public func format(_ value: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat =  "d"
-        return formatter.string(from: value.startOfDate)
-    }
-}
-
-extension FormatStyle where Self == CalendarDayFormat {
+extension FormatStyle where Self == DateFormatStyle.CalendarDay {
     /// Format Style to display day in calendar
-    public static var calendarDay: CalendarDayFormat { .init() }
+    public static var calendarDay: DateFormatStyle.CalendarDay { .init() }
 }
 
-// MARK: Weekday Format
-public struct WeekDayFormat: FormatStyle {
-    public func format(_ value: Date) -> String {
-        let formatter = Date.FormatStyle().weekday()
-        return formatter.format(value.startOfDate)
-    }
-}
-
-extension FormatStyle where Self == WeekDayFormat {
+extension FormatStyle where Self == DateFormatStyle.WeekDay {
     /// Format Style to display weekdays
-    public static var weekday: WeekDayFormat { .init() }
+    public static var weekday: DateFormatStyle.WeekDay { .init() }
 }

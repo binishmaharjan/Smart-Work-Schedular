@@ -1,5 +1,5 @@
-import Foundation
 import Dependencies
+import Foundation
 
 public struct UserDefaultsClient {
     /// Get is tutorial complete

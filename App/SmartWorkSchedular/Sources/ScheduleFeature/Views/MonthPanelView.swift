@@ -1,7 +1,7 @@
-import SwiftUI
+import CalendarKit
 import ComposableArchitecture
 import SharedUIs
-import CalendarKit
+import SwiftUI
 
 public struct MonthPanelView: View {
     public init(store: StoreOf<SchedulePanel>) {
@@ -33,5 +33,3 @@ public struct MonthPanelView: View {
         )
     )
 }
-
-

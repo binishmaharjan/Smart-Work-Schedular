@@ -1,13 +1,14 @@
-import SwiftUI
 import ComposableArchitecture
-import TutorialFeature
 import MainTabFeature
+import SwiftUI
+import TutorialFeature
 
 public struct RootView: View {
     public init(store: StoreOf<Root>) {
         self.store = store
     }
     
+    // MARK: Properties
     @Bindable private var store: StoreOf<Root>
     
     public var body: some View {

@@ -2,7 +2,6 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-
 public struct Localized: ExpressionMacro {
     public static func expansion(
         of node: some FreestandingMacroExpansionSyntax,

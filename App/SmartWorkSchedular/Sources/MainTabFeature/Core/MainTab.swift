@@ -1,9 +1,9 @@
-import Foundation
 import ComposableArchitecture
+import EarningsFeature
+import Foundation
+import LoggerClient
 import ScheduleFeature
 import TemplatesFeature
-import EarningsFeature
-import LoggerClient
 
 @Reducer
 public struct MainTab {

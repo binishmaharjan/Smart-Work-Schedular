@@ -1,6 +1,6 @@
-import Foundation
-import ComposableArchitecture
 import CalendarKit
+import ComposableArchitecture
+import Foundation
 
 @Reducer
 public struct StartWeekOn {
@@ -26,7 +26,7 @@ public struct StartWeekOn {
     @Dependency(\.calendarKitClient) private var calendarKitClient
     
     public var body: some ReducerOf<Self> {
-        Reduce<State, Action> { state, action in
+        Reduce<State, Action> { _, action in
             switch action {
             case .selected(let weekday):
                 calendarKitClient.updateStartWeekdayOn(to: weekday)

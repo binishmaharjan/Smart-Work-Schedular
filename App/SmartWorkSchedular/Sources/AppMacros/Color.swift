@@ -2,7 +2,6 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-
 public struct Color: ExpressionMacro {
     public static func expansion(
         of node: some FreestandingMacroExpansionSyntax,

@@ -1,5 +1,5 @@
-import SwiftUI
 import ComposableArchitecture
+import SwiftUI
 
 public struct LaunchView: View {
     public init(store: StoreOf<Launch>) {

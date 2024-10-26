@@ -1,9 +1,9 @@
 import Foundation
 
 public enum AppScheme: String, RawRepresentable, Identifiable, CaseIterable {
-    case system = "system"
-    case light = "light"
-    case dark = "dark"
+    case system
+    case light
+    case dark
     
     public var id: Self { self }
     

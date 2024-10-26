@@ -1,5 +1,5 @@
-import Foundation
 import ComposableArchitecture
+import Foundation
 
 @Reducer
 public struct Earnings {
@@ -9,14 +9,13 @@ public struct Earnings {
     }
     
     public enum Action {
-        
     }
     
     public init() { }
     
     public var body: some ReducerOf<Self> {
-        Reduce<State, Action> { state, action in
-            return .none
+        Reduce<State, Action> { _, _ in
+            .none
         }
     }
 }

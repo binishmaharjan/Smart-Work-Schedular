@@ -1,5 +1,5 @@
-import Foundation
 import ComposableArchitecture
+import Foundation
 import ThemeKit
 
 @Reducer
@@ -22,7 +22,7 @@ public struct ThemePicker {
     @Dependency(\.themeKitClient) private var themeKitClient
     
     public var body: some ReducerOf<Self> {
-        Reduce<State, Action> { state, action in
+        Reduce<State, Action> { _, action in
             switch action {
             case .onAppear:
                 return .none

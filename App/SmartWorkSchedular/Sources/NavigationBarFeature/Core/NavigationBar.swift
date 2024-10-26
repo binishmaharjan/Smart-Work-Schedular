@@ -1,5 +1,5 @@
-import Foundation
 import ComposableArchitecture
+import Foundation
 
 @Reducer
 public struct NavigationBar {
@@ -33,7 +33,7 @@ public struct NavigationBar {
     public init() { }
     
     public var body: some ReducerOf<Self> {
-        Reduce<State, Action> { state, action in
+        Reduce<State, Action> { _, action in
             switch action {
             case .firstTrailingItemTapped:
                 return .send(.delegate(.executeFirstAction))

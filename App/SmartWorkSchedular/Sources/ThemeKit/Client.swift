@@ -1,6 +1,6 @@
-import Foundation
 import Dependencies
 import DependenciesMacros
+import Foundation
 
 @DependencyClient
 public struct ThemeKitClient {

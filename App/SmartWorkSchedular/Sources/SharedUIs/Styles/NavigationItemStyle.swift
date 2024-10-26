@@ -12,7 +12,6 @@ public struct NavigationItemStyle: ViewModifier {
     }
 }
 
-
 extension View {
     public func navigationItemStyle() -> some View {
         self.modifier(NavigationItemStyle())
