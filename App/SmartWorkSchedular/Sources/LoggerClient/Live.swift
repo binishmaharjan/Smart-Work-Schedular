@@ -1,6 +1,6 @@
+import Dependencies
 import Foundation
 import os.log
-import Dependencies
 
 // MARK: Dependency (liveValue)
 extension LoggerClient: DependencyKey {
@@ -16,25 +16,29 @@ extension LoggerClient {
             debug: { parameters in
                 guard shouldPrintLog(for: .debug) else { return }
                         
-                let fileName = (parameters.file as NSString).lastPathComponent
+                let filePath = parameters.file
+                let fileName = URL(string: filePath)?.lastPathComponent ?? ""
                 logger.debug("[\(fileName): \(parameters.line)] \(parameters.message)")
             },
             info: { parameters in
                 guard shouldPrintLog(for: .info) else { return }
                 
-                let fileName = (parameters.file as NSString).lastPathComponent
+                let filePath = parameters.file
+                let fileName = URL(string: filePath)?.lastPathComponent ?? ""
                 logger.info("[\(fileName): \(parameters.line)] \(parameters.message)")
             },
             warning: { parameters in
                 guard shouldPrintLog(for: .warning) else { return }
                 
-                let fileName = (parameters.file as NSString).lastPathComponent
+                let filePath = parameters.file
+                let fileName = URL(string: filePath)?.lastPathComponent ?? ""
                 logger.warning("[\(fileName): \(parameters.line)] \(parameters.message)")
             },
             error: { parameters in
                 guard shouldPrintLog(for: .error) else { return }
                 
-                let fileName = (parameters.file as NSString).lastPathComponent
+                let filePath = parameters.file
+                let fileName = URL(string: filePath)?.lastPathComponent ?? ""
                 logger.error("[\(fileName): \(parameters.line)] \(parameters.message)")
             }
         )
@@ -46,4 +50,3 @@ extension LoggerClient {
         return logLevel.rawValue >= Self.logLevel.rawValue 
     }
 }
-

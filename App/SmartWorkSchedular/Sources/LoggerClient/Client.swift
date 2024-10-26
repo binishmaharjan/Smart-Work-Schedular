@@ -1,15 +1,15 @@
+import Dependencies
 import Foundation
 import os.log
-import Dependencies
 
 public struct LoggerClient {
+    internal static var isLogEnabled = false
+    internal static var logLevel: LogLevel = .error
+    
     public var debug: (LoggerParameter) -> Void
     public var info: (LoggerParameter) -> Void
     public var warning: (LoggerParameter) -> Void
     public var error: (LoggerParameter) -> Void
-    
-    internal static var isLogEnabled = false
-    internal static var logLevel: LogLevel = .error
 }
 
 // MARK: Helpers (Creating methods for passing #file and #line)
@@ -19,7 +19,7 @@ extension LoggerClient {
         Self.isLogEnabled = isEnabled
     }
     
-    ///Log with the smaller level will be ignored and not printed
+    /// Log with the smaller level will be ignored and not printed
     public func setLogLevel(_ logLevel: LogLevel) {
         Self.logLevel = logLevel
     }
@@ -73,4 +73,3 @@ extension LoggerClient: TestDependencyKey {
         error:  unimplemented("\(Self.self).error is unimplemented", placeholder: ())
     )
 }
-

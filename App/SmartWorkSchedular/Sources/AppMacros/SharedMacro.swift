@@ -3,16 +3,16 @@ import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
 /* TODO: Not Working
- @sharedPeer(Int) @sharedAccessor
- var displayMode: DisplayMode = .month
+    @sharedPeer(Int) @sharedAccessor
+    var displayMode: DisplayMode = .month
  
- Expected Result
- var displayMode: DisplayMode {
+    Expected Result
+    var displayMode: DisplayMode {
     get { DisplayMode(rawValue: _displayMode) ?? DisplayMode.allCase[0] }
     set { _displayMode = newValue.rawValue }
- }
- var _displayMode: Int = DisplayMode.month.rawValue
- */
+    }
+    var _displayMode: Int = DisplayMode.month.rawValue
+    */
 
 // AccessorMacro + PeerMacro
 public struct SharedAccessor: AccessorMacro {
@@ -30,9 +30,11 @@ public struct SharedAccessor: AccessorMacro {
             throw AsyncDeclError.missingProperties
         }
         
-        guard let pattern = binding.pattern.as(IdentifierPatternSyntax.self),
-              let typeAnnotation = binding.typeAnnotation,
-              let initializer = binding.initializer else {
+        guard
+            let pattern = binding.pattern.as(IdentifierPatternSyntax.self),
+            let typeAnnotation = binding.typeAnnotation,
+            binding.initializer != nil
+        else {
             throw AsyncDeclError.missingProperties
         }
         
@@ -50,6 +52,7 @@ public struct SharedAccessor: AccessorMacro {
     }
 }
 
+// swiftlint:disable:next file_types_order
 public struct SharedPeer: PeerMacro {
     public static func expansion(
         of node: SwiftSyntax.AttributeSyntax,
@@ -68,9 +71,11 @@ public struct SharedPeer: PeerMacro {
             throw AsyncDeclError.missingProperties
         }
         
-        guard let pattern = binding.pattern.as(IdentifierPatternSyntax.self),
-              let typeAnnotation = binding.typeAnnotation,
-              let initializer = binding.initializer else {
+        guard
+            let pattern = binding.pattern.as(IdentifierPatternSyntax.self),
+            let typeAnnotation = binding.typeAnnotation,
+            let initializer = binding.initializer
+        else {
             throw AsyncDeclError.missingProperties
         }
         
@@ -79,7 +84,8 @@ public struct SharedPeer: PeerMacro {
         let value = initializer.value.description.trimmingCharacters(in: .whitespacesAndNewlines)
         
         return [
-            DeclSyntax("""
+            DeclSyntax(
+            """
                 var _\(raw: name): \(raw: argument.description) = \(raw: variableType)\(raw: value).rawValue
             """
             )
@@ -96,8 +102,10 @@ public enum AsyncDeclError: CustomStringConvertible, Error {
         switch self {
         case .onlyApplicableToVariable:
             "@macro can only be applied to a variable."
+            
         case .noArguments:
             "@macro has no argument."
+            
         case .missingProperties:
             "@macro has missing properties."
         }

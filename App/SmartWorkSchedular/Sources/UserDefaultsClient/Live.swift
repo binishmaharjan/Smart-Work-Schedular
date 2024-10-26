@@ -1,5 +1,5 @@
-import Foundation
 import Dependencies
+import Foundation
 
 private enum Keys {
     static let isTutorialComplete = "isTutorialComplete"
