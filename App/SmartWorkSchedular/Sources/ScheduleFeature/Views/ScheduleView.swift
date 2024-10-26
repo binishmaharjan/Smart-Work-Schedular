@@ -13,7 +13,7 @@ public struct ScheduleView: View {
     
     @Bindable public var store: StoreOf<Schedule>
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
-//    @State private var currentSelected = 1
+    @State private var sheetHeight: CGFloat = .zero
     
     public var body: some View {
         NavigationStack {
@@ -29,6 +29,10 @@ public struct ScheduleView: View {
             .overlay(navigationBar)
         }
         .onAppear { send(.onAppear) }
+        .sheet(
+            item: $store.scope(state: \.destination?.calendarMode, action: \.destination.calendarMode),
+            content: calendarMode(store:)
+        )
         .fullScreenCover(
             item: $store.scope(state: \.destination?.settings, action: \.destination.settings),
             content: SettingsView.init(store:)
@@ -89,6 +93,22 @@ extension ScheduleView {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
+    }
+    
+    private func calendarMode(store: StoreOf<CalendarMode>) -> some View {
+        CalendarModeView(store: store)
+            .overlay {
+                GeometryReader { geometry in
+                    Color.clear.preference(
+                        key: InnerHeightPreferenceKey.self,
+                        value: geometry.size.height
+                    )
+                }
+            }
+            .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                sheetHeight = newHeight
+            }
+            .presentationDetents([.height(sheetHeight)])
     }
 }
 

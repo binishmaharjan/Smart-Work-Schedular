@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import EarningsFeature
 import ScheduleFeature
+import SettingsFeature
 import SharedUIs
 import SwiftUI
 import TemplatesFeature
@@ -30,6 +31,12 @@ public struct MainTabView: View {
                 .tag(Tab.earnings)
                 .tabItem {
                     Label(Tab.earnings.title, systemImage: Tab.earnings.icon)
+                }
+            
+            SettingsView(store: store.scope(state: \.settings, action: \.settings))
+                .tag(Tab.settings)
+                .tabItem {
+                    Label(Tab.settings.title, systemImage: Tab.settings.icon)
                 }
         }
     }

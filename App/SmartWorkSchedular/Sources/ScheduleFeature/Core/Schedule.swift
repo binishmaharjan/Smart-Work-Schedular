@@ -10,6 +10,7 @@ public struct Schedule {
     @Reducer(state: .equatable)
     public enum Destination {
         case settings(Settings)
+        case calendarMode(CalendarMode)
     }
     
     @ObservableState
@@ -33,7 +34,7 @@ public struct Schedule {
             title: "My Work Schedule",
             subTitle: "October",
             firstTrailingItem: "plus",
-            secondTrailingItem: "gearshape.fill"
+            secondTrailingItem: "calendar.badge.clock"
         )
     }
     
@@ -50,6 +51,7 @@ public struct Schedule {
         case view(View)
         
         case startWeekOnUpdated(Weekday)
+        case displayModeUpdated(DisplayMode)
         case previousButtonPressed
         case nextButtonPressed
         case monthButtonPressed
@@ -69,19 +71,22 @@ public struct Schedule {
             case .view(.onAppear):
                 // initialize weekdays
                 state.weekdays = calendarKitClient.weekDays()
+                
                 // observe change in the startOfWeekDay
                 _ = state.$startOfWeekday.publisher.map(Action.startWeekOnUpdated)
+                _ = state.$displayMode.publisher.map(Action.displayModeUpdated)
+                
                 return createInitialDisplayDate(state: &state)
                 
             case .view(.scrollEndReached):
                 return createNextDisplayDate(state: &state)
                 
-            case .binding(\.startOfWeekday): // <- find the changed timing
-                print("Changed To: \(state.startOfWeekday)")
-                return .none
-                
             case .startWeekOnUpdated(let weekday):
                 print("Start Week Updated To: \(weekday)")
+                return .none
+                
+            case .displayModeUpdated(let displayMode):
+                print("Display Mode Updated To: \(displayMode)")
                 return .none
                 
             case .previousButtonPressed:
@@ -109,7 +114,7 @@ public struct Schedule {
                 return .none
                 
             case .navigationBar(.delegate(.executeSecondAction)):
-                state.destination = .settings(Settings.State())
+                state.destination = .calendarMode(CalendarMode.State())
                 return .none
                 
             case .destination, .navigationBar, .binding, .schedulePanels:

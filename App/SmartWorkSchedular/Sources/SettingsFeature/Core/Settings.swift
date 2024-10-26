@@ -18,8 +18,7 @@ public struct Settings {
         @Presents var destination: Destination.State?
         var navigationBar = NavigationBar.State(
             title: "",
-            subTitle: #localized("Settings"),
-            secondTrailingItem: "xmark"
+            subTitle: #localized("Settings")
         )
     }
     
@@ -38,11 +37,6 @@ public struct Settings {
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
-            case .navigationBar(.delegate(.executeSecondAction)):
-                return .run { _ in
-                    await dismiss()
-                }
-                
             case .startWeekOnMenuTapped:
                 state.destination = .startWeekOn(StartWeekOn.State())
                 return .none
