@@ -102,17 +102,10 @@ extension ScheduleView {
             return AnyView(MonthPanelView(store: store))
             
         case .week:
-            return AnyView(MonthPanelView(store: store))
+            return AnyView(WeekPanelView(store: store))
             
         case .day:
-            return AnyView(
-                VStack {
-                    Text("Day View")
-                    ForEach(store.displayDays) { day in
-                        Text(day.formatted(.calendarDay))
-                    }
-                }
-            )
+            return AnyView(DayPanelView(store: store))
         }
     }
     
