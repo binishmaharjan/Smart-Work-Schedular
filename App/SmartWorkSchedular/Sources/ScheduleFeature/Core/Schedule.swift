@@ -23,9 +23,9 @@ public struct Schedule {
         // Data State
         @Presents var destination: Destination.State?
         var schedulePanels: IdentifiedArrayOf<SchedulePanel.State> = []
-        var focusDay = Day(date: .now) {
+        var originDay = Day(date: .now) {
             didSet {
-                print("🍎: \(focusDay.date.startOfDate)")
+                print("🍎: \(originDay.date.startOfDate)")
             }
         }
         var weekdays: [String] = []
@@ -33,8 +33,7 @@ public struct Schedule {
         var currentPage: Int = 1
     
         var navigationBar = NavigationBar.State(
-            title: "My Work Schedule",
-            subTitle: "October",
+            title: "October",
             firstTrailingItem: "plus",
             secondTrailingItem: "calendar.badge.clock"
         )
@@ -81,16 +80,17 @@ public struct Schedule {
                 // create display dates
                 createInitialDisplayDate(state: &state)
                 
-                return .run { send in
+                return .run { [originDay = state.originDay] send in
                     await send(.observeStartWeekOn)
                     await send(.observerDisplayMode)
+                    await send(.navigationBar(.updateTitle(originDay.navigationTitle)))
                 }
                 
             case .view(.scrollEndReached):
                 logger.debug("view: scrollEndReached")
                 
                 createNextDisplayDate(state: &state)
-                return .none
+                return .send(.navigationBar(.updateTitle(state.originDay.navigationTitle)))
                 
             case .observeStartWeekOn:
                 logger.debug("observeStartWeekOn")
@@ -151,33 +151,33 @@ extension Schedule {
         state.schedulePanels.removeAll()
         
         // Initially set previous month as first
-        let previousOriginDay = calendarKitClient.previousFocusDay(from: state.focusDay)
+        let previousOriginDay = calendarKitClient.previousFocusDay(from: state.originDay)
         let previousDisplayDays = calendarKitClient.displayDays(from: previousOriginDay)
         state.schedulePanels.append(
             SchedulePanel.State(
                 displayMode: state.displayMode,
-                originDay: state.focusDay.previousMonthDay,
+                originDay: previousOriginDay,
                 displayDays: previousDisplayDays
             )
         )
         
         // Initially set this month as second
-        let displayDays = calendarKitClient.displayDays(from: state.focusDay)
+        let displayDays = calendarKitClient.displayDays(from: state.originDay)
         state.schedulePanels.append(
             SchedulePanel.State(
                 displayMode: state.displayMode,
-                originDay: state.focusDay,
+                originDay: state.originDay,
                 displayDays: displayDays
             )
         )
         
         // Initially set next month as third
-        let nextOriginDay = calendarKitClient.nextFocusDay(from: state.focusDay)
+        let nextOriginDay = calendarKitClient.nextFocusDay(from: state.originDay)
         let nextDisplayDays = calendarKitClient.displayDays(from: nextOriginDay)
         state.schedulePanels.append(
             SchedulePanel.State(
                 displayMode: state.displayMode,
-                originDay: state.focusDay.nextMonthDay,
+                originDay: nextOriginDay,
                 displayDays: nextDisplayDays
             )
         )
@@ -196,7 +196,6 @@ extension Schedule {
             // get new origin day from first day, to add as first page
             let newOriginDay = calendarKitClient.previousFocusDay(from: currentFirstOriginDay)
             print("🍎 Current : \(currentFirstOriginDay.date.startOfDate)")
-            print("🍎 Previous: \(newOriginDay.date.startOfDate)")
             // create new display days
             let newDisplayDays = calendarKitClient.displayDays(from: newOriginDay)
             // add new created display days and add at first page
@@ -215,7 +214,7 @@ extension Schedule {
             state.currentPage = 1
             // update originDay to current middle page, i.e previous first day
             // since previous first day was changed to middle page
-            state.focusDay = currentFirstOriginDay
+            state.originDay = currentFirstOriginDay
         }
         
         // append new dates at last index and remove firs item
@@ -225,7 +224,6 @@ extension Schedule {
             // get new origin day from last day, to add as first page
             let newOriginDay = calendarKitClient.nextFocusDay(from: currentLastOriginDay)
             print("🍎 Current : \(currentLastOriginDay.date.startOfDate)")
-            print("🍎 Next: \(newOriginDay.date.startOfDate)")
             // create new display days
             let newDisplayDays = calendarKitClient.displayDays(from: newOriginDay)
             // add new created display days and add at last page
@@ -243,7 +241,7 @@ extension Schedule {
             state.currentPage = state.schedulePanels.count - 2
             // update originDay to current middle page, i.e previous last day
             // since previous last day was changed to middle page
-            state.focusDay = currentLastOriginDay
+            state.originDay = currentLastOriginDay
         }
     }
 }
