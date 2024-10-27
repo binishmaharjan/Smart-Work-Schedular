@@ -28,6 +28,14 @@ public enum DateFormatStyle {
             return formatter.format(value.startOfDate)
         }
     }
+    
+    // MARK: Month Format
+    public struct MonthAndYear: FormatStyle {
+        public func format(_ value: Date) -> String {
+            let formatter = Date.FormatStyle().month().year()
+            return formatter.format(value.startOfDate)
+        }
+    }
 }
 
 extension FormatStyle where Self == DateFormatStyle.DateIdentifier {
@@ -43,4 +51,9 @@ extension FormatStyle where Self == DateFormatStyle.CalendarDay {
 extension FormatStyle where Self == DateFormatStyle.WeekDay {
     /// Format Style to display weekdays
     public static var weekday: DateFormatStyle.WeekDay { .init() }
+}
+
+extension FormatStyle where Self == DateFormatStyle.MonthAndYear {
+    /// Format Style to display weekdays
+    public static var monthAndYear: DateFormatStyle.MonthAndYear { .init() }
 }

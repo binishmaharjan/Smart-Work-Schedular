@@ -5,15 +5,13 @@ import Foundation
 public struct NavigationBar {
     @ObservableState
     public struct State: Equatable {
-        public init(title: String, subTitle: String? = nil, firstTrailingItem: String? = nil, secondTrailingItem: String? = nil) {
+        public init(title: String, firstTrailingItem: String? = nil, secondTrailingItem: String? = nil) {
             self.title = title
-            self.subTitle = subTitle
             self.firstTrailingItem = firstTrailingItem
             self.secondTrailingItem = secondTrailingItem
         }
         
         var title: String
-        var subTitle: String?
         var firstTrailingItem: String?
         var secondTrailingItem: String?
     }
@@ -26,6 +24,7 @@ public struct NavigationBar {
         }
         
         case delegate(Delegate)
+        case updateTitle(String)
         case firstTrailingItemTapped
         case secondTrailingItemTapped
     }
@@ -33,8 +32,12 @@ public struct NavigationBar {
     public init() { }
     
     public var body: some ReducerOf<Self> {
-        Reduce<State, Action> { _, action in
+        Reduce<State, Action> { state, action in
             switch action {
+            case .updateTitle(let title):
+                state.title = title
+                return .none
+                
             case .firstTrailingItemTapped:
                 return .send(.delegate(.executeFirstAction))
 

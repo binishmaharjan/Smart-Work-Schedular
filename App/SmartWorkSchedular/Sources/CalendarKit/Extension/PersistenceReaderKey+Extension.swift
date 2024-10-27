@@ -10,7 +10,7 @@ extension AppStorageKey where Value == Weekday {
     public static var startOfWeekday: Self = .appStorage("startOfWeekday")
 }
 
-// MARK: Persistance Key
+// MARK: Persistence Key
 extension PersistenceReaderKey where Self == AppStorageKey<DisplayMode> {
     public static var displayMode: Self { AppStorageKey.displayMode }
 }

@@ -17,8 +17,7 @@ public struct Settings {
         
         @Presents var destination: Destination.State?
         var navigationBar = NavigationBar.State(
-            title: "",
-            subTitle: #localized("Settings")
+            title: #localized("Settings")
         )
     }
     

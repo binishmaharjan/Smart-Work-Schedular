@@ -14,11 +14,7 @@ public struct NavigationBarView: View {
             HStack(spacing: 8) {
                 VStack(alignment: .leading, spacing: 0) {
                     Text(store.title)
-                        .font(.customSubheadline)
-                        .foregroundStyle(#color("text_color"))
-                    
-                    Text(store.subTitle ?? "")
-                        .font(.customHeadline)
+                        .font(.customTitle)
                         .foregroundStyle(#color("accent_color"))
                 }
                 

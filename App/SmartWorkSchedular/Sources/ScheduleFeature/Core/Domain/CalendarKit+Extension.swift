@@ -1,5 +1,5 @@
-import Foundation
 import CalendarKit
+import Foundation
 
 extension DisplayMode {
     var image: String {
@@ -13,5 +13,11 @@ extension DisplayMode {
         case .day:
             return "d.square"
         }
+    }
+}
+
+extension Day {
+    var navigationTitle: String {
+        formatted(.monthAndYear)
     }
 }
