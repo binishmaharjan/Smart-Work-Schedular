@@ -9,7 +9,6 @@ import SharedUIs
 public struct Schedule {
     @Reducer(state: .equatable)
     public enum Destination {
-        case settings(Settings)
         case calendarMode(CalendarMode)
     }
     

@@ -1,6 +1,6 @@
 import ComposableArchitecture
-import SwiftUI
 import SharedUIs
+import SwiftUI
 
 @ViewAction(for: CalendarMode.self)
 public struct CalendarModeView: View {

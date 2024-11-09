@@ -34,10 +34,6 @@ public struct ScheduleView: View {
             item: $store.scope(state: \.destination?.calendarMode, action: \.destination.calendarMode),
             content: calendarMode(store:)
         )
-        .fullScreenCover(
-            item: $store.scope(state: \.destination?.settings, action: \.destination.settings),
-            content: SettingsView.init(store:)
-        )
         .onChange(of: store.currentPage, initial: false) { _, newValue in
             // create week if the page reaches first/last page
             if newValue == 0 || newValue == (store.schedulePanels.count - 1) {
