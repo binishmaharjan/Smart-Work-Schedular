@@ -3,13 +3,13 @@ import ComposableArchitecture
 import SharedUIs
 import SwiftUI
 
-public struct DayPanelView: View {
-    public init(store: StoreOf<SchedulePanel>) {
+public struct MonthCalendarView: View {
+    public init(store: StoreOf<MonthCalendar>) {
         self.store = store
     }
     
-    @Bindable private var store: StoreOf<SchedulePanel>
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 1)
+    @Bindable private var store: StoreOf<MonthCalendar>
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
     public var body: some View {
         VStack(spacing: 0) {
@@ -38,10 +38,10 @@ public struct DayPanelView: View {
 }
 
 #Preview {
-    DayPanelView(
+    MonthCalendarView(
         store: .init(
-            initialState: .init(displayMode: .day, originDay: .init(date: .now), displayDays: []),
-            reducer: SchedulePanel.init
+            initialState: .init(originDay: Day(date: .now), displayDays: []),
+            reducer: MonthCalendar.init
         )
     )
 }

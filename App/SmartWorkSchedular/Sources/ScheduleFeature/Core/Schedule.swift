@@ -2,8 +2,6 @@ import CalendarKit
 import ComposableArchitecture
 import Foundation
 import NavigationBarFeature
-import SettingsFeature
-import SharedUIs
 
 @Reducer
 public struct Schedule {
@@ -18,19 +16,12 @@ public struct Schedule {
         
         // Shared State
         @Shared(.displayMode) var displayMode = DisplayMode.month
-        @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
         // Data State
         @Presents var destination: Destination.State?
-        var schedulePanels: IdentifiedArrayOf<SchedulePanel.State> = []
-        var originDay = Day(date: .now) {
-            didSet {
-                print("🍎: \(originDay.date.startOfDate)")
-            }
-        }
-        var weekdays: [String] = []
-        // View State
-        var currentPage: Int = 1
-    
+        var monthSchedule: MonthSchedule.State?
+        var weekSchedule: WeekSchedule.State?
+        var daySchedule: DaySchedule.State?
+        
         var navigationBar = NavigationBar.State(
             title: "October",
             firstTrailingItem: "plus",
@@ -38,103 +29,67 @@ public struct Schedule {
         )
     }
     
-    public enum Action: BindableAction, ViewAction {
+    public enum Action: ViewAction {
         public enum View {
             case onAppear
-            case scrollEndReached
         }
         
         case destination(PresentationAction<Destination.Action>)
+        case monthSchedule(MonthSchedule.Action)
+        case weekSchedule(WeekSchedule.Action)
+        case daySchedule(DaySchedule.Action)
         case navigationBar(NavigationBar.Action)
-        case binding(BindingAction<State>)
-        case schedulePanels(IdentifiedActionOf<SchedulePanel>)
         case view(View)
         
-        case observeStartWeekOn
-        case observerDisplayMode
-        case startWeekOnUpdated(Weekday)
+        case observeDisplayMode
         case displayModeUpdated(DisplayMode)
     }
     
     public init() { }
     
-    @Dependency(\.calendarKitClient) private var calendarKitClient
     @Dependency(\.loggerClient) private var logger
     
     public var body: some ReducerOf<Self> {
-        BindingReducer()
-        
         Reduce<State, Action> { state, action in
             switch action {
             case .view(.onAppear):
-                logger.debug("view: onAppear")
+                createSchedule(&state)
                 
-                // initialize weekdays
-                state.weekdays = calendarKitClient.weekDays()
-                
-                guard state.schedulePanels.isEmpty else {
-                    return .none
+                return .run { send in
+                    await send(.observeDisplayMode)
                 }
                 
-                // create display dates
-                createInitialDisplayDate(state: &state)
-                
-                return .run { [originDay = state.originDay] send in
-                    await send(.observeStartWeekOn)
-                    await send(.observerDisplayMode)
-                    await send(.navigationBar(.updateTitle(originDay.navigationTitle)))
-                }
-                
-            case .view(.scrollEndReached):
-                logger.debug("view: scrollEndReached")
-                
-                createNextDisplayDate(state: &state)
-                return .send(.navigationBar(.updateTitle(state.originDay.navigationTitle)))
-                
-            case .observeStartWeekOn:
-                logger.debug("observeStartWeekOn")
-                
-                return .publisher {
-                    state.$startOfWeekday.publisher.map(Action.startWeekOnUpdated)
-                }
-                
-            case .observerDisplayMode:
-                logger.debug("observerDisplayMode")
-                
+            case .observeDisplayMode:
                 return .publisher {
                     state.$displayMode.publisher.map(Action.displayModeUpdated)
                 }
                 
-            case .startWeekOnUpdated(let weekday):
-                logger.debug("startWeekOnUpdated: \(weekday)")
-                
-                createInitialDisplayDate(state: &state)
+            case .displayModeUpdated:
+                createSchedule(&state)
                 return .none
                 
-            case .displayModeUpdated(let displayMode):
-                logger.debug("displayModeUpdated: \(displayMode)")
-                
-                createInitialDisplayDate(state: &state)
+            case .navigationBar(.firstTrailingItemTapped):
                 return .none
                 
-            case .navigationBar(.delegate(.executeFirstAction)):
-                logger.debug("navigationBar: delegate: executeFirstAction")
-                
-                return .none
-                
-            case .navigationBar(.delegate(.executeSecondAction)):
+            case .navigationBar(.secondTrailingItemTapped):
                 logger.debug("navigationBar: delegate: executeSecondAction")
                 
                 state.destination = .calendarMode(CalendarMode.State())
                 return .none
                 
-            case .destination, .navigationBar, .binding, .schedulePanels:
+            case .destination, .navigationBar, .monthSchedule, .weekSchedule, .daySchedule:
                 return .none
             }
         }
         .ifLet(\.$destination, action: \.destination)
-        .forEach(\.schedulePanels, action: \.schedulePanels) {
-            SchedulePanel()
+        .ifLet(\.monthSchedule, action: \.monthSchedule) {
+            MonthSchedule()
+        }
+        .ifLet(\.weekSchedule, action: \.weekSchedule) {
+            WeekSchedule()
+        }
+        .ifLet(\.daySchedule, action: \.daySchedule) {
+            DaySchedule()
         }
         
         Scope(state: \.navigationBar, action: \.navigationBar) {
@@ -145,102 +100,22 @@ public struct Schedule {
 
 // MARK: Effects & Methods
 extension Schedule {
-    private func createInitialDisplayDate(state: inout State) {
-        // clear current displayDays
-        state.schedulePanels.removeAll()
-        
-        // Initially set previous month as first
-        let previousOriginDay = calendarKitClient.previousFocusDay(from: state.originDay)
-        let previousDisplayDays = calendarKitClient.displayDays(from: previousOriginDay)
-        state.schedulePanels.append(
-            SchedulePanel.State(
-                displayMode: state.displayMode,
-                originDay: previousOriginDay,
-                displayDays: previousDisplayDays
-            )
-        )
-        
-        // Initially set this month as second
-        let displayDays = calendarKitClient.displayDays(from: state.originDay)
-        state.schedulePanels.append(
-            SchedulePanel.State(
-                displayMode: state.displayMode,
-                originDay: state.originDay,
-                displayDays: displayDays
-            )
-        )
-        
-        // Initially set next month as third
-        let nextOriginDay = calendarKitClient.nextFocusDay(from: state.originDay)
-        let nextDisplayDays = calendarKitClient.displayDays(from: nextOriginDay)
-        state.schedulePanels.append(
-            SchedulePanel.State(
-                displayMode: state.displayMode,
-                originDay: nextOriginDay,
-                displayDays: nextDisplayDays
-            )
-        )
-    }
-    
-    private func createNextDisplayDate(state: inout State) {
-        // safe guard for index
-        guard state.schedulePanels.indices.contains(state.currentPage) else {
-            return
-        }
-        
-        // inserting new dates at index 0 and remove last item
-        if state.currentPage == 0 {
-            // get first page origin day
-            let currentFirstOriginDay = state.schedulePanels[0].originDay
-            // get new origin day from first day, to add as first page
-            let newOriginDay = calendarKitClient.previousFocusDay(from: currentFirstOriginDay)
-            print("🍎 Current : \(currentFirstOriginDay.date.startOfDate)")
-            // create new display days
-            let newDisplayDays = calendarKitClient.displayDays(from: newOriginDay)
-            // add new created display days and add at first page
-            state.schedulePanels.insert(
-                SchedulePanel.State(
-                    displayMode: state.displayMode,
-                    originDay: newOriginDay,
-                    displayDays: newDisplayDays
-                ),
-                at: 0
-            )
+    private func createSchedule(_ state: inout State) {
+        switch state.displayMode {
+        case .month:
+            state.monthSchedule = MonthSchedule.State()
+            state.weekSchedule = nil
+            state.daySchedule = nil
             
-            // remove last page
-            state.schedulePanels.removeLast()
-            // adjust index
-            state.currentPage = 1
-            // update originDay to current middle page, i.e previous first day
-            // since previous first day was changed to middle page
-            state.originDay = currentFirstOriginDay
-        }
-        
-        // append new dates at last index and remove firs item
-        if state.currentPage == (state.schedulePanels.count - 1) {
-            // get last page origin day
-            let currentLastOriginDay = state.schedulePanels[state.schedulePanels.count - 1].originDay
-            // get new origin day from last day, to add as first page
-            let newOriginDay = calendarKitClient.nextFocusDay(from: currentLastOriginDay)
-            print("🍎 Current : \(currentLastOriginDay.date.startOfDate)")
-            // create new display days
-            let newDisplayDays = calendarKitClient.displayDays(from: newOriginDay)
-            // add new created display days and add at last page
-            state.schedulePanels.append(
-                SchedulePanel.State(
-                    displayMode: state.displayMode,
-                    originDay: newOriginDay,
-                    displayDays: newDisplayDays
-                )
-            )
+        case .week:
+            state.monthSchedule = nil
+            state.weekSchedule = WeekSchedule.State()
+            state.daySchedule = nil
             
-            // remove first page
-            state.schedulePanels.removeFirst()
-            // adjust index
-            state.currentPage = state.schedulePanels.count - 2
-            // update originDay to current middle page, i.e previous last day
-            // since previous last day was changed to middle page
-            state.originDay = currentLastOriginDay
+        case .day:
+            state.monthSchedule = nil
+            state.weekSchedule = nil
+            state.daySchedule = DaySchedule.State()
         }
     }
 }
