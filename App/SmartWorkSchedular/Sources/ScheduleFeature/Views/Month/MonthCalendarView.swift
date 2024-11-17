@@ -3,12 +3,13 @@ import ComposableArchitecture
 import SharedUIs
 import SwiftUI
 
+@ViewAction(for: MonthCalendar.self)
 public struct MonthCalendarView: View {
     public init(store: StoreOf<MonthCalendar>) {
         self.store = store
     }
     
-    @Bindable private var store: StoreOf<MonthCalendar>
+    @Bindable public var store: StoreOf<MonthCalendar>
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
     public var body: some View {
@@ -17,6 +18,9 @@ public struct MonthCalendarView: View {
                 ForEach(store.displayDays) { day in
                     MonthItemView(originDay: store.originDay, day: day)
                         .frame(height: 70)
+                        .onTapGesture {
+                            send(.daySelected(day))
+                        }
                 }
             }
             
@@ -27,6 +31,9 @@ public struct MonthCalendarView: View {
                     .font(.customTitle)
                 
                 Text(#localized("No Events"))
+                    .font(.customHeadline)
+                
+                Text(#localized("\(store.currentSelectedDay.formatted(.dateIdentifier))"))
                     .font(.customHeadline)
             }
             .foregroundStyle(#color("sub_text_color"))
