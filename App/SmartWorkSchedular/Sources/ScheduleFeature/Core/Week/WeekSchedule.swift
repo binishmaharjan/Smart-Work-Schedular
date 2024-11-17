@@ -27,7 +27,12 @@ public struct WeekSchedule {
             case scrollEndReached
         }
         
+        public enum Delegate {
+            case weekChanged(originDay: Day)
+        }
+        
         case view(View)
+        case delegate(Delegate)
         case binding(BindingAction<State>)
         
         case observeStartWeekOn
@@ -60,7 +65,8 @@ public struct WeekSchedule {
                 // create display dates
                 createInitialDisplayDate(state: &state)
                 
-                return .run { send in
+                return .run { [originDay = state.originDay] send in
+                    await send(.delegate(.weekChanged(originDay: originDay)))
                     await send(.observeStartWeekOn)
                     await send(.observeCurrentSelectedDay)
                 }
@@ -69,7 +75,7 @@ public struct WeekSchedule {
                 logger.debug("view: scrollEndReached: generate new days")
                 
                 createNextDisplayDate(state: &state)
-                return .none
+                return .send(.delegate(.weekChanged(originDay: state.originDay)))
                 
             case .observeStartWeekOn:
                 logger.debug("observeStartWeekOn")
@@ -96,7 +102,7 @@ public struct WeekSchedule {
                 
                 return .none
 
-            case .binding, .weekCalendar:
+            case .binding, .weekCalendar, .delegate:
                 return .none
             }
         }

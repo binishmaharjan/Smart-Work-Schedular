@@ -85,6 +85,9 @@ public struct Schedule {
                 state.destination = .calendarMode(CalendarMode.State())
                 return .none
                 
+            case .weekSchedule(.delegate(.weekChanged(let originDay))):
+                return .send(.navigationBar(.updateTitle(originDay.formatted(.monthAndYear))))
+                
             case .destination, .navigationBar, .monthSchedule, .weekSchedule, .daySchedule:
                 return .none
             }
