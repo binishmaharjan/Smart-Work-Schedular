@@ -3,6 +3,7 @@ import EarningsFeature
 import Foundation
 import LoggerClient
 import ScheduleFeature
+import SettingsFeature
 import TemplatesFeature
 
 @Reducer
@@ -13,12 +14,14 @@ public struct MainTab {
             self.schedule = Schedule.State()
             self.templates = Templates.State()
             self.earnings = Earnings.State()
+            self.settings = Settings.State()
             self.selectedTab = .schedule
         }
         
         public var schedule: Schedule.State
         public var templates: Templates.State
         public var earnings: Earnings.State
+        public var settings: Settings.State
         public var selectedTab: Tab
     }
     
@@ -28,6 +31,7 @@ public struct MainTab {
         case schedule(Schedule.Action)
         case templates(Templates.Action)
         case earnings(Earnings.Action)
+        case settings(Settings.Action)
     }
     
     public init() { }
@@ -43,7 +47,7 @@ public struct MainTab {
                 logger.debug("tabSelected: \(state.selectedTab)")
                 return .none
                 
-            case .binding, .schedule, .templates, .earnings:
+            case .binding, .schedule, .templates, .earnings, .settings:
                 return .none
             }
         }
@@ -58,6 +62,10 @@ public struct MainTab {
         
         Scope(state: \.earnings, action: \.earnings) {
             Earnings()
+        }
+        
+        Scope(state: \.settings, action: \.settings) {
+            Settings()
         }
     }
 }

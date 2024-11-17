@@ -13,10 +13,8 @@ struct MonthItemView: View {
     
     var body: some View {
         VStack {
-            Rectangle()
-                .fill(#color("sub_text_color").opacity(0.5))
-                .frame(height: 1)
-
+            hSeparator()
+            
             Text(day.formatted(.calendarDay))
                 .font(.customCaption)
                 .foregroundStyle(day.isInSameMonth(as: originDay) ? #color("text_color") : #color("sub_text_color"))
@@ -24,10 +22,4 @@ struct MonthItemView: View {
             Spacer()
         }
     }
-}
-
-#Preview {
-    MonthItemView(
-        originDay: .init(date: .now), day: .init(date: .now)
-    )
 }

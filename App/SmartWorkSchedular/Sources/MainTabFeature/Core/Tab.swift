@@ -6,6 +6,7 @@ public enum Tab {
     case schedule
     case templates
     case earnings
+    case settings
     
     public var title: String {
         switch self {
@@ -17,6 +18,9 @@ public enum Tab {
             
         case .earnings:
             return #localized("Earnings")
+            
+        case .settings:
+            return #localized("Settings")
         }
     }
     
@@ -30,6 +34,9 @@ public enum Tab {
             
         case .earnings:
             return "chart.bar.xaxis"
+            
+        case .settings:
+            return "gearshape.fill"
         }
     }
 }

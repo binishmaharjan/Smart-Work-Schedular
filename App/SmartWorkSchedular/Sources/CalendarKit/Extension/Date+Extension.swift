@@ -4,42 +4,42 @@ extension Date {
     /// Returns a start of date for self
     /// Note: Use this for proper date calculation
     public var startOfDate: Date {
-        gegorianCalendar.startOfDay(for: self)
+        gregorianCalendar.startOfDay(for: self)
     }
     
     /// Determines if the self is today
     public var isToday: Bool {
-        gegorianCalendar.isDateInToday(self)
+        gregorianCalendar.isDateInToday(self)
     }
     
     /// Determines if the self is tomorrow
     public var isTomorrow: Bool {
-        gegorianCalendar.isDateInTomorrow(self)
+        gregorianCalendar.isDateInTomorrow(self)
     }
     
     /// Determines if the date is in this year
     public var isInThisYear: Bool {
-        isEqual(to: .now, toGranularity: .year, in: gegorianCalendar)
+        isEqual(to: .now, toGranularity: .year, in: gregorianCalendar)
     }
             
     /// Determines if the date is in this month
     public var isInThisMonth: Bool {
-        isEqual(to: .now, toGranularity: .month, in: gegorianCalendar)
+        isEqual(to: .now, toGranularity: .month, in: gregorianCalendar)
     }
     
     /// Determines if the date is in same week
     public var isInThisWeek: Bool {
-        isEqual(to: .now, toGranularity: .weekOfYear, in: gegorianCalendar)
+        isEqual(to: .now, toGranularity: .weekOfYear, in: gregorianCalendar)
     }
     
     /// Determines if the self is yesterday
     public var isYesterDay: Bool {
-        gegorianCalendar.isDateInYesterday(self)
+        gregorianCalendar.isDateInYesterday(self)
     }
     
     // Returns the date of next day
     public var nextDate: Date {
-        guard let nextDate = gegorianCalendar.date(byAdding: .day, value: 1, to: self) else {
+        guard let nextDate = gregorianCalendar.date(byAdding: .day, value: 1, to: self) else {
             return self
         }
         return nextDate
@@ -47,15 +47,15 @@ extension Date {
     
     // Returns the date of previous day
     public var previousDate: Date {
-        guard let previoustDate = gegorianCalendar.date(byAdding: .day, value: -1, to: self) else {
+        guard let previousDate = gregorianCalendar.date(byAdding: .day, value: -1, to: self) else {
             return self
         }
-        return previoustDate
+        return previousDate
     }
     
     // Returns the date of same weekDate from next week
     public var nextWeeDate: Date {
-        guard let nextWeekDate = gegorianCalendar.date(byAdding: .weekOfMonth, value: 1, to: self) else {
+        guard let nextWeekDate = gregorianCalendar.date(byAdding: .weekOfMonth, value: 1, to: self) else {
             return self
         }
         return nextWeekDate
@@ -63,15 +63,15 @@ extension Date {
     
     // Returns the date of same weekDate from previous week
     public var previousWeekDate: Date {
-        guard let previoustWeeDate = gegorianCalendar.date(byAdding: .weekOfMonth, value: -1, to: self) else {
+        guard let previousWeekDate = gregorianCalendar.date(byAdding: .weekOfMonth, value: -1, to: self) else {
             return self
         }
-        return previoustWeeDate
+        return previousWeekDate
     }
     
     // Returns the date of same date from next month
     public var nextMonthDate: Date {
-        guard let nextWeekDate = gegorianCalendar.date(byAdding: .month, value: 1, to: self) else {
+        guard let nextWeekDate = gregorianCalendar.date(byAdding: .month, value: 1, to: self) else {
             return self
         }
         return nextWeekDate
@@ -79,7 +79,7 @@ extension Date {
     
     // Returns the date of same date from next month
     public var previousMonthDate: Date {
-        guard let nextWeekDate = gegorianCalendar.date(byAdding: .month, value: -1, to: self) else {
+        guard let nextWeekDate = gregorianCalendar.date(byAdding: .month, value: -1, to: self) else {
             return self
         }
         return nextWeekDate
@@ -87,22 +87,22 @@ extension Date {
     
     /// Determines if the give date is same as self
     public func isSameDate(as date: Date) -> Bool {
-        gegorianCalendar.isDate(self, inSameDayAs: date)
+        gregorianCalendar.isDate(self, inSameDayAs: date)
     }
     
     /// Determines if the date is in same year as the date
     public func isInSameYear(as date: Date) -> Bool {
-        isEqual(to: date, toGranularity: .year, in: gegorianCalendar)
+        isEqual(to: date, toGranularity: .year, in: gregorianCalendar)
     }
     
     /// Determines if the date is in same week as the date
     public func isInSameWeek(as date: Date) -> Bool {
-        isEqual(to: date, toGranularity: .weekOfYear, in: gegorianCalendar)
+        isEqual(to: date, toGranularity: .weekOfYear, in: gregorianCalendar)
     }
     
     /// Determines if the date is in same month as the date
     public func isInSameMonth(as date: Date) -> Bool {
-        isEqual(to: date, toGranularity: .month, in: gegorianCalendar)
+        isEqual(to: date, toGranularity: .month, in: gregorianCalendar)
     }
 }
 

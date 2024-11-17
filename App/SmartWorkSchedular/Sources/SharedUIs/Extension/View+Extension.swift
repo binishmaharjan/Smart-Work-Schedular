@@ -12,4 +12,20 @@ extension View {
     public func vSpacing(_ alignment: Alignment) -> some View {
         frame(maxHeight: .infinity, alignment: alignment)
     }
+    
+    /// horizontal separator
+    @ViewBuilder
+    public func hSeparator() -> some View {
+        Rectangle()
+            .fill(#color("sub_text_color").opacity(0.5))
+            .frame(height: 1)
+    }
+    
+    /// vertical separator
+    @ViewBuilder
+    public func vSeparator() -> some View {
+        Rectangle()
+            .fill(#color("sub_text_color").opacity(0.5))
+            .frame(width: 1)
+    }
 }

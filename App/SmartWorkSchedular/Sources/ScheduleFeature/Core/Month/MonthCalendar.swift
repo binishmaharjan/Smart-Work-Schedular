@@ -3,24 +3,19 @@ import ComposableArchitecture
 import Foundation
 
 @Reducer
-public struct SchedulePanel {
+public struct MonthCalendar {
     @ObservableState
     public struct State: Equatable, Identifiable {
-        public init(displayMode: DisplayMode, originDay: Day, displayDays: [Day]) {
-            self.displayMode = displayMode
+        public init(originDay: Day, displayDays: [Day]) {
             self.originDay = originDay
             self.displayDays = IdentifiedArray(uniqueElements: displayDays)
         }
         
-        var displayMode: DisplayMode
         var originDay: Day
         var displayDays: IdentifiedArrayOf<Day>
-        var numberOfWeeks: Int {
-            displayDays.count / 7
-        }
         
-        public var id: String { // TODO: Think of the id
-            UUID().uuidString
+        public var id: String {
+            originDay.formatted(.dateIdentifier)
         }
     }
     
@@ -29,9 +24,11 @@ public struct SchedulePanel {
     
     public init() { }
     
+    @Dependency(\.loggerClient) private var logger
+    
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { _, _ in
-            .none
+            return .none
         }
     }
 }
