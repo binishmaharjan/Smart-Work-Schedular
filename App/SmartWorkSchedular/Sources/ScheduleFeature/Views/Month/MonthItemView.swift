@@ -1,4 +1,5 @@
 import CalendarKit
+import ComposableArchitecture
 import SharedUIs
 import SwiftUI
 
@@ -8,18 +9,48 @@ struct MonthItemView: View {
         self.day = day
     }
     
+    // Shared State
+    @Shared(.mem_currentSelectedDay) var currentSelectedDay = Day(date: .now)
+    
     private var originDay: Day
     private var day: Day
     
+    private var textColor: Color {
+        if day.isInSameMonth(as: originDay) && day.isSameDay(as: currentSelectedDay) {
+            #color("background")
+        } else if day.isInSameMonth(as: originDay) && !day.isSameDay(as: currentSelectedDay) {
+            #color("text_color")
+        } else {
+            #color("sub_text_color")
+        }
+    }
+    
+    private var todayIndicatorColor: Color {
+        if day.isSameDay(as: currentSelectedDay) {
+            #color("background")
+        } else {
+            #color("accent_color")
+        }
+    }
+    
     var body: some View {
-        VStack {
-            hSeparator()
-            
+        VStack(spacing: 0) {
             Text(day.formatted(.calendarDay))
                 .font(.customCaption)
-                .foregroundStyle(day.isInSameMonth(as: originDay) ? #color("text_color") : #color("sub_text_color"))
+                .foregroundStyle(textColor)
+                .padding(.top, 4)
             
-            Spacer()
+            if day.isToday {
+                todayIndicator(color: todayIndicatorColor)
+            }
+        } 
+        .vSpacing(.top)
+        .hSpacing(.center)
+        .background {
+            if day.isSameDay(as: currentSelectedDay) {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(#color("accent_color"))
+            }
         }
     }
 }

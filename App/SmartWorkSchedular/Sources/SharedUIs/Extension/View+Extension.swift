@@ -28,4 +28,12 @@ extension View {
             .fill(#color("sub_text_color").opacity(0.5))
             .frame(width: 1)
     }
+    
+    /// today's indicator
+    @ViewBuilder
+    public func todayIndicator(color: Color = #color("accent_color")) -> some View {
+        Circle()
+            .fill(color)
+            .frame(width: 5, height: 5)
+    }
 }

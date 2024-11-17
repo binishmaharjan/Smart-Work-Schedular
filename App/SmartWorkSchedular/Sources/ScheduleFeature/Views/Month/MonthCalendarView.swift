@@ -25,6 +25,7 @@ public struct MonthCalendarView: View {
             }
             
             hSeparator()
+                .padding(.top, 4)
             
             VStack {
                 Image(systemName: "rectangle.portrait.on.rectangle.portrait.slash")

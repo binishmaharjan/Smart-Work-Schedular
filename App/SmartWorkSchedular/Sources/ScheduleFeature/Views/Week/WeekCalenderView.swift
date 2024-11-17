@@ -32,9 +32,7 @@ public struct WeekCalendarView: View {
                             }
                             
                             if day.isToday {
-                                Circle()
-                                    .fill(#color("accent_color"))
-                                    .frame(width: 5, height: 5)
+                                todayIndicator()
                                     .vSpacing(.bottom)
                                     .offset(y: 8)
                             }
