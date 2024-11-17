@@ -111,13 +111,13 @@ extension Schedule {
     private func createSchedule(_ state: inout State) {
         switch state.displayMode {
         case .month:
-            state.monthSchedule = MonthSchedule.State()
+            state.monthSchedule = MonthSchedule.State(originDay: state.currentSelectedDay)
             state.weekSchedule = nil
             state.daySchedule = nil
             
         case .week:
             state.monthSchedule = nil
-            state.weekSchedule = WeekSchedule.State()
+            state.weekSchedule = WeekSchedule.State(originDay: state.currentSelectedDay)
             state.daySchedule = nil
             
         case .day:

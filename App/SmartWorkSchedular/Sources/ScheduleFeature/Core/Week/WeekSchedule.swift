@@ -6,7 +6,9 @@ import Foundation
 public struct WeekSchedule {
     @ObservableState
     public struct State: Equatable {
-        public init() { }
+        public init(originDay: Day) {
+            self.originDay = originDay
+        }
         // Shared State
         @Shared(.ud_startOfWeekday) var startOfWeekday = Weekday.sunday
         @Shared(.mem_currentSelectedDay) var currentSelectedDay = Day(date: .now)
@@ -14,7 +16,7 @@ public struct WeekSchedule {
         var weekCalendar: IdentifiedArrayOf<WeekCalendar.State> = []
         var weekdays: [String] = []
         var currentPage: Int = 1
-        var originDay = Day(date: .now)
+        var originDay: Day
         
         var displayDays: IdentifiedArrayOf<Day> = []
     }
@@ -67,7 +69,6 @@ public struct WeekSchedule {
                 logger.debug("view: scrollEndReached: generate new days")
                 
                 createNextDisplayDate(state: &state)
-                
                 return .none
                 
             case .observeStartWeekOn:

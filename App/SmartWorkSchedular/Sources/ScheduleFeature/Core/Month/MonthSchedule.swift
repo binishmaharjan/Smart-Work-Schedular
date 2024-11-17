@@ -6,7 +6,9 @@ import Foundation
 public struct MonthSchedule {
     @ObservableState
     public struct State: Equatable {
-        public init() { }
+        public init(originDay: Day) {
+            self.originDay = originDay
+        }
         
         // Shared State
         @Shared(.ud_startOfWeekday) var startOfWeekday = Weekday.sunday
@@ -15,7 +17,7 @@ public struct MonthSchedule {
         var monthCalendar: IdentifiedArrayOf<MonthCalendar.State> = []
         var weekdays: [String] = []
         var currentPage: Int = 1
-        var originDay = Day(date: .now)
+        var originDay: Day
     }
     
     public enum Action: BindableAction, ViewAction {

@@ -1,3 +1,4 @@
+import CalendarKit
 import ComposableArchitecture
 import SharedUIs
 import SwiftUI
@@ -96,7 +97,7 @@ extension WeekScheduleView {
 #Preview {
     WeekScheduleView(
         store: .init(
-            initialState: .init(),
+            initialState: .init(originDay: Day(date: .now)),
             reducer: WeekSchedule.init
         )
     )

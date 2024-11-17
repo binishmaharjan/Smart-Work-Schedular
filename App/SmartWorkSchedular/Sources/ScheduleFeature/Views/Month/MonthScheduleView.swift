@@ -77,7 +77,7 @@ extension MonthScheduleView {
 #Preview {
     MonthScheduleView(
         store: .init(
-            initialState: .init(),
+            initialState: .init(originDay: Day(date: .now)),
             reducer: MonthSchedule.init
         )
     )
