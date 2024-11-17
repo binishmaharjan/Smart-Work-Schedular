@@ -1,5 +1,6 @@
 import CalendarKit
 import ComposableArchitecture
+import SharedUIs
 import SwiftUI
 
 @ViewAction(for: WeekCalendar.self)
@@ -9,9 +10,43 @@ public struct WeekCalendarView: View {
     }
     
     @Bindable public var store: StoreOf<WeekCalendar>
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
     public var body: some View {
-        Text("Hello World")
+        HStack(spacing: 0) {
+            ForEach(store.displayDays) { day in
+                VStack(spacing: 4) {
+                    Text(day.formatted(.weekday))
+                        .font(.customSubheadline)
+                        .foregroundStyle(#color("text_color"))
+                    
+                    Text(day.formatted(.calendarDay))
+                        .font(.customSubheadline)
+                        .foregroundStyle(
+                            day.isSameDay(as: store.currentSelectedDay) ? #color("background") : #color("text_color")
+                        )
+                        .frame(width: 35, height: 35)
+                        .background {
+                            if day.isSameDay(as: store.currentSelectedDay) {
+                                RoundedRectangle(cornerRadius: 8).fill(#color("accent_color"))
+                            }
+                            
+                            if day.isToday {
+                                Circle()
+                                    .fill(#color("accent_color"))
+                                    .frame(width: 5, height: 5)
+                                    .vSpacing(.bottom)
+                                    .offset(y: 8)
+                            }
+                        }
+                }
+                .hSpacing(.center)
+                .contentShape(.rect)
+                .onTapGesture {
+                    send(.daySelected(day), animation: .snappy)
+                }
+            }
+        }
     }
 }
 

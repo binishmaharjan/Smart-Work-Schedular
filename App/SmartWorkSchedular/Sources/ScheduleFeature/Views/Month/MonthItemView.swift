@@ -13,9 +13,7 @@ struct MonthItemView: View {
     
     var body: some View {
         VStack {
-            Rectangle()
-                .fill(#color("sub_text_color").opacity(0.5))
-                .frame(height: 1)
+            hSeparator()
             
             Text(day.formatted(.calendarDay))
                 .font(.customCaption)

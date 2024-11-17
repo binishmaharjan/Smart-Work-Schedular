@@ -9,7 +9,8 @@ public struct MonthSchedule {
         public init() { }
         
         // Shared State
-        @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
+        @Shared(.ud_startOfWeekday) var startOfWeekday = Weekday.sunday
+        @Shared(.mem_currentSelectedDay) var currentSelectedDay = Day(date: .now)
         
         var monthCalendar: IdentifiedArrayOf<MonthCalendar.State> = []
         var weekdays: [String] = []
@@ -72,6 +73,9 @@ public struct MonthSchedule {
             case .binding, .monthCalendar:
                 return .none
             }
+        }
+        .forEach(\.monthCalendar, action: \.monthCalendar) {
+            MonthCalendar()
         }
     }
 }

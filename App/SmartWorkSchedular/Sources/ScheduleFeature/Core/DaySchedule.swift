@@ -9,14 +9,13 @@ public struct DaySchedule {
     }
     
     public enum Action {
-        
     }
     
     public init() { }
     
     public var body: some ReducerOf<Self> {
-        Reduce<State, Action> { state, action in
-            return .none
+        Reduce<State, Action> { _, _ in
+            .none
         }
     }
 }

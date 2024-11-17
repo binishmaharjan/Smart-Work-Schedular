@@ -10,7 +10,7 @@ public struct CalendarMode {
         public init() { }
         
         // Shared State
-        @Shared(.displayMode) var displayMode = DisplayMode.month
+        @Shared(.ud_displayMode) var displayMode = DisplayMode.month
         
         var displayModeList = DisplayMode.allCases
     }
@@ -45,4 +45,3 @@ public struct CalendarMode {
         }
     }
 }
-

@@ -8,12 +8,15 @@ public struct WeekSchedule {
     public struct State: Equatable {
         public init() { }
         // Shared State
-        @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
+        @Shared(.ud_startOfWeekday) var startOfWeekday = Weekday.sunday
+        @Shared(.mem_currentSelectedDay) var currentSelectedDay = Day(date: .now)
         
         var weekCalendar: IdentifiedArrayOf<WeekCalendar.State> = []
         var weekdays: [String] = []
         var currentPage: Int = 1
         var originDay = Day(date: .now)
+        
+        var displayDays: IdentifiedArrayOf<Day> = []
     }
     
     public enum Action: ViewAction, BindableAction {
@@ -27,6 +30,8 @@ public struct WeekSchedule {
         
         case observeStartWeekOn
         case startWeekOnUpdated(Weekday)
+        case observeCurrentSelectedDay
+        case currentSelectedDayUpdate(Day)
         case weekCalendar(IdentifiedActionOf<WeekCalendar>)
     }
     
@@ -35,12 +40,13 @@ public struct WeekSchedule {
     @Dependency(\.calendarKitClient) private var calendarKitClient
     
     public var body: some ReducerOf<Self> {
+        BindingReducer()
+        
         Reduce<State, Action> { state, action in
             switch action {
             case .view(.onAppear):
                 // initialize weekdays
                 state.weekdays = calendarKitClient.weekDays()
-                state.weekdays.insert("Test", at: 0)
                 
                 guard state.weekCalendar.isEmpty else {
                     return .none
@@ -51,6 +57,7 @@ public struct WeekSchedule {
                 
                 return .run { send in
                     await send(.observeStartWeekOn)
+                    await send(.observeCurrentSelectedDay)
                 }
                 
             case .view(.scrollEndReached):
@@ -64,13 +71,23 @@ public struct WeekSchedule {
                 }
                 
             case .startWeekOnUpdated(let weekday):
-                print("Generate next week")
-//                createNextDisplayDate(state: &state)
+                createNextDisplayDate(state: &state)
+                return .none
+                
+            case .observeCurrentSelectedDay:
+                return .publisher {
+                    state.$startOfWeekday.publisher.map(Action.startWeekOnUpdated)
+                }
+                
+            case .currentSelectedDayUpdate(let day):
                 return .none
 
             case .binding, .weekCalendar:
                 return .none
             }
+        }
+        .forEach(\.weekCalendar, action: \.weekCalendar) {
+            WeekCalendar()
         }
     }
 }

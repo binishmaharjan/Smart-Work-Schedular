@@ -10,14 +10,19 @@ public struct WeekScheduleView: View {
     
     @Bindable public var store: StoreOf<WeekSchedule>
     @State private var needsToCreateNewDays = false
-    private let columns: [GridItem] = [GridItem(.fixed(56))] + Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
     public var body: some View {
         VStack {
-            weekdays()
-                .padding(.bottom, 8)
-            
             weekCalendar()
+                .frame(height: 75)
+            
+            hSeparator()
+                
+            VStack {
+                Text("\(store.currentSelectedDay.formatted(.dateIdentifier))")
+            }
+            .vSpacing(.center)
         }
         .onAppear { send(.onAppear) }
         .onChange(of: store.currentPage, initial: false) { _, newValue in
@@ -31,16 +36,30 @@ public struct WeekScheduleView: View {
 
 // MARK: Views
 extension WeekScheduleView {
-    @ViewBuilder
-    private func weekdays() -> some View {
-        LazyVGrid(columns: columns) {
-            ForEach(store.weekdays, id: \.self) { weekday in
-                Text(weekday)
-            }
-        }
-        .font(.customSubheadline)
-        .foregroundStyle(#color("text_color"))
-    }
+//    @ViewBuilder
+//    private func weekdays() -> some View {
+//        HStack(spacing: 0) {
+//            ForEach(store.displayDays) { day in
+//                VStack(spacing: 0) {
+//                    Text(day.formatted(.weekday))
+//                        .font(.customSubheadline)
+//                        .foregroundStyle(#color("text_color"))
+//                    
+//                    Text(day.formatted(.calendarDay))
+//                        .font(.customSubheadline)
+//                        .foregroundStyle(#color("text_color"))
+//                        .frame(width: 35, height: 35)
+//                        .background {
+//                            if day.isSameDay(as: store.originDay) {
+//                                Circle().fill(#color("accent_color"))
+//                            }
+//                        }
+//                        .background(#color("background").shadow(.drop(radius: 1)), in: .circle)
+//                }
+//                .hSpacing(.center)
+//            }
+//        }
+//    }
     
     @ViewBuilder
     private func weekCalendar() -> some View {
@@ -50,6 +69,7 @@ extension WeekScheduleView {
                 id: \.element.id
             ) { index, store in
                 WeekCalendarView(store: store)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .tag(index)
                     .background {
                         GeometryReader { proxy in

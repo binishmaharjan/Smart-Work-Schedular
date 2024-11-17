@@ -20,9 +20,7 @@ public struct MonthCalendarView: View {
                 }
             }
             
-            Rectangle()
-                .fill(#color("sub_text_color").opacity(0.5))
-                .frame(height: 1)
+            hSeparator()
             
             VStack {
                 Image(systemName: "rectangle.portrait.on.rectangle.portrait.slash")

@@ -4,7 +4,7 @@ import LoggerClient
 
 // MARK: The Main Calendar instance
 var gregorianCalendar: Calendar = {
-    @SharedReader(.startOfWeekday) var startOfWeekday = Weekday.sunday
+    @SharedReader(.ud_startOfWeekday) var startOfWeekday = Weekday.sunday
     
     var calendar = Calendar(identifier: .gregorian)
     calendar.locale = Locale.current
@@ -20,8 +20,8 @@ extension CalendarKitClient: DependencyKey {
 extension CalendarKitClient {
     public static func live() -> CalendarKitClient {
         // MARK: Shared Properties
-        @Shared(.displayMode) var displayMode = DisplayMode.month
-        @Shared(.startOfWeekday) var startOfWeekday = Weekday.sunday
+        @Shared(.ud_displayMode) var displayMode = DisplayMode.month
+        @Shared(.ud_startOfWeekday) var startOfWeekday = Weekday.sunday
         // MARK: Dependencies
         @Dependency(\.loggerClient) var logger
         

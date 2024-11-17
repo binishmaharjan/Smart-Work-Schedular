@@ -15,7 +15,9 @@ public struct Schedule {
         public init() { }
         
         // Shared State
-        @Shared(.displayMode) var displayMode = DisplayMode.month
+        @Shared(.ud_displayMode) var displayMode = DisplayMode.month
+        @Shared(.mem_currentSelectedDay) var currentSelectedDay = Day(date: .now)
+        
         // Data State
         @Presents var destination: Destination.State?
         var monthSchedule: MonthSchedule.State?

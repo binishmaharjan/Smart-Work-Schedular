@@ -13,15 +13,19 @@ public enum DateFormatStyle {
     }
 
     // MARK: Day Format
+    // returns day from the date
+    /// eg: 1, 2, 3
     public struct CalendarDay: FormatStyle {
         public func format(_ value: Date) -> String {
             let formatter = DateFormatter()
-            formatter.dateFormat = "MM,d"
+            formatter.dateFormat = "d"
             return formatter.string(from: value.startOfDate)
         }
     }
 
     // MARK: Weekday Format
+    /// returns weekday from the date
+    /// eg: Sun, Mon, Tue
     public struct WeekDay: FormatStyle {
         public func format(_ value: Date) -> String {
             let formatter = Date.FormatStyle().weekday()
@@ -30,6 +34,8 @@ public enum DateFormatStyle {
     }
     
     // MARK: Month Format
+    /// returns month and year from the date
+    /// eg: Oct, 2024
     public struct MonthAndYear: FormatStyle {
         public func format(_ value: Date) -> String {
             let formatter = Date.FormatStyle().month().year()

@@ -11,16 +11,18 @@ public struct WeekCalendar {
             self.displayDays = IdentifiedArray(uniqueElements: displayDays)
         }
         
+        // Shared State
+        @Shared(.mem_currentSelectedDay) var currentSelectedDay = Day(date: .now)
+        
         var originDay: Day
         var displayDays: IdentifiedArrayOf<Day>
         
-        public var id: String {
-            originDay.formatted(.dateIdentifier)
-        }
+        public var id: String = UUID().uuidString
     }
     
     public enum Action: ViewAction {
         public enum View {
+            case daySelected(Day)
         }
         
         case view(View)
@@ -29,9 +31,12 @@ public struct WeekCalendar {
     public init() { }
     
     public var body: some ReducerOf<Self> {
-        Reduce<State, Action> { _, _ in
-            return .none
+        Reduce<State, Action> { state, action in
+            switch action {
+            case .view(.daySelected(let day)):
+                state.currentSelectedDay = day
+                return .none
+            }
         }
     }
 }
-

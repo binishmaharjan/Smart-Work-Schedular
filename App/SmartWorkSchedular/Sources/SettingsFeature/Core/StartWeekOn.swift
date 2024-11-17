@@ -13,7 +13,7 @@ public struct StartWeekOn {
     public struct State: Equatable {
         public init() { }
         
-        @SharedReader(.startOfWeekday) var startOfWeekday = Weekday.sunday
+        @SharedReader(.ud_startOfWeekday) var startOfWeekday = Weekday.sunday
         var weekdays: IdentifiedArrayOf<Weekday> = .init(uniqueElements: Weekday.allCases)
     }
     
