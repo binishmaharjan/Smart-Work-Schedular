@@ -30,10 +30,14 @@ public struct WeekCalendar {
     
     public init() { }
     
+    @Dependency(\.loggerClient) private var logger
+    
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
             case .view(.daySelected(let day)):
+                logger.debug("view: daySelected: \(day.formatted(.dateIdentifier))")
+                
                 state.currentSelectedDay = day
                 return .none
             }

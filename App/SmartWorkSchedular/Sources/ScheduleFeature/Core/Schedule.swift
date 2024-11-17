@@ -55,6 +55,8 @@ public struct Schedule {
         Reduce<State, Action> { state, action in
             switch action {
             case .view(.onAppear):
+                logger.debug("onAppear")
+                
                 createSchedule(&state)
                 
                 return .run { send in
@@ -62,18 +64,22 @@ public struct Schedule {
                 }
                 
             case .observeDisplayMode:
+                logger.debug("observeDisplayMode")
+                
                 return .publisher {
                     state.$displayMode.publisher.map(Action.displayModeUpdated)
                 }
                 
-            case .displayModeUpdated:
+            case .displayModeUpdated(let displayMode):
+                logger.debug("observeDisplayMode: \(displayMode)")
                 createSchedule(&state)
                 return .none
                 
-            case .navigationBar(.firstTrailingItemTapped):
+            case .navigationBar(.delegate(.executeFirstAction)):
+                logger.debug("navigationBar: delegate: executeFirstAction")
                 return .none
                 
-            case .navigationBar(.secondTrailingItemTapped):
+            case .navigationBar(.delegate(.executeSecondAction)):
                 logger.debug("navigationBar: delegate: executeSecondAction")
                 
                 state.destination = .calendarMode(CalendarMode.State())

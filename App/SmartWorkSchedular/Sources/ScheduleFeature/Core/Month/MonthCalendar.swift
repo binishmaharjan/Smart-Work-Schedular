@@ -24,6 +24,8 @@ public struct MonthCalendar {
     
     public init() { }
     
+    @Dependency(\.loggerClient) private var logger
+    
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { _, _ in
             return .none

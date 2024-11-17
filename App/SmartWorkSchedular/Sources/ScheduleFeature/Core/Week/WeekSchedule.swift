@@ -38,6 +38,7 @@ public struct WeekSchedule {
     public init() { }
     
     @Dependency(\.calendarKitClient) private var calendarKitClient
+    @Dependency(\.loggerClient) private var logger
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -45,6 +46,8 @@ public struct WeekSchedule {
         Reduce<State, Action> { state, action in
             switch action {
             case .view(.onAppear):
+                logger.debug("view: onAppear")
+                
                 // initialize weekdays
                 state.weekdays = calendarKitClient.weekDays()
                 
@@ -61,25 +64,35 @@ public struct WeekSchedule {
                 }
                 
             case .view(.scrollEndReached):
+                logger.debug("view: scrollEndReached: generate new days")
+                
                 createNextDisplayDate(state: &state)
                 
                 return .none
                 
             case .observeStartWeekOn:
+                logger.debug("observeStartWeekOn")
+                
                 return .publisher {
                     state.$startOfWeekday.publisher.map(Action.startWeekOnUpdated)
                 }
                 
             case .startWeekOnUpdated(let weekday):
+                logger.debug("startWeekOnUpdated: \(weekday)")
+                
                 createNextDisplayDate(state: &state)
                 return .none
                 
             case .observeCurrentSelectedDay:
+                logger.debug("observeCurrentSelectedDay")
+                
                 return .publisher {
                     state.$startOfWeekday.publisher.map(Action.startWeekOnUpdated)
                 }
                 
             case .currentSelectedDayUpdate(let day):
+                logger.debug("currentSelectedDayUpdate: \(day.formatted(.dateIdentifier))")
+                
                 return .none
 
             case .binding, .weekCalendar:
@@ -140,7 +153,6 @@ extension WeekSchedule {
             let currentFirstOriginDay = state.weekCalendar[0].originDay
             // get new origin day from first day, to add as first page
             let newOriginDay = calendarKitClient.previousFocusDay(from: currentFirstOriginDay)
-            print("🍎 Current : \(currentFirstOriginDay.date.startOfDate)")
             // create new display days
             let newDisplayDays = calendarKitClient.displayDays(from: newOriginDay)
             // add new created display days and add at first page
@@ -167,7 +179,6 @@ extension WeekSchedule {
             let currentLastOriginDay = state.weekCalendar[state.weekCalendar.count - 1].originDay
             // get new origin day from last day, to add as first page
             let newOriginDay = calendarKitClient.nextFocusDay(from: currentLastOriginDay)
-            print("🍎 Current : \(currentLastOriginDay.date.startOfDate)")
             // create new display days
             let newDisplayDays = calendarKitClient.displayDays(from: newOriginDay)
             // add new created display days and add at last page
