@@ -40,10 +40,13 @@ struct MonthItemView: View {
                 .foregroundStyle(textColor)
                 .padding(.top, 4)
             
+            // todays indicator
             if day.isToday {
                 todayIndicator(color: todayIndicatorColor)
+            } else {
+                Color.clear.frame(height: 5)
             }
-        } 
+        }
         .vSpacing(.top)
         .hSpacing(.center)
         .background {

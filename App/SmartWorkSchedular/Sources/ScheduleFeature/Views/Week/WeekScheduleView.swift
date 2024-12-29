@@ -22,6 +22,8 @@ public struct WeekScheduleView: View {
                 
             VStack {
                 Text("\(store.currentSelectedDay.formatted(.dateIdentifier))")
+                    .font(.customHeadline)
+                    .foregroundStyle(#color("sub_text_color"))
             }
             .vSpacing(.center)
         }
