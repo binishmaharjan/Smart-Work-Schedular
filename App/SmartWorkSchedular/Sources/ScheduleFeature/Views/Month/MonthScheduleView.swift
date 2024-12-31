@@ -16,7 +16,8 @@ public struct MonthScheduleView: View {
     public var body: some View {
         VStack {
             weekdays()
-                .padding(.bottom, 8)
+
+            hSeparator()
             
             monthCalendar()
         }

@@ -13,33 +13,33 @@ public struct MonthCalendarView: View {
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
     public var body: some View {
-        VStack(spacing: 0) {
-            LazyVGrid(columns: columns, spacing: 0) {
-                ForEach(store.displayDays) { day in
-                    MonthItemView(originDay: store.originDay, day: day)
-                        .frame(height: 70)
-                        .onTapGesture {
-                            send(.daySelected(day))
-                        }
-                }
+        GeometryReader { proxy in
+            VStack(spacing: 0) {
+                monthItemList(calendarHeight: proxy.size.height)
             }
-            
-            hSeparator()
-                .padding(.top, 4)
-            
-            VStack {
-                Image(systemName: "rectangle.portrait.on.rectangle.portrait.slash")
-                    .font(.customTitle)
-                
-                Text(#localized("No Events"))
-                    .font(.customHeadline)
-                
-                Text(#localized("\(store.currentSelectedDay.formatted(.dateIdentifier))"))
-                    .font(.customHeadline)
-            }
-            .foregroundStyle(#color("sub_text_color"))
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+    }
+}
+
+// MARK: Views
+extension MonthCalendarView {
+    private func monthItemList(calendarHeight: CGFloat) -> some View {
+        LazyVGrid(columns: columns, spacing: 0) {
+            ForEach(store.displayDays) { day in
+                monthItem(
+                    for: day,
+                    height: calendarHeight / CGFloat(store.numberOfWeeks)
+                )
+            }
+        }
+    }
+    
+    private func monthItem(for day: Day, height: CGFloat) -> some View {
+        MonthItemView(originDay: store.originDay, day: day)
+            .frame(height: height)
+            .onTapGesture {
+                send(.daySelected(day))
+            }
     }
 }
 
