@@ -16,11 +16,14 @@ public struct MonthCalendar {
         var originDay: Day
         var displayDays: IdentifiedArrayOf<Day>
         
+        var numberOfWeeks: Int {
+            displayDays.count / 7
+        }
+        
         public var id: String {
             originDay.formatted(.dateIdentifier)
         }
     }
-    
     
     public enum Action: ViewAction {
         public enum View {

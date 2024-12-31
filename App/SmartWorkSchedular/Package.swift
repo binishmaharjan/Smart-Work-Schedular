@@ -11,6 +11,7 @@ let package = Package(
     products: [
         .library(name: "SmartWorkSchedular", targets: ["SmartWorkSchedular"]),
         .library(name: "SharedUIs", targets: ["SharedUIs"]),
+        .library(name: "SharedModels", targets: ["SharedModels"]),
         .library(name: "AppFeature", targets: ["AppFeature"]),
         .library(name: "TutorialFeature", targets: ["TutorialFeature"]),
         .library(name: "MainTabFeature", targets: ["MainTabFeature"]),
@@ -51,6 +52,16 @@ let package = Package(
             ],
             resources: [
                 .process("Resources"),
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+            ]
+        ),
+        .target(
+            name: "SharedModels",
+            dependencies: [
+                "AppMacros",
+                "LoggerClient",
             ],
             plugins: [
                 .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
