@@ -2,7 +2,7 @@ import ComposableArchitecture
 import Foundation
 
 @Reducer
-public struct TaskTimeline {
+public struct EntriesTimeline {
     @ObservableState
     public struct State: Equatable {
         public init() { }

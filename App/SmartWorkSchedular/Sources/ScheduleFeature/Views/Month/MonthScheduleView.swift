@@ -13,6 +13,8 @@ public struct MonthScheduleView: View {
     @State private var needsToCreateNewDays = false
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
+    // TODO: Temp
+    
     public var body: some View {
         VStack(spacing: 0) {
             weekdays
@@ -30,8 +32,8 @@ public struct MonthScheduleView: View {
             }
         }
         .sheet(
-            item: $store.scope(state: \.destination?.taskTimeline, action: \.destination.taskTimeline),
-            content: taskTimeline(store:)
+            item: $store.scope(state: \.destination?.entriesTimeline, action: \.destination.entriesTimeline),
+            content: entriesTimeline(store:)
         )
     }
 }
@@ -80,8 +82,8 @@ extension MonthScheduleView {
     }
     
     @ViewBuilder
-    private func taskTimeline(store: StoreOf<TaskTimeline>) -> some View {
-        TaskTimelineView(store: store)
+    private func entriesTimeline(store: StoreOf<EntriesTimeline>) -> some View {
+        EntriesTimelineView(store: store)
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
     }

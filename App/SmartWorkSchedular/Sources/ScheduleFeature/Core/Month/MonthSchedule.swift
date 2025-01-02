@@ -6,7 +6,7 @@ import Foundation
 public struct MonthSchedule {
     @Reducer(state: .equatable)
     public enum Destination {
-        case taskTimeline(TaskTimeline)
+        case entriesTimeline(EntriesTimeline)
     }
     
     @ObservableState
@@ -77,7 +77,7 @@ public struct MonthSchedule {
                 
             case .monthCalendar(.element(id: _, action: .view(.daySelected(let day)))):
                 logger.debug("monthCalendar: .daySelected: \(day.formatted(.dateIdentifier))")
-                state.destination = .taskTimeline(.init())
+                state.destination = .entriesTimeline(.init())
                 return .none
                 
             case .observeStartWeekOn:
