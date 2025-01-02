@@ -4,12 +4,12 @@
 
 import Foundation
 
-public enum EventType {
+public enum TaskType {
     case shift
     case event
 }
 
-public struct Event {
+public struct Task {
     public var id: UUID
     public var title: String
     public var icon: String
@@ -19,4 +19,6 @@ public struct Event {
     public var breakTime: Int
     public var notes: String
     public var location: String
+    public var taskType: TaskType
+    public var wagePerHour: Double
 }
