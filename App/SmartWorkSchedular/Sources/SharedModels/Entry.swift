@@ -1,11 +1,11 @@
 import Foundation
 
-public enum EntriesType {
+public enum EntryType {
     case shift
     case event
 }
 
-public struct Entries: Identifiable {
+public struct Entry: Identifiable {
     public var id: UUID
     public var title: String
     public var icon: String
@@ -15,7 +15,7 @@ public struct Entries: Identifiable {
     public var breakTime: Int
     public var notes: String
     public var location: String
-    public var entriesType: EntriesType
+    public var entryType: EntryType
     public var wagePerHour: Double
     public var creationDate: Date
 }

@@ -12,7 +12,7 @@ public struct EntriesTimelineView: View {
     @Bindable public var store: StoreOf<EntriesTimeline>
     
     // TODO: Temp
-    var entries: [Entries] = [
+    var entries: [Entry] = [
         
     ].sorted { $0.creationDate < $1.creationDate }
     
