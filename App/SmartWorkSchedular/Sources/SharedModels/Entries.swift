@@ -5,7 +5,7 @@ public enum EntriesType {
     case event
 }
 
-public struct Entries {
+public struct Entries: Identifiable {
     public var id: UUID
     public var title: String
     public var icon: String
@@ -17,4 +17,5 @@ public struct Entries {
     public var location: String
     public var entriesType: EntriesType
     public var wagePerHour: Double
+    public var creationDate: Date
 }

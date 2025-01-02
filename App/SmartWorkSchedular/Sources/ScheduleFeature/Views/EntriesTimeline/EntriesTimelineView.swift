@@ -1,4 +1,6 @@
 import ComposableArchitecture
+import SharedModels
+import SharedUIs
 import SwiftUI
 
 @ViewAction(for: EntriesTimeline.self)
@@ -9,8 +11,31 @@ public struct EntriesTimelineView: View {
     
     @Bindable public var store: StoreOf<EntriesTimeline>
     
+    // TODO: Temp
+    var entries: [Entries] = [
+        
+    ].sorted { $0.creationDate < $1.creationDate }
+    
     public var body: some View {
-        Text("Task Detail")
+        ScrollView(.vertical) {
+            VStack {
+               entriesList
+            }
+            .hSpacing(.center)
+            .vSpacing(.center)
+        }
+        .scrollIndicators(.hidden)
+    }
+}
+
+// MARK: Views
+extension EntriesTimelineView {
+    @ViewBuilder
+    private var entriesList: some View {
+        VStack(alignment: .leading, spacing: 35) {
+            ForEach(entries) { entry in
+            }
+        }
     }
 }
 
@@ -21,4 +46,11 @@ public struct EntriesTimelineView: View {
             reducer: EntriesTimeline.init
         )
     )
+}
+
+
+struct EntryView: View {
+    var body: some View {
+        Text("Entry View")
+    }
 }
