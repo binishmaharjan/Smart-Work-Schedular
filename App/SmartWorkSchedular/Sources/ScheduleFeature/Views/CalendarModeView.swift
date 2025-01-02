@@ -27,7 +27,7 @@ public struct CalendarModeView: View {
                         
                         if store.displayMode == mode {
                             Image(systemName: "checkmark.circle")
-                                .foregroundStyle(#color("accent_color"))
+                                .foregroundStyle(Color.accent)
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -38,7 +38,7 @@ public struct CalendarModeView: View {
             .font(.customHeadline)
         }
         .padding(.bottom, 16)
-        .foregroundStyle(#color("text_color"))
+        .foregroundStyle(Color.text)
     }
 }
 

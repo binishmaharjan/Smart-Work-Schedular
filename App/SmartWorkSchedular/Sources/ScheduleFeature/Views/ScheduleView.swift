@@ -26,7 +26,7 @@ public struct ScheduleView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.top, 50) // Takes space for navigation bar
             .padding(.top, 8)
-            .background(#color("background"))
+            .background(Color.background)
             .overlay(navigationBar)
         }
         .onAppear { send(.onAppear) }

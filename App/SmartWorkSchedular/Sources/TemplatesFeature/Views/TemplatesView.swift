@@ -12,9 +12,9 @@ public struct TemplatesView: View {
     public var body: some View {
         Text("Templates View")
             .font(.customTitle)
-            .foregroundStyle(#color("text_color"))
+            .foregroundStyle(Color.text)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(#color("background"))
+            .background(Color.background)
     }
 }
 

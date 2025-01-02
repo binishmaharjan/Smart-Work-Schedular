@@ -48,7 +48,7 @@ extension MonthScheduleView {
             }
         }
         .font(.customSubheadline)
-        .foregroundStyle(#color("text_color"))
+        .foregroundStyle(Color.text)
     }
     
     @ViewBuilder

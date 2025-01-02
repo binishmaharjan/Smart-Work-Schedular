@@ -18,17 +18,17 @@ public struct WeekCalendarView: View {
                 VStack(spacing: 4) {
                     Text(day.formatted(.weekday))
                         .font(.customSubheadline)
-                        .foregroundStyle(#color("text_color"))
+                        .foregroundStyle(Color.text)
                     
                     Text(day.formatted(.calendarDay))
                         .font(.customSubheadline)
                         .foregroundStyle(
-                            day.isSameDay(as: store.currentSelectedDay) ? #color("background") : #color("text_color")
+                            day.isSameDay(as: store.currentSelectedDay) ? Color.background : Color.text
                         )
                         .frame(width: 35, height: 35)
                         .background {
                             if day.isSameDay(as: store.currentSelectedDay) {
-                                RoundedRectangle(cornerRadius: 8).fill(#color("accent_color"))
+                                RoundedRectangle(cornerRadius: 8).fill(Color.accent)
                             }
                             
                             if day.isToday {
