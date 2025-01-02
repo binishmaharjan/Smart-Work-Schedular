@@ -39,6 +39,7 @@ public struct ScheduleView: View {
 
 // MARK: Views
 extension ScheduleView {
+    @ViewBuilder
     private var navigationBar: some View {
         NavigationBarView(
             store: store.scope(state: \.navigationBar, action: \.navigationBar)
@@ -60,6 +61,7 @@ extension ScheduleView {
                 sheetHeight = newHeight
             }
             .presentationDetents([.height(sheetHeight)])
+            .presentationDragIndicator(.visible)
     }
 }
 

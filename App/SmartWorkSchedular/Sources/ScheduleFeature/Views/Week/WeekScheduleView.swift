@@ -15,7 +15,7 @@ public struct WeekScheduleView: View {
     
     public var body: some View {
         VStack {
-            weekCalendar()
+            weekCalendar
                 .frame(height: 75)
             
             hSeparator()
@@ -40,7 +40,7 @@ public struct WeekScheduleView: View {
 // MARK: Views
 extension WeekScheduleView {    
     @ViewBuilder
-    private func weekCalendar() -> some View {
+    private var weekCalendar: some View {
         TabView(selection: $store.currentPage) {
             ForEach(
                 Array(store.scope(state: \.weekCalendar, action: \.weekCalendar).enumerated()),

@@ -14,12 +14,13 @@ public struct MonthScheduleView: View {
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
     public var body: some View {
-        VStack {
-            weekdays()
+        VStack(spacing: 0) {
+            weekdays
+                .padding(.bottom, 4)
 
             hSeparator()
             
-            monthCalendar()
+            monthCalendar
         }
         .onAppear { send(.onAppear) }
         .onChange(of: store.currentPage, initial: false) { _, newValue in
@@ -28,13 +29,17 @@ public struct MonthScheduleView: View {
                 needsToCreateNewDays = true
             }
         }
+        .sheet(
+            item: $store.scope(state: \.destination?.taskTimeline, action: \.destination.taskTimeline),
+            content: taskTimeline(store:)
+        )
     }
 }
 
 // MARK: Views
 extension MonthScheduleView {
     @ViewBuilder
-    private func weekdays() -> some View {
+    private var weekdays: some View {
         LazyVGrid(columns: columns) {
             ForEach(store.weekdays, id: \.self) { weekday in
                 Text(weekday)
@@ -45,7 +50,7 @@ extension MonthScheduleView {
     }
     
     @ViewBuilder
-    private func monthCalendar() -> some View {
+    private var monthCalendar: some View {
         TabView(selection: $store.currentPage) {
             ForEach(
                 Array(store.scope(state: \.monthCalendar, action: \.monthCalendar).enumerated()),
@@ -72,6 +77,13 @@ extension MonthScheduleView {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
+    }
+    
+    @ViewBuilder
+    private func taskTimeline(store: StoreOf<TaskTimeline>) -> some View {
+        TaskTimelineView(store: store)
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
     }
 }
 

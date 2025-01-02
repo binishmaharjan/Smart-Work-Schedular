@@ -23,6 +23,7 @@ public struct MonthCalendarView: View {
 
 // MARK: Views
 extension MonthCalendarView {
+    @ViewBuilder
     private func monthItemList(calendarHeight: CGFloat) -> some View {
         LazyVGrid(columns: columns, spacing: 0) {
             ForEach(store.displayDays) { day in
@@ -30,16 +31,17 @@ extension MonthCalendarView {
                     for: day,
                     height: calendarHeight / CGFloat(store.numberOfWeeks)
                 )
+                .onTapGesture {
+                    send(.daySelected(day))
+                }
             }
         }
     }
     
+    @ViewBuilder
     private func monthItem(for day: Day, height: CGFloat) -> some View {
         MonthItemView(originDay: store.originDay, day: day)
             .frame(height: height)
-            .onTapGesture {
-                send(.daySelected(day))
-            }
     }
 }
 

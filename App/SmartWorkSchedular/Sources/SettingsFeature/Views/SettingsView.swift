@@ -54,6 +54,7 @@ public struct SettingsView: View {
 
 // MARK: Views
 extension SettingsView {
+    @ViewBuilder
     private var navigationBar: some View {
         NavigationBarView(
             store: store.scope(state: \.navigationBar, action: \.navigationBar)

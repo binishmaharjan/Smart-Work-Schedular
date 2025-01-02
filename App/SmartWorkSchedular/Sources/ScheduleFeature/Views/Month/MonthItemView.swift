@@ -14,7 +14,6 @@ struct MonthItemView: View {
     
     private var originDay: Day
     private var day: Day
-    
     private var textColor: Color {
         if day.isInSameMonth(as: originDay) && day.isSameDay(as: currentSelectedDay) {
             #color("background")
@@ -24,7 +23,6 @@ struct MonthItemView: View {
             #color("sub_text_color")
         }
     }
-    
     private var todayIndicatorColor: Color {
         if day.isSameDay(as: currentSelectedDay) {
             #color("background")
@@ -50,10 +48,26 @@ struct MonthItemView: View {
         .vSpacing(.top)
         .hSpacing(.center)
         .background {
-            if day.isSameDay(as: currentSelectedDay) {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(#color("accent_color"))
-            }
+            itemBackground
         }
     }
+}
+
+// MARK: Views
+extension MonthItemView {
+    @ViewBuilder
+    private var itemBackground: some View {
+        if day.isSameDay(as: currentSelectedDay) {
+            Rectangle()
+                .fill(#color("accent_color"))
+        } else {
+            // Note: Filling with background color because it tap does not work when the background is clear
+            Rectangle()
+                .fill(#color("background"))
+        }
+    }
+}
+
+#Preview {
+    MonthItemView(originDay: Day(date: .now), day: Day(date: .now))
 }
