@@ -1,15 +1,11 @@
-//
-//  Created by マハルジャン ビニシュ on 2024/12/31.
-//
-
 import Foundation
 
-public enum TaskType {
+public enum EntriesType {
     case shift
     case event
 }
 
-public struct Task {
+public struct Entries {
     public var id: UUID
     public var title: String
     public var icon: String
@@ -19,6 +15,6 @@ public struct Task {
     public var breakTime: Int
     public var notes: String
     public var location: String
-    public var taskType: TaskType
+    public var entriesType: EntriesType
     public var wagePerHour: Double
 }
