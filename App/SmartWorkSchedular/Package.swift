@@ -108,6 +108,8 @@ let package = Package(
         .target(
             name: "ScheduleFeature",
             dependencies: [
+                "SharedUIs",
+                "SharedModels",
                 "CalendarKit",
                 "LoggerClient",
                 "SettingsFeature",
