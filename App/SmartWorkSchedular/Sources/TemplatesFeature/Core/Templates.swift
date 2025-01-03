@@ -4,10 +4,18 @@ import NavigationBarFeature
 
 @Reducer
 public struct Templates {
+    enum Kind {
+        case shifts
+        case rotations
+    }
+    
     @ObservableState
     public struct State: Equatable {
-        public init() { }
+        public init() {
+            self.kind = .shifts
+        }
         
+        var kind: Kind
         var navigationBar = NavigationBar.State(
             title: "Templates",
             firstTrailingItem: "plus"
