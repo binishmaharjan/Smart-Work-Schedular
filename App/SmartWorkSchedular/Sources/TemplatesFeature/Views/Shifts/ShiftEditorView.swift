@@ -10,7 +10,7 @@ public struct ShiftEditorView: View {
     @Bindable public var store: StoreOf<ShiftEditor>
     
     public var body: some View {
-        Text("Hello World")
+        Text("Shift Editor View")
     }
 }
 
