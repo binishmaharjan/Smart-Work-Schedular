@@ -5,6 +5,11 @@ import SharedUIs
 
 @Reducer
 public struct Templates {
+    @Reducer(state: .equatable)
+    public enum Destination {
+        
+    }
+    
     @ObservableState
     public struct State: Equatable {
         public init() {
@@ -13,6 +18,7 @@ public struct Templates {
             self.shiftList = ShiftList.State()
         }
         
+        @Presents var destination: Destination.State?
         var selectedKind: Kind
         var shiftList: ShiftList.State
         var rotationList: RotationList.State
@@ -27,6 +33,7 @@ public struct Templates {
             case onAppear
         }
         case binding(BindingAction<State>)
+        case destination(PresentationAction<Destination.Action>)
         case navigationBar(NavigationBar.Action)
         case view(View)
         
@@ -36,15 +43,25 @@ public struct Templates {
     
     public init() { }
     
+    @Dependency(\.loggerClient) private var logger
+    
     public var body: some ReducerOf<Self> {
         BindingReducer()
         
         Reduce<State, Action> { _, action in
             switch action {
-            case .navigationBar, .shiftList, .rotationList, .view, .binding:
+            case .view(.onAppear):
+                return .none
+                
+            case .navigationBar(.firstTrailingItemTapped):
+                logger.debug("firstTrailingItemTapped")
+                return .none
+                
+            case .navigationBar, .shiftList, .rotationList, .view, .binding, .destination:
                 return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
         
         Scope(state: \.shiftList, action: \.shiftList) {
             ShiftList()
