@@ -95,7 +95,7 @@ extension Font {
     /// FontSize: 16.0, Weight: Light
     public static let customCallout = custom(.light, relativeTo: .callout)
     /// FontSize: 15.0, Weight: Regular
-    public static let customSubheadline = custom(.semiBold, relativeTo: .subheadline)
+    public static let customSubHeadline = custom(.semiBold, relativeTo: .subheadline)
     /// FontSize: 13.0, Weight: Light
     public static let customFootnote = custom(.light, relativeTo: .footnote)
     /// FontSize: 12.0, Weight: Regular

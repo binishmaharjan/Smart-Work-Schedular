@@ -45,7 +45,7 @@ extension MonthScheduleView {
                 Text(weekday)
             }
         }
-        .font(.customSubheadline)
+        .font(.customSubHeadline)
         .foregroundStyle(Color.text)
     }
     
