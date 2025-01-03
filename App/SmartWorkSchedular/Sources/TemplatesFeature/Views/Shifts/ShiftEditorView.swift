@@ -82,7 +82,7 @@ public struct ShiftEditorView: View {
 extension ShiftEditorView {
     private var cancelButton: some View {
         Button {
-            print("cancel pressed")
+            send(.cancelButtonTapped)
         } label: {
             Text(#localized("Cancel"))
                 .font(.customBody)
@@ -91,7 +91,7 @@ extension ShiftEditorView {
     
     private var saveButton: some View {
         Button {
-            print("save pressed")
+            send(.saveButtonTapped)
         } label: {
             Text(#localized("Save"))
                 .font(.customHeadline)

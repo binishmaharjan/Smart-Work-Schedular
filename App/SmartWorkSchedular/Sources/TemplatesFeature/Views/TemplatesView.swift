@@ -38,7 +38,7 @@ public struct TemplatesView: View {
             .overlay(navigationBar)
         }
         .onAppear { send(.onAppear) }
-        .sheet(
+        .fullScreenCover(
             item: $store.scope(state: \.destination?.shiftEditor, action: \.destination.shiftEditor),
             content: shiftEditor(store:)
         )

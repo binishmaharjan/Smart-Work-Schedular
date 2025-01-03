@@ -32,6 +32,8 @@ public struct ShiftEditor {
     public enum Action: ViewAction, BindableAction {
         public enum View {
             case addBreakButtonTapped
+            case cancelButtonTapped
+            case saveButtonTapped
         }
         
         case binding(BindingAction<State>)
@@ -42,6 +44,7 @@ public struct ShiftEditor {
     public init() { }
     
     @Dependency(\.loggerClient) private var logger
+    @Dependency(\.dismiss) private var dismiss
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -53,6 +56,20 @@ public struct ShiftEditor {
                 
                 state.destination = .timePicker(.init(hour: 16, minute: 20))
                 return .none
+                
+            case .view(.cancelButtonTapped):
+                logger.debug("view.cancelButtonTapped")
+                
+                return .run { _ in
+                    await dismiss()
+                }
+                
+            case .view(.saveButtonTapped):
+                logger.debug("view.saveButtonTapped")
+                
+                return .run { _ in
+                    await dismiss()
+                }
                 
             case .view, .binding, .destination:
                 return .none
