@@ -13,8 +13,6 @@ public struct MonthScheduleView: View {
     @State private var needsToCreateNewDays = false
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
-    // TODO: Temp
-    
     public var body: some View {
         VStack(spacing: 0) {
             weekdays

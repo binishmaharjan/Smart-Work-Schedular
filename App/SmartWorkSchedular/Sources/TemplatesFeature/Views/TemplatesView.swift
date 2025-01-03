@@ -13,11 +13,22 @@ public struct TemplatesView: View {
     public var body: some View {
         NavigationStack {
             VStack {
-                Text("Templates View")
-                    .font(.customTitle)
-                    .foregroundStyle(Color.text)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.background)
+                Picker("", selection: $store.selectedKind) {
+                    ForEach(Templates.Kind.allCases) { kind in
+                        Text(kind.title)
+                            .tag(kind)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
+
+                TabView(selection: $store.selectedKind) {
+                    ShiftListView(store: store.scope(state: \.shiftList, action: \.shiftList))
+                        .tag(Templates.Kind.shift)
+                    
+                    RotationListView(store: store.scope(state: \.rotationList, action: \.rotationList))
+                        .tag(Templates.Kind.rotation)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.top, 50) // Takes space for navigation bar

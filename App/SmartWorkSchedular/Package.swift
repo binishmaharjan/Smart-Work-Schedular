@@ -124,7 +124,9 @@ let package = Package(
             name: "TemplatesFeature",
             dependencies: [
                 "SharedUIs",
+                "SharedModels",
                 "LoggerClient",
+                "NavigationBarFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ],
             plugins: [
