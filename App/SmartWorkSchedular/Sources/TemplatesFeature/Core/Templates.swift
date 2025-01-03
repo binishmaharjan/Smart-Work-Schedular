@@ -18,7 +18,7 @@ public struct Templates {
             self.shiftList = ShiftList.State()
         }
         
-        @Presents var destination: Destination.State?
+        @Presents var destination: Destination.State? = .shiftEditor(.init())
         var selectedKind: Kind
         var shiftList: ShiftList.State
         var rotationList: RotationList.State

@@ -9,6 +9,7 @@ public struct ShiftEditorView: View {
     }
     
     @Bindable public var store: StoreOf<ShiftEditor>
+    @State private var sheetHeight: CGFloat = .zero
     
     public var body: some View {
         NavigationStack {
@@ -37,7 +38,7 @@ public struct ShiftEditorView: View {
                 Section {
                     LabeledContent(#localized("Break")) {
                         Button {
-                            print("add break")
+                            send(.addBreakButtonTapped)
                         } label: {
                             Image(systemName: "plus")
                         }
@@ -70,6 +71,10 @@ public struct ShiftEditorView: View {
                 }
             }
         }
+        .sheet(
+            item: $store.scope(state: \.destination?.timePicker, action: \.destination.timePicker),
+            content: breakTimePicker(store:)
+        )
     }
 }
 
@@ -91,6 +96,23 @@ extension ShiftEditorView {
             Text(#localized("Save"))
                 .font(.customHeadline)
         }
+    }
+    
+    private func breakTimePicker(store: StoreOf<TimePicker>) -> some View {
+        TimePickerView(store: store)
+            .overlay {
+                GeometryReader { geometry in
+                    Color.clear.preference(
+                        key: InnerHeightPreferenceKey.self,
+                        value: geometry.size.height
+                    )
+                }
+            }
+            .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                sheetHeight = newHeight
+            }
+            .presentationDetents([.height(sheetHeight)])
+            .presentationDragIndicator(.visible)
     }
 }
 
