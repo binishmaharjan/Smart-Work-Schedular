@@ -5,14 +5,14 @@ import NavigationBarFeature
 @Reducer
 public struct Templates {
     enum Kind {
-        case shifts
-        case rotations
+        case shift
+        case rotation
     }
     
     @ObservableState
     public struct State: Equatable {
         public init() {
-            self.kind = .shifts
+            self.kind = .shift
         }
         
         var kind: Kind
