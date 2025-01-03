@@ -26,7 +26,7 @@ public struct ScheduleView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.top, 50) // Takes space for navigation bar
             .padding(.top, 8)
-            .background(#color("background"))
+            .background(Color.background)
             .overlay(navigationBar)
         }
         .onAppear { send(.onAppear) }
@@ -39,6 +39,7 @@ public struct ScheduleView: View {
 
 // MARK: Views
 extension ScheduleView {
+    @ViewBuilder
     private var navigationBar: some View {
         NavigationBarView(
             store: store.scope(state: \.navigationBar, action: \.navigationBar)
@@ -60,6 +61,7 @@ extension ScheduleView {
                 sheetHeight = newHeight
             }
             .presentationDetents([.height(sheetHeight)])
+            .presentationDragIndicator(.visible)
     }
 }
 

@@ -15,13 +15,15 @@ public struct WeekScheduleView: View {
     
     public var body: some View {
         VStack {
-            weekCalendar()
+            weekCalendar
                 .frame(height: 75)
             
             hSeparator()
                 
             VStack {
                 Text("\(store.currentSelectedDay.formatted(.dateIdentifier))")
+                    .font(.customHeadline)
+                    .foregroundStyle(Color.subText)
             }
             .vSpacing(.center)
         }
@@ -36,34 +38,9 @@ public struct WeekScheduleView: View {
 }
 
 // MARK: Views
-extension WeekScheduleView {
-//    @ViewBuilder
-//    private func weekdays() -> some View {
-//        HStack(spacing: 0) {
-//            ForEach(store.displayDays) { day in
-//                VStack(spacing: 0) {
-//                    Text(day.formatted(.weekday))
-//                        .font(.customSubheadline)
-//                        .foregroundStyle(#color("text_color"))
-//                    
-//                    Text(day.formatted(.calendarDay))
-//                        .font(.customSubheadline)
-//                        .foregroundStyle(#color("text_color"))
-//                        .frame(width: 35, height: 35)
-//                        .background {
-//                            if day.isSameDay(as: store.originDay) {
-//                                Circle().fill(#color("accent_color"))
-//                            }
-//                        }
-//                        .background(#color("background").shadow(.drop(radius: 1)), in: .circle)
-//                }
-//                .hSpacing(.center)
-//            }
-//        }
-//    }
-    
+extension WeekScheduleView {    
     @ViewBuilder
-    private func weekCalendar() -> some View {
+    private var weekCalendar: some View {
         TabView(selection: $store.currentPage) {
             ForEach(
                 Array(store.scope(state: \.weekCalendar, action: \.weekCalendar).enumerated()),

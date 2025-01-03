@@ -13,12 +13,16 @@ public struct MonthScheduleView: View {
     @State private var needsToCreateNewDays = false
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
     
+    // TODO: Temp
+    
     public var body: some View {
-        VStack {
-            weekdays()
-                .padding(.bottom, 8)
+        VStack(spacing: 0) {
+            weekdays
+                .padding(.bottom, 4)
+
+            hSeparator()
             
-            monthCalendar()
+            monthCalendar
         }
         .onAppear { send(.onAppear) }
         .onChange(of: store.currentPage, initial: false) { _, newValue in
@@ -27,24 +31,28 @@ public struct MonthScheduleView: View {
                 needsToCreateNewDays = true
             }
         }
+        .sheet(
+            item: $store.scope(state: \.destination?.entriesTimeline, action: \.destination.entriesTimeline),
+            content: entriesTimeline(store:)
+        )
     }
 }
 
 // MARK: Views
 extension MonthScheduleView {
     @ViewBuilder
-    private func weekdays() -> some View {
+    private var weekdays: some View {
         LazyVGrid(columns: columns) {
             ForEach(store.weekdays, id: \.self) { weekday in
                 Text(weekday)
             }
         }
         .font(.customSubheadline)
-        .foregroundStyle(#color("text_color"))
+        .foregroundStyle(Color.text)
     }
     
     @ViewBuilder
-    private func monthCalendar() -> some View {
+    private var monthCalendar: some View {
         TabView(selection: $store.currentPage) {
             ForEach(
                 Array(store.scope(state: \.monthCalendar, action: \.monthCalendar).enumerated()),
@@ -71,6 +79,13 @@ extension MonthScheduleView {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
+    }
+    
+    @ViewBuilder
+    private func entriesTimeline(store: StoreOf<EntriesTimeline>) -> some View {
+        EntriesTimelineView(store: store)
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
     }
 }
 

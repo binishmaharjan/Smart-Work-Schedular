@@ -5,8 +5,8 @@ public struct NavigationItemStyle: ViewModifier {
         content
             .font(.customHeadline)
             .frame(width: 36, height: 36)
-            .foregroundColor(#color("text_color"))
-            .background(#color("accent_color"))
+            .foregroundColor(Color.text)
+            .background(Color.accent)
             .opacity(1)
             .cornerRadius(10)
     }

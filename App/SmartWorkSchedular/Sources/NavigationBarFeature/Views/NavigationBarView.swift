@@ -15,7 +15,7 @@ public struct NavigationBarView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text(store.title)
                         .font(.customTitle)
-                        .foregroundStyle(#color("accent_color"))
+                        .foregroundStyle(Color.accent)
                 }
                 
                 Spacer()

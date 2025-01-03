@@ -4,6 +4,11 @@ import Foundation
 
 @Reducer
 public struct MonthSchedule {
+    @Reducer(state: .equatable)
+    public enum Destination {
+        case entriesTimeline(EntriesTimeline)
+    }
+    
     @ObservableState
     public struct State: Equatable {
         public init(originDay: Day) {
@@ -14,6 +19,7 @@ public struct MonthSchedule {
         @Shared(.ud_startOfWeekday) var startOfWeekday = Weekday.sunday
         @Shared(.mem_currentSelectedDay) var currentSelectedDay = Day(date: .now)
         
+        @Presents var destination: Destination.State?
         var monthCalendar: IdentifiedArrayOf<MonthCalendar.State> = []
         var weekdays: [String] = []
         var currentPage: Int = 1
@@ -26,9 +32,10 @@ public struct MonthSchedule {
             case scrollEndReached
         }
         
-        case view(View)
         case binding(BindingAction<State>)
-        
+        case destination(PresentationAction<Destination.Action>)
+        case view(View)
+
         case observeStartWeekOn
         case startWeekOnUpdated(Weekday)
         case monthCalendar(IdentifiedActionOf<MonthCalendar>)
@@ -68,6 +75,11 @@ public struct MonthSchedule {
                 
                 return .none
                 
+            case .monthCalendar(.element(id: _, action: .view(.daySelected(let day)))):
+                logger.debug("monthCalendar: .daySelected: \(day.formatted(.dateIdentifier))")
+                state.destination = .entriesTimeline(.init())
+                return .none
+                
             case .observeStartWeekOn:
                 logger.debug("observeStartWeekOn")
                 
@@ -81,10 +93,11 @@ public struct MonthSchedule {
                 createNextDisplayDate(state: &state)
                 return .none
 
-            case .binding, .monthCalendar:
+            case .binding, .monthCalendar, .destination:
                 return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
         .forEach(\.monthCalendar, action: \.monthCalendar) {
             MonthCalendar()
         }

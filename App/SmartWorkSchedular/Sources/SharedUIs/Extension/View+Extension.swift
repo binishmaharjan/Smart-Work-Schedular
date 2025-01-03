@@ -17,7 +17,7 @@ extension View {
     @ViewBuilder
     public func hSeparator() -> some View {
         Rectangle()
-            .fill(#color("sub_text_color").opacity(0.5))
+            .fill(Color.subText.opacity(0.5))
             .frame(height: 1)
     }
     
@@ -25,7 +25,15 @@ extension View {
     @ViewBuilder
     public func vSeparator() -> some View {
         Rectangle()
-            .fill(#color("sub_text_color").opacity(0.5))
+            .fill(Color.subText.opacity(0.5))
             .frame(width: 1)
+    }
+    
+    /// today's indicator
+    @ViewBuilder
+    public func todayIndicator(color: Color = Color.accent) -> some View {
+        Circle()
+            .fill(color)
+            .frame(width: 5, height: 5)
     }
 }
