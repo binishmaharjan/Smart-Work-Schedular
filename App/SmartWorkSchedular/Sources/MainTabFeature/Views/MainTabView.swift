@@ -49,7 +49,7 @@ public struct MainTabView: View {
             reducer: MainTab.init
         )
     )
-    .tint(.accentColor)
+    .tint(Color.accent)
 }
 
 #Preview("Dark Mode") {
@@ -59,6 +59,6 @@ public struct MainTabView: View {
             reducer: MainTab.init
         )
     )
-    .tint(.accentColor)
+    .tint(Color.accent)
     .preferredColorScheme(.dark)
 }
