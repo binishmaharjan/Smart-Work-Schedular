@@ -3,6 +3,7 @@ import NavigationBarFeature
 import SharedUIs
 import SwiftUI
 
+@ViewAction(for: Templates.self)
 public struct TemplatesView: View {
     public init(store: StoreOf<Templates>) {
         self.store = store
@@ -36,6 +37,11 @@ public struct TemplatesView: View {
             .background(Color.background)
             .overlay(navigationBar)
         }
+        .onAppear { send(.onAppear) }
+        .sheet(
+            item: $store.scope(state: \.destination?.shiftEditor, action: \.destination.shiftEditor),
+            content: shiftEditor(store:)
+        )
     }
 }
 
@@ -46,6 +52,11 @@ extension TemplatesView {
         NavigationBarView(
             store: store.scope(state: \.navigationBar, action: \.navigationBar)
         )
+    }
+    
+    @ViewBuilder
+    private func shiftEditor(store: StoreOf<ShiftEditor>) -> some View {
+        ShiftEditorView(store: store)
     }
 }
 

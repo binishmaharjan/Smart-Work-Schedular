@@ -7,7 +7,7 @@ import SharedUIs
 public struct Templates {
     @Reducer(state: .equatable)
     public enum Destination {
-        
+        case shiftEditor(ShiftEditor)
     }
     
     @ObservableState
@@ -48,13 +48,15 @@ public struct Templates {
     public var body: some ReducerOf<Self> {
         BindingReducer()
         
-        Reduce<State, Action> { _, action in
+        Reduce<State, Action> { state, action in
             switch action {
             case .view(.onAppear):
                 return .none
                 
             case .navigationBar(.firstTrailingItemTapped):
                 logger.debug("firstTrailingItemTapped")
+                
+                state.destination = state.selectedKind == .shift ? .shiftEditor(.init()) : nil
                 return .none
                 
             case .navigationBar, .shiftList, .rotationList, .view, .binding, .destination:
