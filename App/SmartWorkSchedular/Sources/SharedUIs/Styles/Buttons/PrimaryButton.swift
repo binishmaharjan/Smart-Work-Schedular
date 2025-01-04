@@ -4,7 +4,8 @@ public struct PrimaryButton: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .font(.customHeadline)
-            .frame(width: 176, height: 44)
+            .frame(height: 44)
+            .frame(maxWidth: .infinity)
             .foregroundColor(Color.text)
             .background(Color.accent)
             .opacity(1)

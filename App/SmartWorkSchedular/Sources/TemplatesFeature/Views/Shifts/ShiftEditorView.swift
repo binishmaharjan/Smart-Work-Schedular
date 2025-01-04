@@ -53,7 +53,14 @@ public struct ShiftEditorView: View {
                 }
                 
                 Section {
-                    Text(#localized("Alert"))
+                    LabeledContent(#localized("Alert")) {
+                        Button {
+                            send(.alertButtonTapped)
+                        } label: {
+                            Text(store.notificationTime.title)
+                        }
+                    }
+                    .foregroundStyle(Color.text)
                 }
                 
                 Section {
@@ -90,6 +97,10 @@ public struct ShiftEditorView: View {
             item: $store.scope(state: \.destination?.endDatePicker, action: \.destination.endDatePicker),
             content: timePicker(store:)
         )
+        .sheet(
+            item: $store.scope(state: \.destination?.notificationTime, action: \.destination.notificationTime),
+            content: notificationTime(store:)
+        )
     }
 }
 
@@ -115,6 +126,23 @@ extension ShiftEditorView {
     
     private func timePicker(store: StoreOf<TimePicker>) -> some View {
         TimePickerView(store: store)
+            .overlay {
+                GeometryReader { geometry in
+                    Color.clear.preference(
+                        key: InnerHeightPreferenceKey.self,
+                        value: geometry.size.height
+                    )
+                }
+            }
+            .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                sheetHeight = newHeight
+            }
+            .presentationDetents([.height(sheetHeight)])
+            .presentationDragIndicator(.visible)
+    }
+    
+    private func notificationTime(store: StoreOf<NotificationTimePicker>) -> some View {
+        NotificationTimePickerView(store: store)
             .overlay {
                 GeometryReader { geometry in
                     Color.clear.preference(

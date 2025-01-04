@@ -14,7 +14,7 @@ public struct TimePickerView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            Text("Break")
+            Text(store.title)
                 .font(.customHeadline)
                 .padding(.vertical, 16)
             
@@ -46,6 +46,7 @@ extension TimePickerView {
         } label: {
             Text(#localized("Save"))
                 .primaryButton()
+                .padding(.horizontal, 16)
         }
     }
     
@@ -72,7 +73,7 @@ extension TimePickerView {
 #Preview {
     TimePickerView(
         store: .init(
-            initialState: .init(hour: 12, minute: 0),
+            initialState: .init(title: "Break", hour: 12, minute: 0),
             reducer: TimePicker.init
         )
     )

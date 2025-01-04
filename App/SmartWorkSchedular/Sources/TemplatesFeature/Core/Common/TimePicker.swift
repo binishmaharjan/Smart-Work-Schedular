@@ -6,13 +6,15 @@ import SharedModels
 public struct TimePicker {
     @ObservableState
     public struct State: Equatable {
-        public init(hour: Int, minute: Int) {
+        public init(title: String, hour: Int, minute: Int) {
+            self.title = title
             self.hour = hour
             self.minute = minute
         }
         
         var hour: Int
         var minute: Int
+        var title: String
     }
     
     public enum Action: ViewAction, BindableAction {

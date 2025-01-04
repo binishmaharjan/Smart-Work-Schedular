@@ -1,14 +1,15 @@
 import ComposableArchitecture
+import SharedModels
 import SharedUIs
 import SwiftUI
 
-@ViewAction(for: CalendarMode.self)
-public struct CalendarModeView: View {
-    public init(store: StoreOf<CalendarMode>) {
+@ViewAction(for: NotificationTimePicker.self)
+public struct NotificationTimePickerView: View {
+    public init(store: StoreOf<NotificationTimePicker>) {
         self.store = store
     }
     
-    @Bindable public var store: StoreOf<CalendarMode>
+    @Bindable public var store: StoreOf<NotificationTimePicker>
     
     public var body: some View {
         VStack(spacing: 0) {
@@ -16,16 +17,16 @@ public struct CalendarModeView: View {
                 .font(.customHeadline)
                 .padding(.vertical, 16)
             
-            ForEach(store.displayModeList) { mode in
+            ForEach(NotificationTimeOption.allCases) { option in
                 Button {
-                    send(.onDisplayModeSelected(mode))
+                    send(.optionSelected(option))
                 } label: {
                     HStack {
-                        Label(mode.name, systemImage: mode.image)
+                        Text(option.title)
                         
                         Spacer()
                         
-                        if store.displayMode == mode {
+                        if store.selectedOptions == option {
                             Image(systemName: "checkmark.circle")
                                 .foregroundStyle(Color.accent)
                         }
@@ -43,10 +44,10 @@ public struct CalendarModeView: View {
 }
 
 #Preview {
-    CalendarModeView(
+    NotificationTimePickerView(
         store: .init(
             initialState: .init(),
-            reducer: CalendarMode.init
+            reducer: NotificationTimePicker.init
         )
     )
 }

@@ -3,7 +3,7 @@ import Foundation
 public enum NumberFormatStyle {
     public struct TwoDigit: FormatStyle {
         public func format(_ value: Int) -> String {
-            return String(format: "%02d", value)
+            String(format: "%02d", value)
         }
     }
 }

@@ -10,6 +10,7 @@ public struct ShiftEditor {
         case startDatePicker(TimePicker)
         case endDatePicker(TimePicker)
         case breakTimePicker(TimePicker)
+        case notificationTime(NotificationTimePicker)
     }
     
     @ObservableState
@@ -25,7 +26,7 @@ public struct ShiftEditor {
         var startDate = HourAndMinute(hour: 9, minute: 0)
         var endDate = HourAndMinute(hour: 17, minute: 0)
         var breakTime = HourAndMinute(hour: 0, minute: 0)
-        var alert: String = ""
+        var notificationTime: NotificationTimeOption = .none
         var location: String = ""
         var memo: String = ""
     }
@@ -37,6 +38,7 @@ public struct ShiftEditor {
             case endDateButtonTapped
             case cancelButtonTapped
             case saveButtonTapped
+            case alertButtonTapped
         }
         
         case binding(BindingAction<State>)
@@ -57,19 +59,32 @@ public struct ShiftEditor {
             case .view(.addBreakButtonTapped):
                 logger.debug("view.addBreakButtonTapped")
                 
-                state.destination = .breakTimePicker(.init(hour: state.breakTime.hour, minute: state.breakTime.minute))
+                state.destination = .breakTimePicker(
+                    .init(title: #localized("Break"), hour: state.breakTime.hour, minute: state.breakTime.minute)
+                )
                 return .none
                 
             case .view(.startDateButtonTapped):
                 logger.debug("view.startDateButtonTapped")
                 
-                state.destination = .startDatePicker(.init(hour: state.startDate.hour, minute: state.startDate.minute))
+                state.destination = .startDatePicker(
+                    .init(title: #localized("Starts"), hour: state.startDate.hour, minute: state.startDate.minute)
+                )
                 return .none
                 
             case .view(.endDateButtonTapped):
                 logger.debug("view.endDateButtonTapped")
                 
-                state.destination = .endDatePicker(.init(hour: state.endDate.hour, minute: state.endDate.minute))
+                state.destination = .endDatePicker(
+                    .init(title: #localized("Ends"), hour: state.endDate.hour, minute: state.endDate.minute)
+                )
+                return .none
+                
+            case .view(.alertButtonTapped):
+                logger.debug("view.saveButtonTapped")
+                
+                state.destination = .notificationTime(.init(option: state.notificationTime))
+                
                 return .none
                 
             case .view(.cancelButtonTapped):
@@ -102,6 +117,12 @@ public struct ShiftEditor {
                 logger.debug("destination.presented.endDatePicker.delegate.saveTime: \(time.hour):\(time.minute)")
                 
                 state.endDate = time
+                return .none
+                
+            case .destination(.presented(.notificationTime(.delegate(.updateOption(let option))))):
+                logger.debug("destination.presented.notificationTime.delegate.updateOption: \(option)")
+                
+                state.notificationTime = option
                 return .none
                 
             case .view, .binding, .destination:
