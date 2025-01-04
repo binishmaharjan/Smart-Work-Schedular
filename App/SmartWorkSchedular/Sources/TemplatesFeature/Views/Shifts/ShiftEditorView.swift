@@ -23,16 +23,23 @@ public struct ShiftEditorView: View {
                 Section {
                     Toggle(#localized("All Day"), isOn: $store.isAllDay)
 
-                    DatePicker(
-                        #localized("Starts"),
-                        selection: .constant(.now),
-                        displayedComponents: [.hourAndMinute]
-                    )
-                    DatePicker(
-                        #localized("Ends"),
-                        selection: .constant(.now),
-                        displayedComponents: [.hourAndMinute]
-                    )
+                    LabeledContent(#localized("Starts")) {
+                        Button {
+                            send(.startDateButtonTapped)
+                        } label: {
+                            Text(store.startDate.description)
+                        }
+                    }
+                    .foregroundStyle(Color.text)
+                    
+                    LabeledContent(#localized("Ends")) {
+                        Button {
+                            send(.endDateButtonTapped)
+                        } label: {
+                            Text(store.endDate.description)
+                        }
+                    }
+                    .foregroundStyle(Color.text)
                 }
                 
                 Section {
@@ -72,8 +79,16 @@ public struct ShiftEditorView: View {
             }
         }
         .sheet(
-            item: $store.scope(state: \.destination?.timePicker, action: \.destination.timePicker),
-            content: breakTimePicker(store:)
+            item: $store.scope(state: \.destination?.breakTimePicker, action: \.destination.breakTimePicker),
+            content: timePicker(store:)
+        )
+        .sheet(
+            item: $store.scope(state: \.destination?.startDatePicker, action: \.destination.startDatePicker),
+            content: timePicker(store:)
+        )
+        .sheet(
+            item: $store.scope(state: \.destination?.endDatePicker, action: \.destination.endDatePicker),
+            content: timePicker(store:)
         )
     }
 }
@@ -98,7 +113,7 @@ extension ShiftEditorView {
         }
     }
     
-    private func breakTimePicker(store: StoreOf<TimePicker>) -> some View {
+    private func timePicker(store: StoreOf<TimePicker>) -> some View {
         TimePickerView(store: store)
             .overlay {
                 GeometryReader { geometry in

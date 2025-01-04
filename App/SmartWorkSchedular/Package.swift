@@ -47,6 +47,7 @@ let package = Package(
         .target(
             name: "SharedUIs",
             dependencies: [
+                "SharedModels",
                 "AppMacros",
                 "LoggerClient",
             ],

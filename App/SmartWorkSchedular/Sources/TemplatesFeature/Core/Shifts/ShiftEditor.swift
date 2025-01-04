@@ -1,12 +1,15 @@
 import ComposableArchitecture
 import Foundation
+import SharedModels
 import SharedUIs
 
 @Reducer
 public struct ShiftEditor {
     @Reducer(state: .equatable)
     public enum Destination {
-        case timePicker(TimePicker)
+        case startDatePicker(TimePicker)
+        case endDatePicker(TimePicker)
+        case breakTimePicker(TimePicker)
     }
     
     @ObservableState
@@ -19,11 +22,9 @@ public struct ShiftEditor {
         var icon: String = ""
         var color: String = ""
         var isAllDay: Bool = false
-        var startHour: Int = 9
-        var startMinute: Int = 0
-        var endHour: Int = 17
-        var endMinutes: Int = 0
-        var breakTime: [String] = []
+        var startDate = HourAndMinute(hour: 9, minute: 0)
+        var endDate = HourAndMinute(hour: 17, minute: 0)
+        var breakTime = HourAndMinute(hour: 0, minute: 0)
         var alert: String = ""
         var location: String = ""
         var memo: String = ""
@@ -32,6 +33,8 @@ public struct ShiftEditor {
     public enum Action: ViewAction, BindableAction {
         public enum View {
             case addBreakButtonTapped
+            case startDateButtonTapped
+            case endDateButtonTapped
             case cancelButtonTapped
             case saveButtonTapped
         }
@@ -54,7 +57,19 @@ public struct ShiftEditor {
             case .view(.addBreakButtonTapped):
                 logger.debug("view.addBreakButtonTapped")
                 
-                state.destination = .timePicker(.init(hour: 16, minute: 20))
+                state.destination = .breakTimePicker(.init(hour: state.breakTime.hour, minute: state.breakTime.minute))
+                return .none
+                
+            case .view(.startDateButtonTapped):
+                logger.debug("view.startDateButtonTapped")
+                
+                state.destination = .startDatePicker(.init(hour: state.startDate.hour, minute: state.startDate.minute))
+                return .none
+                
+            case .view(.endDateButtonTapped):
+                logger.debug("view.endDateButtonTapped")
+                
+                state.destination = .endDatePicker(.init(hour: state.endDate.hour, minute: state.endDate.minute))
                 return .none
                 
             case .view(.cancelButtonTapped):
@@ -70,6 +85,24 @@ public struct ShiftEditor {
                 return .run { _ in
                     await dismiss()
                 }
+                
+            case .destination(.presented(.breakTimePicker(.delegate(.saveTime(let time))))):
+                logger.debug("destination.presented.breakTimePicker.delegate.saveTime: \(time.hour):\(time.minute)")
+                
+                state.breakTime = time
+                return .none
+                
+            case .destination(.presented(.startDatePicker(.delegate(.saveTime(let time))))):
+                logger.debug("destination.presented.startDatePicker.delegate.saveTime: \(time.hour):\(time.minute)")
+                
+                state.startDate = time
+                return .none
+                
+            case .destination(.presented(.endDatePicker(.delegate(.saveTime(let time))))):
+                logger.debug("destination.presented.endDatePicker.delegate.saveTime: \(time.hour):\(time.minute)")
+                
+                state.endDate = time
+                return .none
                 
             case .view, .binding, .destination:
                 return .none

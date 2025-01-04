@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import Foundation
+import SharedModels
 import SwiftUI
 import UIKit
 
@@ -17,19 +18,35 @@ public struct TimePicker {
     }
     
     public enum Action: ViewAction, BindableAction {
+        @CasePathable
+        public enum Delegate: Equatable {
+            case saveTime(HourAndMinute)
+        }
+
         public enum View {
+            case saveButtonPressed
         }
         
         case view(View)
         case binding(BindingAction<State>)
+        case delegate(Delegate)
     }
     
     public init() { }
     
+    @Dependency(\.loggerClient) private var logger
+    @Dependency(\.dismiss) private var dismiss
+    
     public var body: some ReducerOf<Self> {
-        Reduce<State, Action> { _, action in
+        Reduce<State, Action> { state, action in
             switch action {
-            case .view, .binding:
+            case .view(.saveButtonPressed):
+                return .run { [state] send in
+                    await send(.delegate(.saveTime(HourAndMinute(hour: state.hour, minute: state.minute))))
+                    await dismiss()
+                }
+                
+            case .view, .binding, .delegate:
                 return .none
             }
         }
@@ -61,6 +78,7 @@ public struct TimePickerView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(.ultraThinMaterial)
                     .frame(height: 35)
+                    .offset(y: -25)
             }
             
             okButton
@@ -73,6 +91,7 @@ extension TimePickerView {
     @ViewBuilder
     private var okButton: some View {
         Button {
+            send(.saveButtonPressed)
         } label: {
             Text(#localized("Save"))
                 .primaryButton()
@@ -84,8 +103,8 @@ extension TimePickerView {
         PickerItemView(selection: selection) {
             ForEach(range, id: \.self) { value in
                 Text("\(value)")
-                    .frame(width: 35, alignment: .trailing)
                     .tag(value)
+                    .frame(width: 35, alignment: .trailing)
             }
         }
         .overlay {
