@@ -4,12 +4,6 @@
     "" : {
 
     },
-    "%lld" : {
-
-    },
-    "Break" : {
-
-    },
     "Earnings" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -43,15 +37,6 @@
           }
         }
       }
-    },
-    "hr" : {
-
-    },
-    "min" : {
-
-    },
-    "Save" : {
-
     },
     "Schedule" : {
       "extractionState" : "manual",

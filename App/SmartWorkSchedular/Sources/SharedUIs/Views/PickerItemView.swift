@@ -23,12 +23,17 @@ private struct PickerItemViewIndicator: UIViewRepresentable {
     }
 }
 
-struct PickerItemView<Content: View, Selection: Hashable>: View {
+public struct PickerItemView<Content: View, Selection: Hashable>: View {
+    public init(selection: Binding<Selection>, @ViewBuilder content: @escaping () -> Content) {
+        self._selection = selection
+        self.content = content()
+    }
+    
     @Binding var selection: Selection
     @ViewBuilder var content: Content
     @State private var isIndicatorBackgroundRemoved = false
     
-    var body: some View {
+    public var body: some View {
         Picker("", selection: $selection) {
             if !isIndicatorBackgroundRemoved {
                 PickerItemViewIndicator {
