@@ -22,6 +22,7 @@ let package = Package(
         .library(name: "NavigationBarFeature", targets: ["NavigationBarFeature"]),
         .library(name: "CalendarKit", targets: ["CalendarKit"]),
         .library(name: "ThemeKit", targets: ["ThemeKit"]),
+        .library(name: "LocationKit", targets: ["LocationKit"]),
         .library(name: "UserDefaultsClient", targets: ["UserDefaultsClient"]),
         .library(name: "LoggerClient", targets: ["LoggerClient"]),
     ],
@@ -127,6 +128,7 @@ let package = Package(
                 "SharedUIs",
                 "SharedModels",
                 "LoggerClient",
+                "LocationKit",
                 "NavigationBarFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ],
@@ -181,6 +183,16 @@ let package = Package(
         ),
         .target(
             name: "ThemeKit",
+            dependencies: [
+                "LoggerClient",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+            ]
+        ),
+        .target(
+            name: "LocationKit",
             dependencies: [
                 "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
