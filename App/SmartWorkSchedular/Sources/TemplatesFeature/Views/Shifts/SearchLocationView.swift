@@ -19,8 +19,18 @@ public struct SearchLocationView: View {
             SearchBar(text: $store.searchText)
             
             List {
-
+                ForEach(store.locations) { location in
+                    VStack(alignment: .leading) {
+                        Text(location.title)
+                            .font(.customBody)
+                        
+                        Text(location.subTitle)
+                            .font(.customFootnote)
+                    }
+                    .hSpacing(.leading)
+                }
             }
+            .listStyle(.plain)
         }
         .vSpacing(.top)
         .onAppear { send(.onAppear) }

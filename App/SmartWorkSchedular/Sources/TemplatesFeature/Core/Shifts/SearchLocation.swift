@@ -12,7 +12,7 @@ public struct SearchLocation {
         }
         
         var searchText: String
-//        var locations: IdentifiedArrayOf<Location> = []
+        var locations: IdentifiedArrayOf<Location> = []
     }
     
     public enum Action: ViewAction, BindableAction {
@@ -50,15 +50,20 @@ public struct SearchLocation {
                 }
                 
             case .view(.searchTextChanged(let text)):
+                guard text.isNotEmpty else {
+                    state.locations.removeAll()
+                    return .none
+                }
+                
                 locationKitClient.searchLocations(query: text)
                 return .none
                 
             case .locationKit(.didUpdateResults(let results)):
-//                state.locations = results
+                state.locations.removeAll()
+                state.locations = IdentifiedArrayOf(uniqueElements: results)
                 return .none
                 
             case .locationKit(.didFailWithError(let error)):
-                print("🍎: \(error)")
                 return .none
                 
             case .view, .binding:
