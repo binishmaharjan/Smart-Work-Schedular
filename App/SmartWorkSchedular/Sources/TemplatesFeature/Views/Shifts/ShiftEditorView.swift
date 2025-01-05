@@ -23,57 +23,25 @@ public struct ShiftEditorView: View {
                 Section {
                     Toggle(#localized("All Day"), isOn: $store.isAllDay)
 
-                    LabeledContent(#localized("Starts")) {
-                        Button {
-                            send(.startDateButtonTapped)
-                        } label: {
-                            Text(store.startDate.description)
-                        }
-                    }
-                    .foregroundStyle(Color.text)
+                    startsDate
                     
-                    LabeledContent(#localized("Ends")) {
-                        Button {
-                            send(.endDateButtonTapped)
-                        } label: {
-                            Text(store.endDate.description)
-                        }
-                    }
-                    .foregroundStyle(Color.text)
+                    endsDate
                 }
                 
                 Section {
-                    LabeledContent(#localized("Break")) {
-                        Button {
-                            send(.addBreakButtonTapped)
-                        } label: {
-                            Image(systemName: "plus")
-                        }
-                    }
+                    breakTime
                 }
                 
                 Section {
-                    LabeledContent(#localized("Alert")) {
-                        Button {
-                            send(.alertButtonTapped)
-                        } label: {
-                            Text(store.notificationTime.title)
-                        }
-                    }
-                    .foregroundStyle(Color.text)
+                    notificationTime
                 }
                 
                 Section {
-                    Button {
-                        send(.locationButtonTapped)
-                    } label: {
-                        Text(#localized("Location"))
-                    }
-                    .foregroundStyle(Color.text)
+                    location
                 }
                 
                 Section {
-                    TextField(#localized("Memo"), text: .constant(""), axis: .vertical)
+                    TextField(#localized("Memo"), text: $store.memo, axis: .vertical)
                         .frame(height: 100, alignment: .top)
                 }
             }
@@ -118,6 +86,7 @@ public struct ShiftEditorView: View {
 
 // MARK: Views
 extension ShiftEditorView {
+    @ViewBuilder
     private var cancelButton: some View {
         Button {
             send(.cancelButtonTapped)
@@ -127,6 +96,7 @@ extension ShiftEditorView {
         }
     }
     
+    @ViewBuilder
     private var saveButton: some View {
         Button {
             send(.saveButtonTapped)
@@ -136,16 +106,100 @@ extension ShiftEditorView {
         }
     }
     
+    @ViewBuilder
+    private var startsDate: some View {
+        LabeledContent(#localized("Starts")) {
+            Button {
+                send(.startDateButtonTapped)
+            } label: {
+                Text(store.startDate.description)
+            }
+        }
+        .foregroundStyle(Color.text)
+    }
+    
+    @ViewBuilder
+    private var endsDate: some View {
+        LabeledContent(#localized("Ends")) {
+            Button {
+                send(.endDateButtonTapped)
+            } label: {
+                Text(store.endDate.description)
+            }
+        }
+        .foregroundStyle(Color.text)
+    }
+    
+    @ViewBuilder
+    private var breakTime: some View {
+        LabeledContent(#localized("Break")) {
+            Button {
+                send(.addBreakButtonTapped)
+            } label: {
+                Image(systemName: "plus")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var notificationTime: some View {
+        LabeledContent(#localized("Alert")) {
+            Button {
+                send(.alertButtonTapped)
+            } label: {
+                Text(store.notificationTime.title)
+            }
+        }
+        .foregroundStyle(Color.text)
+    }
+    
+    @ViewBuilder
+    private var location: some View {
+        if store.location.isEmpty {
+            Button {
+                send(.locationButtonTapped)
+            } label: {
+                Text(#localized("Location"))
+            }
+            .foregroundStyle(Color.text)
+        } else {
+            HStack {
+                Button {
+                    send(.locationButtonTapped)
+                } label: {
+                    Text(store.location)
+                }
+                .foregroundStyle(Color.text)
+                // make button style borderless, so that both button action are not invoked
+                .buttonStyle(.borderless)
+                
+                Spacer()
+                
+                Button {
+                    send(.locationClearButtonTapped)
+                } label: {
+                    Image(systemName: "xmark")
+                        .padding(.vertical, 4)
+                }
+                // make button style borderless, so that both button action are not invoked
+                .buttonStyle(.borderless)
+            }
+        }
+    }
+    
+    @ViewBuilder
     private func timePicker(store: StoreOf<TimePicker>) -> some View {
         TimePickerView(store: store)
             .sheetWithContentHeight($sheetHeight)
     }
     
+    @ViewBuilder
     private func notificationTime(store: StoreOf<NotificationTimePicker>) -> some View {
         NotificationTimePickerView(store: store)
             .sheetWithContentHeight($sheetHeight)
     }
     
+    @ViewBuilder
     private func searchLocation(store: StoreOf<SearchLocation>) -> some View {
         SearchLocationView(store: store)
             .presentationDetents([.fraction(0.75)])

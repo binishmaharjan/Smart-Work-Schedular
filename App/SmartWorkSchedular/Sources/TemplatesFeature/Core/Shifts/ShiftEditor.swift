@@ -42,6 +42,7 @@ public struct ShiftEditor {
             case saveButtonTapped
             case alertButtonTapped
             case locationButtonTapped
+            case locationClearButtonTapped
         }
         
         case binding(BindingAction<State>)
@@ -94,7 +95,12 @@ public struct ShiftEditor {
                 logger.debug("view.locationButtonTapped")
                 
                 state.destination = .searchLocation(.init(searchText: state.location))
+                return .none
                 
+            case .view(.locationClearButtonTapped):
+                logger.debug("view.locationClearButtonTapped")
+                
+                state.location = ""
                 return .none
                 
             case .view(.cancelButtonTapped):
