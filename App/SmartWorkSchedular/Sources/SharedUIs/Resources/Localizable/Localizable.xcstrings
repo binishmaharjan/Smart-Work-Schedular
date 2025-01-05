@@ -21,6 +21,9 @@
         }
       }
     },
+    "Error" : {
+
+    },
     "Hello World" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -37,6 +40,9 @@
           }
         }
       }
+    },
+    "Ok" : {
+
     },
     "Schedule" : {
       "extractionState" : "manual",

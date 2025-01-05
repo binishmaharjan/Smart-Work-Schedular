@@ -135,6 +135,12 @@ public struct ShiftEditor {
                 state.notificationTime = option
                 return .none
                 
+            case .destination(.presented(.searchLocation(.delegate(.updateLocation(let location))))):
+                logger.debug("destination.presented.searchLocation.delegate.updateLocation: \(location)")
+                
+                state.location = location
+                return .none
+                
             case .view, .binding, .destination:
                 return .none
             }

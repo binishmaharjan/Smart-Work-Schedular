@@ -20,14 +20,26 @@ public struct SearchLocationView: View {
             
             List {
                 ForEach(store.locations) { location in
-                    VStack(alignment: .leading) {
-                        Text(location.title)
-                            .font(.customBody)
-                        
-                        Text(location.subTitle)
-                            .font(.customFootnote)
+                    Button {
+                        send(.locationSelected(location))
+                    } label: {
+                        HStack {
+                            Image(systemName: "mappin.and.ellipse")
+                                .font(.customHeadline)
+                                .foregroundStyle(Color.accent)
+                            
+                            VStack(alignment: .leading) {
+                                Text(location.title)
+                                    .font(.customBody)
+                                    .foregroundStyle(Color.text)
+                                
+                                Text(location.subTitle)
+                                    .font(.customFootnote)
+                                    .foregroundStyle(Color.subText)
+                            }
+                            .hSpacing(.leading)
+                        }
                     }
-                    .hSpacing(.leading)
                 }
             }
             .listStyle(.plain)
