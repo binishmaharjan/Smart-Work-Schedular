@@ -55,6 +55,9 @@
         }
       }
     },
+    "Search" : {
+
+    },
     "Templates" : {
       "extractionState" : "manual",
       "localizations" : {

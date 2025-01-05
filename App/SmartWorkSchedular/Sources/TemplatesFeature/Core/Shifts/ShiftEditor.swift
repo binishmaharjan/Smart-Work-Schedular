@@ -11,6 +11,7 @@ public struct ShiftEditor {
         case endDatePicker(TimePicker)
         case breakTimePicker(TimePicker)
         case notificationTime(NotificationTimePicker)
+        case searchLocation(SearchLocation)
     }
     
     @ObservableState
@@ -33,12 +34,14 @@ public struct ShiftEditor {
     
     public enum Action: ViewAction, BindableAction {
         public enum View {
+            case onAppear
             case addBreakButtonTapped
             case startDateButtonTapped
             case endDateButtonTapped
             case cancelButtonTapped
             case saveButtonTapped
             case alertButtonTapped
+            case locationButtonTapped
         }
         
         case binding(BindingAction<State>)
@@ -84,6 +87,13 @@ public struct ShiftEditor {
                 logger.debug("view.saveButtonTapped")
                 
                 state.destination = .notificationTime(.init(option: state.notificationTime))
+                
+                return .none
+                
+            case .view(.locationButtonTapped):
+                logger.debug("view.locationButtonTapped")
+                
+                state.destination = .searchLocation(.init(searchText: state.location))
                 
                 return .none
                 

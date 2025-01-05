@@ -64,7 +64,12 @@ public struct ShiftEditorView: View {
                 }
                 
                 Section {
-                    Text(#localized("Location"))
+                    Button {
+                        send(.locationButtonTapped)
+                    } label: {
+                        Text(#localized("Location"))
+                    }
+                    .foregroundStyle(Color.text)
                 }
                 
                 Section {
@@ -85,6 +90,9 @@ public struct ShiftEditorView: View {
                 }
             }
         }
+        .onAppear {
+            send(.onAppear)
+        }
         .sheet(
             item: $store.scope(state: \.destination?.breakTimePicker, action: \.destination.breakTimePicker),
             content: timePicker(store:)
@@ -100,6 +108,10 @@ public struct ShiftEditorView: View {
         .sheet(
             item: $store.scope(state: \.destination?.notificationTime, action: \.destination.notificationTime),
             content: notificationTime(store:)
+        )
+        .sheet(
+            item: $store.scope(state: \.destination?.searchLocation, action: \.destination.searchLocation),
+            content: searchLocation(store:)
         )
     }
 }
@@ -132,6 +144,12 @@ extension ShiftEditorView {
     private func notificationTime(store: StoreOf<NotificationTimePicker>) -> some View {
         NotificationTimePickerView(store: store)
             .sheetWithContentHeight($sheetHeight)
+    }
+    
+    private func searchLocation(store: StoreOf<SearchLocation>) -> some View {
+        SearchLocationView(store: store)
+            .presentationDetents([.fraction(0.75)])
+            .presentationDragIndicator(.visible)
     }
 }
 
