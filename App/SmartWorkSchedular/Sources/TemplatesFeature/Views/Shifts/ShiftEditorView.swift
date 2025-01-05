@@ -126,36 +126,12 @@ extension ShiftEditorView {
     
     private func timePicker(store: StoreOf<TimePicker>) -> some View {
         TimePickerView(store: store)
-            .overlay {
-                GeometryReader { geometry in
-                    Color.clear.preference(
-                        key: InnerHeightPreferenceKey.self,
-                        value: geometry.size.height
-                    )
-                }
-            }
-            .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                sheetHeight = newHeight
-            }
-            .presentationDetents([.height(sheetHeight)])
-            .presentationDragIndicator(.visible)
+            .sheetWithContentHeight($sheetHeight)
     }
     
     private func notificationTime(store: StoreOf<NotificationTimePicker>) -> some View {
         NotificationTimePickerView(store: store)
-            .overlay {
-                GeometryReader { geometry in
-                    Color.clear.preference(
-                        key: InnerHeightPreferenceKey.self,
-                        value: geometry.size.height
-                    )
-                }
-            }
-            .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                sheetHeight = newHeight
-            }
-            .presentationDetents([.height(sheetHeight)])
-            .presentationDragIndicator(.visible)
+            .sheetWithContentHeight($sheetHeight)
     }
 }
 
