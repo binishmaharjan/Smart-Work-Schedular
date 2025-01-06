@@ -14,7 +14,6 @@ extension UIColor {
 
         var rgbValue: UInt64 = 0
         guard scanner.scanHexInt64(&rgbValue) else {
-            // TODO: Debug Print
             print("💀 Could not create color from hex code.")
             self.init(white: 0, alpha: 0)
             return

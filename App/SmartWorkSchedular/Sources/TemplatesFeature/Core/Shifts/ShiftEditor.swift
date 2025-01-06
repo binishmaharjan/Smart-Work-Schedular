@@ -19,10 +19,12 @@ public struct ShiftEditor {
         public init() { }
         
         @Presents var destination: Destination.State?
+        var isIconToggleOpen = false
+        
         var kind: Kind = .new
         var title: String = ""
-        var icon: String = ""
-        var color: String = ""
+        var icon: String = "sun.max.fill"
+        var hexCode: HexCode = "8E8E93"
         var isAllDay: Bool = false
         var startDate = HourAndMinute(hour: 9, minute: 0)
         var endDate = HourAndMinute(hour: 17, minute: 0)
@@ -35,6 +37,7 @@ public struct ShiftEditor {
     public enum Action: ViewAction, BindableAction {
         public enum View {
             case onAppear
+            case iconButtonTapped
             case breakButtonTapped
             case breakClearButtonTapped
             case startDateButtonTapped
@@ -61,6 +64,12 @@ public struct ShiftEditor {
         
         Reduce<State, Action> { state, action in
             switch action {
+            case .view(.iconButtonTapped):
+                logger.debug("view.iconButtonTapped")
+                
+                state.isIconToggleOpen.toggle()
+                return .none
+                
             case .view(.breakButtonTapped):
                 logger.debug("view.addBreakButtonTapped")
                 

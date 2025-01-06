@@ -18,6 +18,10 @@ public struct ShiftEditorView: View {
                     TextField(#localized("Title"), text: $store.title, axis: .horizontal)
                     
                     iconRow
+                    
+                    if store.isIconToggleOpen {
+                        iconPickerRow
+                    }
                 }
                 
                 Section {
@@ -110,19 +114,27 @@ extension ShiftEditorView {
     private var iconRow: some View {
         LabeledContent(#localized("Icon")) {
             HStack {
-                Image(systemName: "circle.fill")
+                Image(systemName: store.icon)
                     .resizable()
                     .frame(width: 24, height: 24)
+                    .padding(.trailing, 8)
+                    .foregroundStyle(Color(hex: store.hexCode))
 
                 Button {
+                    send(.iconButtonTapped, animation: .default)
                 } label: {
-                    Image(systemName: "chevron.down")
+                    (store.isIconToggleOpen ? Image(systemName: "chevron.up") : Image(systemName: "chevron.down"))
                         .resizable()
                         .scaledToFit()
                         .frame(width: 12)
                 }
             }
         }
+    }
+    
+    @ViewBuilder
+    private var iconPickerRow: some View {
+        Text("Pick Icon From Here")
     }
     
     @ViewBuilder

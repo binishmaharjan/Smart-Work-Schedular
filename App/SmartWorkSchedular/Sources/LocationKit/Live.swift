@@ -48,7 +48,7 @@ extension LocationKitClient {
         }
         
         deinit {
-            continuation.finish() // TODO: Do i need this?
+            continuation.finish()
         }
         
         func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
