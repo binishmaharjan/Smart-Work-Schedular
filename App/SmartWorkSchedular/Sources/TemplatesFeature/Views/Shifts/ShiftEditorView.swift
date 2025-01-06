@@ -121,7 +121,7 @@ extension ShiftEditorView {
                     .foregroundStyle(Color(hex: store.hexCode))
 
                 Button {
-                    send(.iconButtonTapped, animation: .default)
+                    send(.iconButtonTapped, animation: .linear)
                 } label: {
                     (store.isIconToggleOpen ? Image(systemName: "chevron.up") : Image(systemName: "chevron.down"))
                         .resizable()
@@ -134,7 +134,7 @@ extension ShiftEditorView {
     
     @ViewBuilder
     private var iconPickerRow: some View {
-        Text("Pick Icon From Here")
+        IconPickerView(store: store.scope(state: \.iconPicker, action: \.iconPicker))
     }
     
     @ViewBuilder

@@ -19,6 +19,7 @@ public struct ShiftEditor {
         public init() { }
         
         @Presents var destination: Destination.State?
+        var iconPicker = IconPicker.State()
         var isIconToggleOpen = false
         
         var kind: Kind = .new
@@ -51,6 +52,7 @@ public struct ShiftEditor {
         
         case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
+        case iconPicker(IconPicker.Action)
         case view(View)
     }
     
@@ -162,11 +164,15 @@ public struct ShiftEditor {
                 state.location = location
                 return .none
                 
-            case .view, .binding, .destination:
+            case .view, .binding, .destination, .iconPicker:
                 return .none
             }
         }
         .ifLet(\.$destination, action: \.destination)
+        
+        Scope(state: \.iconPicker, action: \.iconPicker) {
+            IconPicker()
+        }
     }
 }
 
