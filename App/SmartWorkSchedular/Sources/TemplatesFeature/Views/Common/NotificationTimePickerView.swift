@@ -13,7 +13,7 @@ public struct NotificationTimePickerView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            Text(#localized("Select Mode"))
+            Text(#localized("Alert"))
                 .font(.customHeadline)
                 .padding(.vertical, 16)
             

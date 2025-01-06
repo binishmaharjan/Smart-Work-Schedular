@@ -47,6 +47,7 @@ extension TimePickerView {
             Text(#localized("Save"))
                 .primaryButton()
                 .padding(.horizontal, 16)
+                .padding(.bottom, 16)
         }
     }
     

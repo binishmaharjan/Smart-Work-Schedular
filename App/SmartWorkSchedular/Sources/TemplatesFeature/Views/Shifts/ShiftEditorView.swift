@@ -23,21 +23,21 @@ public struct ShiftEditorView: View {
                 Section {
                     Toggle(#localized("All Day"), isOn: $store.isAllDay)
 
-                    startsDate
+                    startsDateRow
                     
-                    endsDate
+                    endsDateRow
                 }
                 
                 Section {
-                    breakTime
+                    breakTimeRow
                 }
                 
                 Section {
-                    notificationTime
+                    notificationTimeRow
                 }
                 
                 Section {
-                    location
+                    locationRow
                 }
                 
                 Section {
@@ -107,7 +107,12 @@ extension ShiftEditorView {
     }
     
     @ViewBuilder
-    private var startsDate: some View {
+    private var icon: some View {
+        Text("")
+    }
+    
+    @ViewBuilder
+    private var startsDateRow: some View {
         LabeledContent(#localized("Starts")) {
             Button {
                 send(.startDateButtonTapped)
@@ -119,7 +124,7 @@ extension ShiftEditorView {
     }
     
     @ViewBuilder
-    private var endsDate: some View {
+    private var endsDateRow: some View {
         LabeledContent(#localized("Ends")) {
             Button {
                 send(.endDateButtonTapped)
@@ -131,7 +136,7 @@ extension ShiftEditorView {
     }
     
     @ViewBuilder
-    private var breakTime: some View {
+    private var breakTimeRow: some View {
         LabeledContent(#localized("Break")) {
             Button {
                 send(.addBreakButtonTapped)
@@ -142,7 +147,7 @@ extension ShiftEditorView {
     }
     
     @ViewBuilder
-    private var notificationTime: some View {
+    private var notificationTimeRow: some View {
         LabeledContent(#localized("Alert")) {
             Button {
                 send(.alertButtonTapped)
@@ -154,7 +159,7 @@ extension ShiftEditorView {
     }
     
     @ViewBuilder
-    private var location: some View {
+    private var locationRow: some View {
         if store.location.isEmpty {
             Button {
                 send(.locationButtonTapped)

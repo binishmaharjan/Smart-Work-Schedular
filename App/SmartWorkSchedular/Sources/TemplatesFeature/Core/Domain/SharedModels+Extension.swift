@@ -1,38 +1,39 @@
 import Foundation
 import SharedModels
+import SharedUIs
 
 extension NotificationTimeOption {
     var title: String {
         switch self {
         case .none:
-            return "None"
+            return #localized("None")
             
         case .atTimeOfEvent:
-            return "At time of event"
+            return #localized("At time of event")
             
         case .fiveMinutesBefore:
-            return "5 minutes before"
+            return #localized("5 minutes before")
             
         case .fifteenMinutesBefore:
-            return "15 minutes before"
+            return #localized("15 minutes before")
             
         case .thirtyMinutesBefore:
-            return "20 minutes before"
+            return #localized("20 minutes before")
             
         case .oneHourBefore:
-            return "1 hour before"
+            return #localized("1 hour before")
             
         case .twoHoursBefore:
-            return "2 hours before"
+            return #localized("2 hours before")
             
         case .fourHoursBefore:
-            return "4 hours before"
+            return #localized("4 hours before")
             
         case .oneDayBefore:
-            return "1 day before"
+            return #localized("1 day before")
             
         case .oneWeekBefore:
-            return "1 week before"
+            return #localized("1 week before")
         }
     }
 }
