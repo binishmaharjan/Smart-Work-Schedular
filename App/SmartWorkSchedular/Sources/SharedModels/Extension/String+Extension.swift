@@ -8,22 +8,30 @@ public enum Process {
 
 extension String {
     public var trimmed: String {
-        return trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+    }
+    
+    public var isValidPassword: Bool {
+        let regex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[a-zA-Z\\d]{8,}$"
+        return range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
+    }
+    
+    public var isBackspace: Bool {
+        let ansic = cString(using: .utf8)
+        return strcmp(ansic, "\\b") == -92
     }
 
     public func removingWhitespaces() -> String {
-        return components(separatedBy: .whitespaces).joined()
+        components(separatedBy: .whitespaces).joined()
     }
 
     public func trimmed(at limit: Int) -> String {
         if endIndex.utf16Offset(in: self) > limit {
             var trimmedString = self
             var index = 0
-
-            /*
-             Use endIndex.encodeOffset of caption instead of count of caption
-             because server validates data by counting memories, not counting letters
-             */
+            
+            // Use endIndex.encodeOffset of caption instead of count of caption
+            // because server validates data by counting memories, not counting letters
             while trimmedString.endIndex.utf16Offset(in: self) > limit {
                 trimmedString = String(prefix(limit - index))
                 index += 1
@@ -33,17 +41,18 @@ extension String {
         return self
     }
 
-    public func trailed(with lenght: Int) -> String {
-        if lenght < 0 {
+    public func trailed(with length: Int) -> String {
+        if length < 0 {
             return ""
         }
-        return String(suffix(lenght))
+        return String(suffix(length))
     }
 
     public func base64(_ method: Process) -> String? {
         switch method {
         case .encode:
             return data(using: .utf8)?.base64EncodedString()
+            
         case .decode:
             guard let data = Data(base64Encoded: self) else { return nil }
             return String(data: data, encoding: .utf8)
@@ -51,7 +60,7 @@ extension String {
     }
 
     public func urlEncode() -> String? {
-        return addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
     }
 
     public func validPath() -> String? {
@@ -73,15 +82,14 @@ extension String {
         return validURL
     }
 
-    public var isValidPassword: Bool {
-        let regex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[a-zA-Z\\d]{8,}$"
-        return range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
-    }
-
     public func contentHeight(contentWidth: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: contentWidth, height: .greatestFiniteMagnitude)
-        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin,
-                                            attributes: [.font: font], context: nil)
+        let boundingBox = self.boundingRect(
+            with: constraintRect,
+            options: .usesLineFragmentOrigin,
+            attributes: [.font: font],
+            context: nil
+        )
         return boundingBox.height
     }
 
@@ -93,19 +101,14 @@ extension String {
     }
 
     public func contentWidth(font: UIFont) -> CGFloat {
-        let size = (self as NSString).size(withAttributes: [.font: font])
+        let size = (self as String).size(withAttributes: [.font: font])
         return size.width
-    }
-
-    public var isBackspace: Bool {
-        let ansic = cString(using: .utf8)
-        return strcmp(ansic, "\\b") == -92
     }
 
     public func stringFromHTML() -> NSAttributedString? {
         do {
             guard let data = self.data(using: String.Encoding.utf8, allowLossyConversion: true) else { return nil }
-            let str = try NSAttributedString(
+            return try NSAttributedString(
                 data: data,
                 options: [
                     .documentType: NSAttributedString.DocumentType.html,
@@ -113,7 +116,6 @@ extension String {
                 ],
                 documentAttributes: nil
             )
-            return str
         } catch {
         }
         return nil
@@ -132,9 +134,11 @@ extension String {
         do {
             var result = self
             let regex = try NSRegularExpression(pattern: regex)
-            let matches = regex.matches(in: result,
-                                        range: NSRange(result.startIndex..., in: result))
-            let replaceStrings = matches.map { (match) -> String in
+            let matches = regex.matches(
+                in: result,
+                range: NSRange(result.startIndex..., in: result)
+            )
+            let replaceStrings = matches.map { match -> String in
                 guard let range = Range(match.range, in: result) else {
                     return ""
                 }
@@ -153,10 +157,9 @@ extension String {
 
     /// Keep "\n" to prevent break line
     /// Keep "\n" characters by replace "\n" by "\\\\n"
-    /// - Returns: The string contain "\n" and not breakline
+    /// - Returns: The string contain "\n" and not break line
     public func notBreakLine() -> String {
-        let newText = self.replacingOccurrences(of: "\n", with: "\\\\n")
-        return newText
+        self.replacingOccurrences(of: "\n", with: "\\\\n")
     }
 }
 
@@ -193,9 +196,9 @@ extension String {
 }
 
 extension String {
-    public func substring(from: Int?, to: Int?) -> String {
+    public func substring(from: Int?, upTo: Int?) -> String {
         guard let start = from, start < self.count,
-            let end = to, end >= 0,
+            let end = upTo, end >= 0,
             end - start >= 0
             else {
                 return ""
@@ -209,7 +212,7 @@ extension String {
         }
 
         let endIndex: String.Index
-        if let end = to, end >= 0, end < self.count {
+        if let end = upTo, end >= 0, end < self.count {
             endIndex = self.index(self.startIndex, offsetBy: end + 1)
         } else {
             endIndex = self.endIndex
@@ -230,22 +233,22 @@ extension String {
             end = length - 1
         }
 
-        return self.substring(from: from, to: end)
+        return self.substring(from: from, upTo: end)
     }
 
-    public func substring(length: Int, to: Int?) -> String {
-        guard let end = to, end > 0, length > 0 else {
+    public func substring(length: Int, upTo: Int?) -> String {
+        guard let end = upTo, end > 0, length > 0 else {
             return ""
         }
 
         let start: Int
-        if let end = to, end - length > 0 {
+        if let end = upTo, end - length > 0 {
             start = end - length + 1
         } else {
             start = 0
         }
 
-        return self.substring(from: start, to: to)
+        return self.substring(from: start, upTo: upTo)
     }
 
     public func nsRanges(of string: String, options: String.CompareOptions = [], range: Range<Index>? = nil, locale: Locale? = nil) -> [NSRange] {
@@ -263,7 +266,7 @@ extension String {
 extension String {
     /// Initializes an NSURL object with a provided URL string. (read-only)
     public var url: URL? {
-        return URL(string: self)
+        URL(string: self)
     }
 
     /// The host, conforming to RFC 1808. (read-only)
@@ -277,6 +280,7 @@ extension String {
 
 extension String {
     public typealias Byte = UInt8
+    
     public var hexaToBytes: [Byte] {
         var start = startIndex
         return stride(from: 0, to: count, by: 2).compactMap { _ in   // use flatMap for older Swift versions
@@ -289,17 +293,18 @@ extension String {
 
 // MARK: - Validated String
 extension String {
-    public func validateWithRegex(_ regex: String) -> Bool {
-        let validateName = NSPredicate(format: "SELF MATCHES %@", regex)
-        return validateName.evaluate(with: self)
-    }
-
     public var decimalDigits: [String] {
-        let decimalDigits = self.components(separatedBy: CharacterSet.decimalDigits.inverted).joined(separator: "")
+        let decimalDigits = self.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        
         let arr = decimalDigits.map {
             String($0)
         }
         return arr
+    }
+    
+    public func validateWithRegex(_ regex: String) -> Bool {
+        let validateName = NSPredicate(format: "SELF MATCHES %@", regex)
+        return validateName.evaluate(with: self)
     }
 }
 
@@ -311,9 +316,11 @@ extension String {
             .replacingOccurrences(of: "-", with: "+")
         let remainder = self.count % 4
         if remainder > 0 {
-            base64String = self.padding(toLength: self.count + 4 - remainder,
-                              withPad: "=",
-                              startingAt: 0)
+            base64String = self.padding(
+                toLength: self.count + 4 - remainder,
+                withPad: "=",
+                startingAt: 0
+            )
         }
         guard Data(base64Encoded: base64String, options: .ignoreUnknownCharacters) != nil else {
             return ""
@@ -347,7 +354,7 @@ extension String {
 
 extension String {
     public var xmlNewLineDecodeString: String {
-        return self.replacingOccurrences(of: "\\n", with: "\n")
+        self.replacingOccurrences(of: "\\n", with: "\n")
     }
 }
 

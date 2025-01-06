@@ -1,5 +1,5 @@
-import Foundation
 import ComposableArchitecture
+import Foundation
 
 extension AlertState {
     /// Common Alert for error

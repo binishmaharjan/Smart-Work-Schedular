@@ -20,7 +20,6 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - comma_inheritance
   - contains_over_filter_count
   - contains_over_filter_is_empty
-  - direct_return
   - discarded_notification_center_observer
   - discouraged_assert
   - discouraged_object_literal

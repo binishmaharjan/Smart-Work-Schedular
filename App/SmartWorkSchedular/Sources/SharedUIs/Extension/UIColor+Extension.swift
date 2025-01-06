@@ -26,11 +26,13 @@ extension UIColor {
             green = (rgbValue >> 8 & 0xFF)
             blue = (rgbValue & 0xFF)
             alpha = 255
+            
         case 8:
             red = (rgbValue >> 16)
             green = (rgbValue >> 8 & 0xFF)
             blue = (rgbValue & 0xFF)
             alpha = rgbValue >> 24
+            
         default:
             print("💀 Could not create color from hex code.")
             red = 0
@@ -68,4 +70,3 @@ extension UIColor {
         return hexString
     }
 }
-
