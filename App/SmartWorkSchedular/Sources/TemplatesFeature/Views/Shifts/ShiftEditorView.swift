@@ -17,7 +17,7 @@ public struct ShiftEditorView: View {
                 Section {
                     TextField(#localized("Title"), text: $store.title, axis: .horizontal)
                     
-                    Text(#localized("Icon"))
+                    iconRow
                 }
                 
                 Section {
@@ -107,8 +107,22 @@ extension ShiftEditorView {
     }
     
     @ViewBuilder
-    private var icon: some View {
-        Text("")
+    private var iconRow: some View {
+        LabeledContent(#localized("Icon")) {
+            HStack {
+                Image(systemName: "circle.fill")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+
+                Button {
+                } label: {
+                    Image(systemName: "chevron.down")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 12)
+                }
+            }
+        }
     }
     
     @ViewBuilder
@@ -137,11 +151,29 @@ extension ShiftEditorView {
     
     @ViewBuilder
     private var breakTimeRow: some View {
-        LabeledContent(#localized("Break")) {
-            Button {
-                send(.addBreakButtonTapped)
-            } label: {
-                Image(systemName: "plus")
+        if store.breakTime.isEmpty {
+            LabeledContent(#localized("Break")) {
+                Button {
+                    send(.breakButtonTapped)
+                } label: {
+                    Image(systemName: "plus")
+                        .resizable()
+                        .frame(width: 12, height: 12)
+                }
+            }
+        } else {
+            LabeledContent(#localized("Break")) {
+                HStack {
+                    Text(store.breakTime.timeDescription)
+                    
+                    Button {
+                        send(.breakClearButtonTapped)
+                    } label: {
+                        Image(systemName: "xmark")
+                            .resizable()
+                            .frame(width: 12, height: 12)
+                    }
+                }
             }
         }
     }
@@ -184,7 +216,8 @@ extension ShiftEditorView {
                     send(.locationClearButtonTapped)
                 } label: {
                     Image(systemName: "xmark")
-                        .padding(.vertical, 4)
+                        .resizable()
+                        .frame(width: 12, height: 12)
                 }
                 // make button style borderless, so that both button action are not invoked
                 .buttonStyle(.borderless)

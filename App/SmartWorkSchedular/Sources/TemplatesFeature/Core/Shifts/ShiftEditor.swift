@@ -26,7 +26,7 @@ public struct ShiftEditor {
         var isAllDay: Bool = false
         var startDate = HourAndMinute(hour: 9, minute: 0)
         var endDate = HourAndMinute(hour: 17, minute: 0)
-        var breakTime = HourAndMinute(hour: 0, minute: 0)
+        var breakTime = HourAndMinute.empty
         var notificationTime: NotificationTimeOption = .none
         var location: String = ""
         var memo: String = ""
@@ -35,7 +35,8 @@ public struct ShiftEditor {
     public enum Action: ViewAction, BindableAction {
         public enum View {
             case onAppear
-            case addBreakButtonTapped
+            case breakButtonTapped
+            case breakClearButtonTapped
             case startDateButtonTapped
             case endDateButtonTapped
             case cancelButtonTapped
@@ -60,12 +61,18 @@ public struct ShiftEditor {
         
         Reduce<State, Action> { state, action in
             switch action {
-            case .view(.addBreakButtonTapped):
+            case .view(.breakButtonTapped):
                 logger.debug("view.addBreakButtonTapped")
                 
                 state.destination = .breakTimePicker(
                     .init(title: #localized("Break"), hour: state.breakTime.hour, minute: state.breakTime.minute)
                 )
+                return .none
+                
+            case .view(.breakClearButtonTapped):
+                logger.debug("view.breakClearButtonTapped")
+                
+                state.breakTime = .empty
                 return .none
                 
             case .view(.startDateButtonTapped):
@@ -88,7 +95,6 @@ public struct ShiftEditor {
                 logger.debug("view.saveButtonTapped")
                 
                 state.destination = .notificationTime(.init(option: state.notificationTime))
-                
                 return .none
                 
             case .view(.locationButtonTapped):
