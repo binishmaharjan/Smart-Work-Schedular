@@ -12,7 +12,7 @@ public struct SearchBar: View {
             ZStack {
                 // 背景
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(red: 239 / 255, green: 239 / 255, blue: 241 / 255))
+                    .fill(Color.searchBar)
                     .frame(height: 36)
                 
                 HStack(spacing: 6) {
@@ -21,7 +21,7 @@ public struct SearchBar: View {
                     
                     // 虫眼鏡
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color.gray)
                     
                     // テキストフィールド
                     TextField("Search", text: $text)
@@ -32,7 +32,7 @@ public struct SearchBar: View {
                             text.removeAll()
                         } label: {
                             Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.gray)
+                                .foregroundColor(Color.gray)
                         }
                         .padding(.trailing, 6)
                     }
