@@ -165,6 +165,7 @@ extension ShiftEditorView {
             LabeledContent(#localized("Break")) {
                 HStack {
                     Text(store.breakTime.timeDescription)
+                        .foregroundStyle(Color.subText)
                     
                     Button {
                         send(.breakClearButtonTapped)
