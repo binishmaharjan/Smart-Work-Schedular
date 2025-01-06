@@ -38,6 +38,8 @@ public struct TimePicker {
     @Dependency(\.dismiss) private var dismiss
     
     public var body: some ReducerOf<Self> {
+        BindingReducer()
+        
         Reduce<State, Action> { state, action in
             switch action {
             case .view(.saveButtonPressed):
