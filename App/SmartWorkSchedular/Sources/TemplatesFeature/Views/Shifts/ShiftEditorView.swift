@@ -164,8 +164,12 @@ extension ShiftEditorView {
         } else {
             LabeledContent(#localized("Break")) {
                 HStack {
-                    Text(store.breakTime.timeDescription)
-                        .foregroundStyle(Color.subText)
+                    Button {
+                        send(.breakButtonTapped)
+                    } label: {
+                        Text(store.breakTime.timeDescription)
+                            .foregroundStyle(Color.subText)
+                    }
                     
                     Button {
                         send(.breakClearButtonTapped)
@@ -174,6 +178,8 @@ extension ShiftEditorView {
                             .resizable()
                             .frame(width: 12, height: 12)
                     }
+                    // make button style borderless, so that both button action are not invoked
+                    .buttonStyle(.borderless)
                 }
             }
         }
