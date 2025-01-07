@@ -19,6 +19,7 @@ let package = Package(
         .library(name: "TemplatesFeature", targets: ["TemplatesFeature"]),
         .library(name: "EarningsFeature", targets: ["EarningsFeature"]),
         .library(name: "SettingsFeature", targets: ["SettingsFeature"]),
+        .library(name: "ColorPaletteFeature", targets: ["ColorPaletteFeature"]),
         .library(name: "NavigationBarFeature", targets: ["NavigationBarFeature"]),
         .library(name: "CalendarKit", targets: ["CalendarKit"]),
         .library(name: "ThemeKit", targets: ["ThemeKit"]),
@@ -129,6 +130,7 @@ let package = Package(
                 "SharedModels",
                 "LoggerClient",
                 "LocationKit",
+                "ColorPaletteFeature",
                 "NavigationBarFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ],
@@ -154,6 +156,16 @@ let package = Package(
                 "NavigationBarFeature",
                 "CalendarKit",
                 "ThemeKit",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+            ]
+        ),
+        .target(
+            name: "ColorPaletteFeature",
+            dependencies: [
+                "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ],
             plugins: [
