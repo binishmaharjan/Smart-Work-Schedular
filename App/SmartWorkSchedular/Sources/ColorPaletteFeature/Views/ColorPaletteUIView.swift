@@ -19,7 +19,7 @@ public final class ColorPaletteUIView: UIView {
     private var mainPaletteRect: CGRect = .zero
     public var onColorDidChange: ((_ color: UIColor) -> Void)?
     
-    public var elementSize: CGFloat = 20 {
+    public var elementSize: CGFloat = 1 {
         didSet { setNeedsDisplay() }
     }
     

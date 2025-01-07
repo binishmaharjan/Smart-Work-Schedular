@@ -24,12 +24,12 @@ public struct IconPicker {
         public enum Delegate {
             case updateIcon(String)
             case updateColor(HexCode)
-            case showCustomPicker
         }
     
         public enum View {
             case imageTapped(IconPreset.Image)
             case colorTapped(IconPreset.Color)
+            case showColorPalette
         }
         
         case delegate(Delegate)
@@ -55,6 +55,18 @@ public struct IconPicker {
                 
                 state.selectedColor = color
                 return .send(.delegate(.updateColor(color.rawValue)))
+                
+            case .view(.showColorPalette):
+                logger.debug("view.showColorPalette")
+                
+                state.destination = .colorPalette(.init())
+                return .none
+                
+            case .destination(.presented(.colorPalette(.delegate(.updateColor(let color))))):
+                logger.debug("destination.presented.colorPalette.delegate.updateColor: \(color)")
+                
+                state.selectedColor = .custom
+                return .send(.delegate(.updateColor(color)))
                 
             case .delegate, .destination:
                 return .none

@@ -1,3 +1,4 @@
+import ColorPaletteFeature
 import ComposableArchitecture
 import SharedUIs
 import SwiftUI
@@ -31,7 +32,11 @@ public struct IconPickerView: View {
                 }
                 ForEach(IconPreset.Color.allCases) { color in
                     Button {
-                        send(.colorTapped(color))
+                        if color == .custom {
+                            send(.showColorPalette)
+                        } else {
+                            send(.colorTapped(color))
+                        }
                     } label: {
                         Image(systemName: "circle.fill")
                             .resizable()
@@ -43,6 +48,29 @@ public struct IconPickerView: View {
                 }
             }
         }
+        .sheet(
+            item: $store.scope(state: \.destination?.colorPalette, action: \.destination.colorPalette),
+            content: colorPalette(store:)
+        )
+    }
+}
+
+// MARK: Views
+extension IconPickerView {
+    @ViewBuilder
+    private func colorPalette(store: StoreOf<ColorPalette>) -> some View {
+        VStack(spacing: 0) {
+            Text(#localized("Color Picker"))
+                .font(.customHeadline)
+                .padding(.vertical, 16)
+            
+            ColorPaletteView(store: store)
+                .padding(.horizontal)
+                .padding(.bottom)
+        }
+        .vSpacing(.top)
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
     }
 }
 
