@@ -70,4 +70,3 @@ extension UIColor {
         return hexString
     }
 }
-

@@ -2,61 +2,60 @@ import UIKit
 
 /// Color Picker For Choosing a Color
 public final class ColorPaletteUIView: UIView {
-    public var onColorDidChange: ((_ color: UIColor) -> ())?
-    public var elementSize: CGFloat = 20 {
-        didSet { setNeedsDisplay() }
+    // MARK: Init
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+    
+    override public init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
     }
     
     private let saturationExponentTop: Float = 1.0
     private let saturationExponentBottom: Float = 1.0
     
     private var mainPaletteRect: CGRect = .zero
+    public var onColorDidChange: ((_ color: UIColor) -> Void)?
     
-    // MARK: Init
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        setup()
+    public var elementSize: CGFloat = 20 {
+        didSet { setNeedsDisplay() }
     }
     
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setup()
-    }
-    
-    // MARK: LifeCycle
-    public override func draw(_ rect: CGRect) {
+    // MARK: Override
+    override public func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         
         mainPaletteRect = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
         
         // Main Palette
-        for y in stride(from: CGFloat.zero, to: mainPaletteRect.height, by: elementSize) {
-            
-            var saturation = y < mainPaletteRect.height / 2.0 ?
-            CGFloat(2 * y) / mainPaletteRect.height :
-            2.0 * CGFloat(mainPaletteRect.height - y) / mainPaletteRect.height
+        for yPoint in stride(from: CGFloat.zero, to: mainPaletteRect.height, by: elementSize) {
+            var saturation = yPoint < mainPaletteRect.height / 2.0 ?
+            CGFloat(2 * yPoint) / mainPaletteRect.height :
+            2.0 * CGFloat(mainPaletteRect.height - yPoint) / mainPaletteRect.height
             
             saturation = CGFloat(
                 powf(
                     Float(saturation),
-                    y < mainPaletteRect.height / 2.0 ?
+                    yPoint < mainPaletteRect.height / 2.0 ?
                         saturationExponentTop :
                         saturationExponentBottom
                 )
             )
             
-            let brightness = y < mainPaletteRect.height / 2.0 ?
+            let brightness = yPoint < mainPaletteRect.height / 2.0 ?
             CGFloat(1.0) :
-            2.0 * CGFloat(mainPaletteRect.height - y) / mainPaletteRect.height
+            2.0 * CGFloat(mainPaletteRect.height - yPoint) / mainPaletteRect.height
             
-            for x in stride(from: CGFloat.zero, to: mainPaletteRect.width, by: elementSize) {
+            for xPoint in stride(from: CGFloat.zero, to: mainPaletteRect.width, by: elementSize) {
                 guard let context = context else { fatalError("No Context") }
                 
-                let hue = x / mainPaletteRect.width
+                let hue = xPoint / mainPaletteRect.width
                 let color = UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1.0)
                 
                 context.setFillColor(color.cgColor)
-                context.fill(CGRect(x: x, y: y + mainPaletteRect.origin.y, width: elementSize, height: elementSize))
+                context.fill(CGRect(x: xPoint, y: yPoint + mainPaletteRect.origin.y, width: elementSize, height: elementSize))
             }
         }
     }
@@ -82,7 +81,7 @@ public final class ColorPaletteUIView: UIView {
     ///
     /// - Parameter point: location of the user touch
     /// - Return: UIColor at the location
-    private func getColorAtPoint(point: CGPoint)  -> UIColor {
+    private func getColorAtPoint(point: CGPoint) -> UIColor {
         let colorSpace: CGColorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
         
@@ -99,9 +98,8 @@ public final class ColorPaletteUIView: UIView {
         let blue: CGFloat = CGFloat(pixelData[2]) / CGFloat(255.0)
         let alpha: CGFloat = CGFloat(pixelData[3]) / CGFloat(255.0)
         
-        let color: UIColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+        let color = UIColor(red: red, green: green, blue: blue, alpha: alpha)
         
         return color
     }
 }
-

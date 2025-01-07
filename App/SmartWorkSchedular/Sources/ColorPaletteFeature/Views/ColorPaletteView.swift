@@ -1,5 +1,5 @@
-import SwiftUI
 import ComposableArchitecture
+import SwiftUI
 
 @ViewAction(for: ColorPalette.self)
 public struct ColorPaletteView: View {
@@ -7,7 +7,7 @@ public struct ColorPaletteView: View {
         self.store = store
     }
     
-    private let store: StoreOf<ColorPalette>
+    public var store: StoreOf<ColorPalette>
     
     public var body: some View {
         ColorPaletteRepresentable { color in
@@ -27,5 +27,3 @@ public struct ColorPaletteView: View {
         )
     )
 }
-
-

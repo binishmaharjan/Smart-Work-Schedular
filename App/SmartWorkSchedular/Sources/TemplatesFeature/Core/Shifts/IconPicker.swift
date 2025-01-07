@@ -1,13 +1,20 @@
+import ColorPaletteFeature
 import ComposableArchitecture
 import Foundation
 import SharedUIs
 
 @Reducer
 public struct IconPicker {
+    @Reducer(state: .equatable)
+    public enum Destination {
+        case colorPalette(ColorPalette)
+    }
+    
     @ObservableState
     public struct State: Equatable {
         public init() { }
         
+        @Presents var destination: Destination.State?
         var selectedImage: IconPreset.Image = .sunMax
         var selectedColor: IconPreset.Color = .blue
     }
@@ -17,6 +24,7 @@ public struct IconPicker {
         public enum Delegate {
             case updateIcon(String)
             case updateColor(HexCode)
+            case showCustomPicker
         }
     
         public enum View {
@@ -25,6 +33,7 @@ public struct IconPicker {
         }
         
         case delegate(Delegate)
+        case destination(PresentationAction<Destination.Action>)
         case view(View)
     }
     
@@ -47,9 +56,10 @@ public struct IconPicker {
                 state.selectedColor = color
                 return .send(.delegate(.updateColor(color.rawValue)))
                 
-            case .delegate:
+            case .delegate, .destination:
                 return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
     }
 }

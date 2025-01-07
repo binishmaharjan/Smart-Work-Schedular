@@ -12,4 +12,3 @@ extension Color {
         UIColor(self).toHexString(includeAlpha: includeAlpha)
     }
 }
-

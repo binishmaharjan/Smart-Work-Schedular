@@ -1,5 +1,5 @@
-import UIKit
 import SwiftUI
+import UIKit
 
 public struct ColorPaletteRepresentable: UIViewRepresentable {
     public var onColorSelected: ((Color) -> Void)?
@@ -16,4 +16,3 @@ public struct ColorPaletteRepresentable: UIViewRepresentable {
         // Update UI if needed
     }
 }
-
