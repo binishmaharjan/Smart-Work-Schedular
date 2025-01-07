@@ -16,36 +16,9 @@ public struct IconPickerView: View {
     public var body: some View {
         VStack {
             LazyVGrid(columns: columns) {
-                ForEach(IconPreset.Image.allCases) { image in
-                    Button {
-                        send(.imageTapped(image))
-                    } label: {
-                        Image(systemName: image.rawValue)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 20, height: 20)
-                            .padding(8)
-                            .foregroundStyle(Color.background)
-                            .background(Circle().fill(Color.subText))
-                    }
-                    .buttonStyle(.borderless)
-                }
-                ForEach(IconPreset.Color.allCases) { color in
-                    Button {
-                        if color == .custom {
-                            send(.showColorPalette)
-                        } else {
-                            send(.colorTapped(color))
-                        }
-                    } label: {
-                        Image(systemName: "circle.fill")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 36, height: 36)
-                            .foregroundStyle(Color(hex: color.rawValue))
-                    }
-                    .buttonStyle(.borderless)
-                }
+                iconList
+                
+                colorList
             }
         }
         .sheet(
@@ -57,6 +30,45 @@ public struct IconPickerView: View {
 
 // MARK: Views
 extension IconPickerView {
+    @ViewBuilder
+    private var iconList: some View {
+        ForEach(IconPreset.Image.allCases) { image in
+            Button {
+                send(.imageTapped(image))
+            } label: {
+                Image(systemName: image.rawValue)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20)
+                    .padding(8)
+                    .foregroundStyle(Color.background)
+                    .background(Circle().fill(Color.subText))
+                    .showSelectionIndicator(when: store.selectedImage == image)
+            }
+            .buttonStyle(.borderless)
+        }
+    }
+    
+    private var colorList: some View {
+        ForEach(IconPreset.Color.allCases) { color in
+            Button {
+                if color == .custom {
+                    send(.showColorPalette)
+                } else {
+                    send(.colorTapped(color))
+                }
+            } label: {
+                Image(systemName: "circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 36, height: 36)
+                    .foregroundStyle(Color(hex: color.rawValue))
+                    .showSelectionIndicator(when: store.selectedColor == color)
+            }
+            .buttonStyle(.borderless)
+        }
+    }
+    
     @ViewBuilder
     private func colorPalette(store: StoreOf<ColorPalette>) -> some View {
         VStack(spacing: 0) {

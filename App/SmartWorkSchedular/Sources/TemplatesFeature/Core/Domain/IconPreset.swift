@@ -31,8 +31,8 @@ public enum IconPreset {
     }
     
     public enum Color: String, CaseIterable, Identifiable {
-        case red = "FF3B30"
         case blue = "33ADE5"
+        case red = "FF3B30"
         case green = "33BF59"
         case orange = "FF9400"
         case yellow = "FFCC00"
