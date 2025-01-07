@@ -116,6 +116,7 @@ extension ShiftEditorView {
             HStack {
                 Image(systemName: store.icon)
                     .resizable()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 24, height: 24)
                     .padding(.trailing, 8)
                     .foregroundStyle(Color(hex: store.hexCode))

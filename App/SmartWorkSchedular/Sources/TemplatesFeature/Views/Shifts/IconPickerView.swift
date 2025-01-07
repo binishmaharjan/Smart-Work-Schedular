@@ -15,14 +15,31 @@ public struct IconPickerView: View {
     public var body: some View {
         VStack {
             LazyVGrid(columns: columns) {
-                ForEach(IconPreset.allCases) { iconPreset in
-                    Image(systemName: iconPreset.rawValue)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 20, height: 20)
-                        .padding(8)
-                        .foregroundStyle(Color.background)
-                        .background(Circle().fill(Color.subText))
+                ForEach(IconPreset.Image.allCases) { image in
+                    Button {
+                        send(.imageTapped(image))
+                    } label: {
+                        Image(systemName: image.rawValue)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 20, height: 20)
+                            .padding(8)
+                            .foregroundStyle(Color.background)
+                            .background(Circle().fill(Color.subText))
+                    }
+                    .buttonStyle(.borderless)
+                }
+                ForEach(IconPreset.Color.allCases) { color in
+                    Button {
+                        send(.colorTapped(color))
+                    } label: {
+                        Image(systemName: "circle.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 36, height: 36)
+                            .foregroundStyle(Color(hex: color.rawValue))
+                    }
+                    .buttonStyle(.borderless)
                 }
             }
         }

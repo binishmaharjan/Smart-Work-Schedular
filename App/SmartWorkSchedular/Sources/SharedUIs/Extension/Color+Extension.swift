@@ -2,11 +2,11 @@ import SwiftUI
 
 // MARK: Predefined Colors
 extension Color {
-    /// Light: #F4C33E, Dark: #F4C33E
+    /// Light: #FFFFFF, Dark: #000000 (Prev: 161621)
     public static let background = #color("background")
     /// Light: #EEEEEE, Dark: #EEEEEE
     public static let subBackground = #color("sub_background")
-    /// Light: #FFFFFF, Dark: #161621
+    /// Light: #F4C33E, Dark: #F4C33E
     public static let accent = #color("accent_color")
     /// Light: #B5B5B5, Dark: #F5F5F5
     public static let separator = #color("separator")

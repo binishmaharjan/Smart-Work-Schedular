@@ -24,8 +24,8 @@ public struct ShiftEditor {
         
         var kind: Kind = .new
         var title: String = ""
-        var icon: String = "sun.max.fill"
-        var hexCode: HexCode = "8E8E93"
+        var icon: String = IconPreset.Image.sunMax.rawValue
+        var hexCode: HexCode = IconPreset.Color.blue.rawValue
         var isAllDay: Bool = false
         var startDate = HourAndMinute(hour: 9, minute: 0)
         var endDate = HourAndMinute(hour: 17, minute: 0)
@@ -133,6 +133,18 @@ public struct ShiftEditor {
                 return .run { _ in
                     await dismiss()
                 }
+                
+            case .iconPicker(.delegate(.updateIcon(let icon))):
+                logger.debug("iconPicker.delegate.updateIcon: \(icon)")
+                
+                state.icon = icon
+                return .none
+                
+            case .iconPicker(.delegate(.updateColor(let hexCode))):
+                logger.debug("iconPicker.delegate.updateColor: \(hexCode)")
+                
+                state.hexCode = hexCode
+                return .none
                 
             case .destination(.presented(.breakTimePicker(.delegate(.saveTime(let time))))):
                 logger.debug("destination.presented.breakTimePicker.delegate.saveTime: \(time.hour):\(time.minute)")
