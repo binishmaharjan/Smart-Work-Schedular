@@ -57,7 +57,8 @@ let package = Package(
                 .process("Resources"),
             ],
             plugins: [
-                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"),
+                .plugin(name: "AssetGenPlugin")
             ]
         ),
         .target(
@@ -230,6 +231,10 @@ let package = Package(
             plugins: [
                 .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
             ]
+        ),
+        .plugin(
+            name: "AssetGenPlugin",
+            capability: .buildTool()
         ),
         .macro(
             name: "AppMacros",
