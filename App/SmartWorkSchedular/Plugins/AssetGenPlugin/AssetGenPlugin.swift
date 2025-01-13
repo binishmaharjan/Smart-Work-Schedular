@@ -15,10 +15,18 @@ struct AssetGenPlugin: BuildToolPlugin {
         import SwiftUI
         
         extension Color {
-        \(EscapeCharacter.tab.rawValue)\(allColor(in: target).map(\.toStaticProperty)
+        \(EscapeCharacter.tab.rawValue)\(fetchAsset(in: target, for: .colorset).map(\.toStaticProperty)
+            .joined(separator: "\(EscapeCharacter.newLine.rawValue)\(EscapeCharacter.tab.rawValue)"))
+        }
+        
+        extension Image {
+        \(EscapeCharacter.tab.rawValue)\(fetchAsset(in: target, for: .imageset).map(\.toStaticProperty)
             .joined(separator: "\(EscapeCharacter.newLine.rawValue)\(EscapeCharacter.tab.rawValue)"))
         }
         """
+        
+        
+        // TODO: Generate for images
         
         let tmpOutputFilePathString = try tmpOutputFilePath().string
         try generatedFileContent.write(to: URL(fileURLWithPath: tmpOutputFilePathString), atomically: true, encoding: .utf8)
@@ -38,21 +46,26 @@ struct AssetGenPlugin: BuildToolPlugin {
         ]
     }
     
-    private func allColor(in target: SourceModuleTarget) -> [ColorAsset] {
+    private func fetchAsset(in target: SourceModuleTarget, for ext: FileExtension) -> [Asset] {
         do {
             let result = try target.sourceFiles(withSuffix: FileExtension.xcassets.rawValue).map { catalog in
                 // path to the catalog asset
                 let input = catalog.path
-                // list of colors in the catalog asset  as string
-                let colors = try FileManager.default.fetchColors(atPath: input.string)
+                // list of assets in the catalog asset  as string
+                let assets: [Asset] =
+                if ext == .colorset {
+                    try FileManager.default.fetchColors(atPath: input.string)
+                } else {
+                    try FileManager.default.fetchImages(atPath: input.string)
+                }
                 
                 // show debug log
                 print("[AssetGen] - Found asset catalog named \(input.stem).\(FileExtension.xcassets.rawValue)")
-                print("[AssetGen] - Searching for colors...")
-                print("[AssetGen] - Found \(colors.count) colors in this catalog")
+                print("[AssetGen] - Searching for \(ext.rawValue)...")
+                print("[AssetGen] - Found \(assets.count) \(ext.rawValue) in this catalog")
                 
                 // return all color name in camel case
-                return colors.map { ColorAsset(originalName: $0, camelCaseName: $0.toCamelCase) }
+                return assets
             }
             // flat map [[String]] from multiple catalog to single [String]
             .flatMap { $0 }

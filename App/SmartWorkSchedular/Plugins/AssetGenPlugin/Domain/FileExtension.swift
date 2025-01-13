@@ -6,4 +6,6 @@ enum FileExtension: String {
     case xcassets
     /// Color Set
     case colorset
+    /// Image Set
+    case imageset
 }
