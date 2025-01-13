@@ -2,7 +2,6 @@ import Foundation
 
 public enum IconPreset {
     public enum Image: String, CaseIterable, Identifiable {
-        case abc = "abc"
         case sunMax = "sun.max.fill"
         case sunHaze = "sun.haze.fill"
         case moon = "moon.fill"
@@ -10,6 +9,7 @@ public enum IconPreset {
         case dollarSign = "dollarsign.circle.fill"
         case desktop = "desktopcomputer"
         case envelope = "envelope.fill"
+        case bag = "bag.fill"
         
         case airplane = "airplane"
         case car = "car.fill"
