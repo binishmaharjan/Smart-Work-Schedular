@@ -58,12 +58,21 @@ extension IconPickerView {
                     send(.colorTapped(color))
                 }
             } label: {
-                Image(systemName: "circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 36, height: 36)
-                    .foregroundStyle(Color(hex: color.rawValue))
-                    .showSelectionIndicator(when: store.selectedColor == color)
+                if color == .custom {
+                    Image.icnColorWheel
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 36, height: 36)
+                        .foregroundStyle(Color(hex: color.rawValue))
+                        .showSelectionIndicator(when: store.selectedColor == color)
+                } else {
+                    Image(systemName: "circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 36, height: 36)
+                        .foregroundStyle(Color(hex: color.rawValue))
+                        .showSelectionIndicator(when: store.selectedColor == color)
+                }
             }
             .buttonStyle(.borderless)
         }
