@@ -52,12 +52,7 @@ struct AssetGenPlugin: BuildToolPlugin {
                 // path to the catalog asset
                 let input = catalog.path
                 // list of assets in the catalog asset  as string
-                let assets: [Asset] =
-                if ext == .colorset {
-                    try FileManager.default.fetchColors(atPath: input.string)
-                } else {
-                    try FileManager.default.fetchImages(atPath: input.string)
-                }
+                let assets: [Asset] = try FileManager.default.fetchAssets(using: ext.fetcher, atPath: input.string)
                 
                 // show debug log
                 print("[AssetGen] - Found asset catalog named \(input.stem).\(FileExtension.xcassets.rawValue)")
