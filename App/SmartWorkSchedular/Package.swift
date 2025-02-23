@@ -30,7 +30,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.17.1"),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.2"),
-        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", exact: "0.57.0"),
+        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", exact: "0.58.2"),
     ],
     targets: [
         .target(
