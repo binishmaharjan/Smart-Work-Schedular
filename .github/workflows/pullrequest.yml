@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Xcode
+        # Its better not to use latest xcode, because simulator might not be available
         run: sudo xcode-select -switch /Applications/Xcode_16.1.app
 
       - name: Cache Bundler dependencies
@@ -49,6 +50,9 @@ jobs:
           xcodebuild -workspace 'App/SmartWorkSchedular.xcworkspace' -scheme 'Development' -showdestinations
 
       - name: Build the project
+        env:
+          # Enable plugins usages
+          XCODE_SKIP_PLUGINS_VALIDATION: NO
         run: |
           set -o pipefail && xcodebuild clean build \
             -workspace 'App/SmartWorkSchedular.xcworkspace' \
