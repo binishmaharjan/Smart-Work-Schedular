@@ -40,7 +40,8 @@ jobs:
             Build/SourcePackages
             Build/Build/Products
           key: ${{ runner.os }}-deps-v1-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: ${{ runner.os }}-deps-v1-
+          restore-keys: |
+            ${{ runner.os }}-deps-v1-
 
       - name: Build the project
         run: |
