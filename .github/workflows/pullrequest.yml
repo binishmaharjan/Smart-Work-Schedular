@@ -19,7 +19,7 @@ jobs:
 
       - name: Cache Bundler dependencies
         uses: actions/cache@v3
-        id: cache_bundler
+        id: cache-bundler
         with:
           path: vendor/bundle
           # Create cache from Gemfile.lock
@@ -36,7 +36,7 @@ jobs:
 
       - name: Swift Packages Cache
         uses: actions/cache@v3
-        id: cache_spm
+        id: cache-spm
         with:
           path: |
             Build/SourcePackages
@@ -47,7 +47,7 @@ jobs:
       - name: Build the project
         run: |
           set -o pipefail && xcodebuild clean build \
-            -workspace 'SmartWorkSchedular.xcworkspace' \
+            -workspace 'App/SmartWorkSchedular.xcworkspace' \
             -scheme 'Development' \
             -destination 'generic/platform=iOS' \
             CODE_SIGNING_ALLOWED=NO | tee xcodebuild.log | xcbeautify
