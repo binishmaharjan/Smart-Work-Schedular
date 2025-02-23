@@ -46,6 +46,6 @@ jobs:
         run: |
           set -o pipefail && xcodebuild clean build \
             -project 'App/Project/Development/Development.xcodeproj' \
-            -scheme 'Development \
+            -scheme 'Development' \
             -destination 'generic/platform=iOS' \
             CODE_SIGNING_ALLOWED=NO | tee xcodebuild.log | xcbeautify
