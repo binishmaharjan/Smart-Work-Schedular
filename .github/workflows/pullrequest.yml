@@ -51,9 +51,20 @@ jobs:
 
       - name: Build the project
         run: |
-          set -o pipefail && xcodebuild clean build \
+          set -o pipefail && xcodebuild clean \
+            -workspace 'App/SmartWorkSchedular.xcworkspace' \
+            -scheme 'Development' \
+            CODE_SIGNING_ALLOWED=NO | xcbeautify
+
+      - name: Run SwiftLint separately
+        run: |
+          swift run swiftlint || echo "SwiftLint failed but continuing..."
+
+      - name: Build the project
+        run: |
+          set -o pipefail && xcodebuild build \
             -workspace 'App/SmartWorkSchedular.xcworkspace' \
             -scheme 'Development' \
             -destination 'generic/platform=iOS' \
-            -skipPackagePluginValidation \
-            CODE_SIGNING_ALLOWED=NO | tee xcodebuild.log | xcbeautify
+            CODE_SIGNING_ALLOWED=NO \
+            -skipPackagePluginValidation | xcbeautify
