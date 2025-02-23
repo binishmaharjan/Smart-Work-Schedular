@@ -50,12 +50,10 @@ jobs:
           xcodebuild -workspace 'App/SmartWorkSchedular.xcworkspace' -scheme 'Development' -showdestinations
 
       - name: Build the project
-        env:
-          # Enable plugins usages
-          XCODE_SKIP_PLUGINS_VALIDATION: NO
         run: |
           set -o pipefail && xcodebuild clean build \
             -workspace 'App/SmartWorkSchedular.xcworkspace' \
             -scheme 'Development' \
             -destination 'generic/platform=iOS' \
+            -skipPackagePluginValidation \
             CODE_SIGNING_ALLOWED=NO | tee xcodebuild.log | xcbeautify
