@@ -43,6 +43,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-deps-v1-
 
+      - name: Show available destinations
+        run: |
+          xcrun simctl list devices
+          xcodebuild -workspace 'App/SmartWorkSchedular.xcworkspace' -scheme 'Development' -showdestinations
+
       - name: Build the project
         run: |
           set -o pipefail && xcodebuild clean build \
