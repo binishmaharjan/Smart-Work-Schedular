@@ -37,11 +37,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            Build/SourcePackages
-            Build/Build/Products
-          key: ${{ runner.os }}-deps-v1-${{ hashFiles('**/Package.resolved') }}
+            ~/Library/Developer/Xcode/DerivedData
+            ~/.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-deps-v1-
+            ${{ runner.os }}-spm-
 
       - name: Build the project
         run: |
