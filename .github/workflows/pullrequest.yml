@@ -1,0 +1,54 @@
+name: Pull Request On Commit Push
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: macos-14
+    timeout-minutes: 30
+
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Set up Xcode
+          run: sudo xcode-select -switch /Applications/Xcode_16.2.app
+
+        - name: Cache Bundler dependencies
+          uses: actions/cache@v3
+          id: cache_bundler
+          with:
+            path: vendor/bundle
+            # Create cache from Gemfile.lock
+            key: ${{ runner.os }}-bundler-${{ hashFiles('**/Gemfile.lock') }}
+            # If cache is not found, use latest cache
+            restore-keys: |
+              ${{ runner.os }}-bundler-
+
+        - name: Install Bundler and dependencies
+          run: |
+            gem install bundler
+            bundle config set --local path 'vendor/bundle'
+            bundle install --jobs 4 --retry 3
+
+        - name: Swift Packages Cache
+          uses: actions/cache@v3
+          id: cache_spm
+          with:
+             path: |
+              Build/SourcePackages
+              Build/Build/Products
+               key: ${{ runner.os }}-deps-v1-${{ hashFiles('BILDsolid.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+               restore-keys: ${{ runner.os }}-deps-v1-
+
+
+        - name: Build the project
+          run:
+            set -o pipefail && xcodebuild clean build \
+            -workspace 'SmartWorkSchedular.xcworkspace' \
+            -scheme 'Development' \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO | tee xcodebuild.log | xcbeautify
