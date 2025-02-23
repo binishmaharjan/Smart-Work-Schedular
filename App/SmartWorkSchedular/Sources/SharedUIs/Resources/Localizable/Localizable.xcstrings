@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "Earnings" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -17,6 +20,9 @@
           }
         }
       }
+    },
+    "Error" : {
+
     },
     "Hello World" : {
       "extractionState" : "manual",
@@ -35,6 +41,9 @@
         }
       }
     },
+    "Ok" : {
+
+    },
     "Schedule" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -51,6 +60,9 @@
           }
         }
       }
+    },
+    "Search" : {
+
     },
     "Templates" : {
       "extractionState" : "manual",

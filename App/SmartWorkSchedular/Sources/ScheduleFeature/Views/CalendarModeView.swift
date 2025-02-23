@@ -12,7 +12,7 @@ public struct CalendarModeView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            Text("Select Mode")
+            Text(#localized("Select Mode"))
                 .font(.customHeadline)
                 .padding(.vertical, 16)
             

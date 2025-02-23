@@ -7,6 +7,6 @@ extension AppStorageKey where Value == AppScheme {
 }
 
 // MARK: Persistance Key
-extension PersistenceReaderKey where Self == AppStorageKey<AppScheme> {
+extension SharedReaderKey where Self == AppStorageKey<AppScheme> {
     public static var appScheme: Self { AppStorageKey.appScheme }
 }

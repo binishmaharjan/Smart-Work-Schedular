@@ -15,7 +15,7 @@ public struct MainTab {
             self.templates = Templates.State()
             self.earnings = Earnings.State()
             self.settings = Settings.State()
-            self.selectedTab = .schedule
+            self.selectedTab = .templates
         }
         
         public var schedule: Schedule.State

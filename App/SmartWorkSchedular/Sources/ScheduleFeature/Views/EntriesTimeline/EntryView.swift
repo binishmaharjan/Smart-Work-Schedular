@@ -17,7 +17,7 @@ struct EntryView: View {
                 )
             VStack(alignment: .leading, spacing: 8) {
                 Text(entry.title)
-                    .font(.customSubheadline)
+                    .font(.customSubHeadline)
                     .foregroundStyle(Color.text)
                 
                 Label(entry.creationDate.formatted(.monthAndYear), systemImage: "clock")

@@ -49,19 +49,7 @@ extension ScheduleView {
     @ViewBuilder
     private func calendarMode(store: StoreOf<CalendarMode>) -> some View {
         CalendarModeView(store: store)
-            .overlay {
-                GeometryReader { geometry in
-                    Color.clear.preference(
-                        key: InnerHeightPreferenceKey.self,
-                        value: geometry.size.height
-                    )
-                }
-            }
-            .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                sheetHeight = newHeight
-            }
-            .presentationDetents([.height(sheetHeight)])
-            .presentationDragIndicator(.visible)
+            .sheetWithContentHeight($sheetHeight)
     }
 }
 

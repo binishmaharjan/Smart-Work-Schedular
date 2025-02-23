@@ -17,11 +17,11 @@ public struct WeekCalendarView: View {
             ForEach(store.displayDays) { day in
                 VStack(spacing: 4) {
                     Text(day.formatted(.weekday))
-                        .font(.customSubheadline)
+                        .font(.customSubHeadline)
                         .foregroundStyle(Color.text)
                     
                     Text(day.formatted(.calendarDay))
-                        .font(.customSubheadline)
+                        .font(.customSubHeadline)
                         .foregroundStyle(
                             day.isSameDay(as: store.currentSelectedDay) ? Color.background : Color.text
                         )

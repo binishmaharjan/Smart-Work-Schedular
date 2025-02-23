@@ -19,14 +19,16 @@ let package = Package(
         .library(name: "TemplatesFeature", targets: ["TemplatesFeature"]),
         .library(name: "EarningsFeature", targets: ["EarningsFeature"]),
         .library(name: "SettingsFeature", targets: ["SettingsFeature"]),
+        .library(name: "ColorPaletteFeature", targets: ["ColorPaletteFeature"]),
         .library(name: "NavigationBarFeature", targets: ["NavigationBarFeature"]),
         .library(name: "CalendarKit", targets: ["CalendarKit"]),
         .library(name: "ThemeKit", targets: ["ThemeKit"]),
+        .library(name: "LocationKit", targets: ["LocationKit"]),
         .library(name: "UserDefaultsClient", targets: ["UserDefaultsClient"]),
         .library(name: "LoggerClient", targets: ["LoggerClient"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.14.0"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.17.1"),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.2"),
         .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", exact: "0.57.0"),
     ],
@@ -47,6 +49,7 @@ let package = Package(
         .target(
             name: "SharedUIs",
             dependencies: [
+                "SharedModels",
                 "AppMacros",
                 "LoggerClient",
             ],
@@ -54,7 +57,8 @@ let package = Package(
                 .process("Resources"),
             ],
             plugins: [
-                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"),
+                .plugin(name: "AssetGenPlugin")
             ]
         ),
         .target(
@@ -124,7 +128,11 @@ let package = Package(
             name: "TemplatesFeature",
             dependencies: [
                 "SharedUIs",
+                "SharedModels",
                 "LoggerClient",
+                "LocationKit",
+                "ColorPaletteFeature",
+                "NavigationBarFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ],
             plugins: [
@@ -149,6 +157,16 @@ let package = Package(
                 "NavigationBarFeature",
                 "CalendarKit",
                 "ThemeKit",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+            ]
+        ),
+        .target(
+            name: "ColorPaletteFeature",
+            dependencies: [
+                "LoggerClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ],
             plugins: [
@@ -187,6 +205,16 @@ let package = Package(
             ]
         ),
         .target(
+            name: "LocationKit",
+            dependencies: [
+                "LoggerClient",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+            ]
+        ),
+        .target(
             name: "UserDefaultsClient",
             dependencies: [
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
@@ -203,6 +231,10 @@ let package = Package(
             plugins: [
                 .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
             ]
+        ),
+        .plugin(
+            name: "AssetGenPlugin",
+            capability: .buildTool()
         ),
         .macro(
             name: "AppMacros",
