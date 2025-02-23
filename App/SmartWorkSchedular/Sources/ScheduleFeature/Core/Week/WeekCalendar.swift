@@ -38,7 +38,7 @@ public struct WeekCalendar {
             case .view(.daySelected(let day)):
                 logger.debug("view: daySelected: \(day.formatted(.dateIdentifier))")
                 
-                state.currentSelectedDay = day
+                state.$currentSelectedDay.withLock { $0 = day }
                 return .none
             }
         }

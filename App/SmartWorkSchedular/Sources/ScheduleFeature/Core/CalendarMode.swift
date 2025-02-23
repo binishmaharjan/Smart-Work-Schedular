@@ -37,7 +37,7 @@ public struct CalendarMode {
                 }
                 logger.debug("displayMode Changed to: \(displayMode)")
                 
-                state.displayMode = displayMode
+                state.$displayMode.withLock { $0 = displayMode }
                 return .run { _ in
                     await dismiss()
                 }

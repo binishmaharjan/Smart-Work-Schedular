@@ -14,13 +14,13 @@ extension ThemeKitClient {
     public static func live() -> ThemeKitClient {
         // MARK: Shared Properties
         @Shared(.appScheme) var appScheme = AppScheme.system
-        // MARK: Dependicies
+        // MARK: Dependenicies
         @Dependency(\.loggerClient) var logger
         
         return ThemeKitClient(
             updateAppScheme: { newAppScheme in
                 logger.debug("updateAppearance(to:) - \(newAppScheme)")
-                appScheme = newAppScheme
+                $appScheme.withLock { $0 = newAppScheme }
                 changeAppScheme(to: appScheme)
             },
             applyInitialAppScheme: {

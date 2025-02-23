@@ -71,7 +71,7 @@ extension CalendarKitClient {
             updateStartWeekdayOn: { weekday in
                 logger.debug("updateStartWeekdayOn(to:) - \(weekday)")
                 
-                startOfWeekday = weekday
+                $startOfWeekday.withLock { $0 = weekday }
                 gregorianCalendar.firstWeekday = weekday.index
             },
             weekDays: {
