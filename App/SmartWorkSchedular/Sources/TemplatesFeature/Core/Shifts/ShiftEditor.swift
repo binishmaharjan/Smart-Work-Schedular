@@ -30,6 +30,7 @@ public struct ShiftEditor {
         var startDate = HourAndMinute(hour: 9, minute: 0)
         var endDate = HourAndMinute(hour: 17, minute: 0)
         var breakTime = HourAndMinute.empty
+        var perHourWage: String = ""
         var notificationTime: NotificationTimeOption = .none
         var location: String = ""
         var memo: String = ""

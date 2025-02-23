@@ -34,6 +34,8 @@ public struct ShiftEditorView: View {
                 
                 Section {
                     breakTimeRow
+                    
+                    perHourWageRow
                 }
                 
                 Section {
@@ -195,6 +197,15 @@ extension ShiftEditorView {
                     .buttonStyle(.borderless)
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var perHourWageRow: some View {
+        HStack {
+            Text(#localized("Per Hour Wage"))
+            TextField(#localized("¥0"), text: $store.perHourWage, axis: .horizontal)
+                .multilineTextAlignment(.trailing)
         }
     }
     
