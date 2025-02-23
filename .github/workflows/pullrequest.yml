@@ -51,7 +51,7 @@ jobs:
 
       - name: Resolve Swift Packages
         run: |
-          xcodebuild -resolvePackageDependencies -workspace 'App/SmartWorkSchedular.xcworkspace'
+          xcodebuild -resolvePackageDependencies -workspace 'App/SmartWorkSchedular.xcworkspace' -scheme 'Development'
 
       - name: Clean project
         run: |
