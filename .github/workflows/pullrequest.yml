@@ -49,7 +49,11 @@ jobs:
           xcrun simctl list devices
           xcodebuild -workspace 'App/SmartWorkSchedular.xcworkspace' -scheme 'Development' -showdestinations
 
-      - name: Build the project
+      - name: Resolve Swift Packages
+        run: |
+          xcodebuild -resolvePackageDependencies -workspace 'App/SmartWorkSchedular.xcworkspace'
+
+      - name: Clean project
         run: |
           set -o pipefail && xcodebuild clean \
             -workspace 'App/SmartWorkSchedular.xcworkspace' \
