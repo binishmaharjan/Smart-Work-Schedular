@@ -19,7 +19,6 @@ jobs:
 
       - name: Cache Bundler dependencies
         uses: actions/cache@v3
-        id: cache_bundler
         with:
           path: vendor/bundle
           # Create cache from Gemfile.lock
@@ -36,7 +35,6 @@ jobs:
 
       - name: Swift Packages Cache
         uses: actions/cache@v3
-        id: cache_spm
         with:
           path: |
             Build/SourcePackages
