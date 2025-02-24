@@ -74,6 +74,7 @@ jobs:
 
       - name: Run SwiftLint separately
         run: |
+          cd App/SmartWorkSchedular
           swift run swiftlint || echo "SwiftLint failed but continuing..."
 
       - name: Build the project
