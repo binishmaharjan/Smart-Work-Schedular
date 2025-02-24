@@ -79,5 +79,7 @@ jobs:
           -scheme 'Development' \
           -configuration 'Debug' \
           -destination 'generic/platform=iOS' \
+          -derivedDataPath Build/DerivedData \
           CODE_SIGNING_ALLOWED=NO \
+          SWIFT_PACKAGE_PREFER_LOCAL=1 \
           -skipPackagePluginValidation
