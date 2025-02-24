@@ -59,7 +59,10 @@ jobs:
 
       - name: Resolve Swift Packages
         run: |
-          xcodebuild -resolvePackageDependencies -workspace 'App/SmartWorkSchedular.xcworkspace' -scheme 'Development'
+          xcodebuild -resolvePackageDependencies \
+          -workspace 'App/SmartWorkSchedular.xcworkspace' \
+          -scheme 'Development' \
+          -clonedSourcePackagesDirPath Build/SourcePackages
 
       - name: Clean project
         run: |
@@ -79,7 +82,6 @@ jobs:
           -scheme 'Development' \
           -configuration 'Debug' \
           -destination 'generic/platform=iOS' \
-          -derivedDataPath Build/DerivedData \
+          -clonedSourcePackagesDirPath Build/SourcePackages \
           CODE_SIGNING_ALLOWED=NO \
-          SWIFT_PACKAGE_PREFER_LOCAL=1 \
           -skipPackagePluginValidation
