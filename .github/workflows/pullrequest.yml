@@ -1,0 +1,87 @@
+name: Pull Request On Commit Push
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: macos-14
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        # Its better not to use latest xcode, because simulator might not be available
+        run: sudo xcode-select -switch /Applications/Xcode_16.1.app
+
+      - name: Cache Bundler dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          # Create cache from Gemfile.lock
+          key: ${{ runner.os }}-bundler-${{ hashFiles('**/Gemfile.lock') }}
+          # If cache is not found, use the latest cache
+          restore-keys: |
+            ${{ runner.os }}-bundler-
+
+      - name: Install Bundler and dependencies
+        run: |
+          gem install bundler
+          bundle config set --local path 'vendor/bundle'
+          bundle install --jobs 4 --retry 3
+
+      - name: Swift Packages Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            Build/SourcePackages
+            Build/Build/Products
+          key: ${{ runner.os }}-deps-v1-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-deps-v1-
+
+      - name: Debug Xcode Environment
+        run: |
+          echo "Xcode version:"
+          xcodebuild -version
+          echo "Available Schemes:"
+          xcodebuild -list -workspace 'App/SmartWorkSchedular.xcworkspace'
+          echo "Derived Data Contents:"
+          ls -la ~/Library/Developer/Xcode/DerivedData/
+          echo "Current Directory:"
+          pwd
+          echo "GitHub Runner User:"
+          whoami
+
+      - name: Resolve Swift Packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+          -workspace 'App/SmartWorkSchedular.xcworkspace' \
+          -scheme 'Development' \
+          -clonedSourcePackagesDirPath Build/SourcePackages
+
+      - name: Clean project
+        run: |
+          sudo xcode-select --reset
+          sudo xcodebuild -runFirstLaunch
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          set -o pipefail && xcodebuild clean \
+          -workspace 'App/SmartWorkSchedular.xcworkspace' \
+          -scheme 'Development' \
+          -destination 'generic/platform=iOS' \
+          CODE_SIGNING_ALLOWED=NO | xcbeautify
+
+      - name: Build the project
+        run: |
+          set -o pipefail && xcodebuild build \
+          -workspace 'App/SmartWorkSchedular.xcworkspace' \
+          -scheme 'Development' \
+          -configuration 'Debug' \
+          -destination 'generic/platform=iOS' \
+          -clonedSourcePackagesDirPath Build/SourcePackages \
+          CODE_SIGNING_ALLOWED=NO \
+          -skipPackagePluginValidation
