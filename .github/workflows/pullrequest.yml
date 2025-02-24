@@ -44,10 +44,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-deps-v1-
 
-      - name: Show available destinations
+      - name: Debug Xcode Environment
         run: |
-          xcrun simctl list devices
-          xcodebuild -workspace 'App/SmartWorkSchedular.xcworkspace' -scheme 'Development' -showdestinations
+          echo "Xcode version:"
+          xcodebuild -version
+          echo "Available Schemes:"
+          xcodebuild -list -workspace 'App/SmartWorkSchedular.xcworkspace'
+          echo "Derived Data Contents:"
+          ls -la ~/Library/Developer/Xcode/DerivedData/
+          echo "Current Directory:"
+          pwd
+          echo "GitHub Runner User:"
+          whoami
 
       - name: Resolve Swift Packages
         run: |
@@ -55,10 +63,14 @@ jobs:
 
       - name: Clean project
         run: |
+          sudo xcode-select --reset
+          sudo xcodebuild -runFirstLaunch
+          rm -rf ~/Library/Developer/Xcode/DerivedData
           set -o pipefail && xcodebuild clean \
-            -workspace 'App/SmartWorkSchedular.xcworkspace' \
-            -scheme 'Development' \
-            CODE_SIGNING_ALLOWED=NO | xcbeautify
+          -workspace 'App/SmartWorkSchedular.xcworkspace' \
+          -scheme 'Development' \
+          -destination 'generic/platform=iOS' \
+          CODE_SIGNING_ALLOWED=NO | xcbeautify
 
       - name: Run SwiftLint separately
         run: |
@@ -67,8 +79,8 @@ jobs:
       - name: Build the project
         run: |
           set -o pipefail && xcodebuild build \
-            -workspace 'App/SmartWorkSchedular.xcworkspace' \
-            -scheme 'Development' \
-            -destination 'generic/platform=iOS' \
-            CODE_SIGNING_ALLOWED=NO \
-            -skipPackagePluginValidation | xcbeautify
+          -workspace 'App/SmartWorkSchedular.xcworkspace' \
+          -scheme 'Development' \
+          -destination 'generic/platform=iOS' \
+          CODE_SIGNING_ALLOWED=NO \
+          -skipPackagePluginValidation | xcbeautify
