@@ -72,11 +72,6 @@ jobs:
           -destination 'generic/platform=iOS' \
           CODE_SIGNING_ALLOWED=NO | xcbeautify
 
-      - name: Run SwiftLint separately
-        run: |
-          cd App/SmartWorkSchedular
-          swift run swiftlint || echo "SwiftLint failed but continuing..."
-
       - name: Build the project
         run: |
           set -o pipefail && xcodebuild build \
