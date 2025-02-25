@@ -41,10 +41,10 @@ let package = Package(
                 "SharedUIs",
                 "ThemeKit",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
             ]
-//            plugins: [
-//                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
-//            ]
         ),
         .target(
             name: "SharedUIs",
