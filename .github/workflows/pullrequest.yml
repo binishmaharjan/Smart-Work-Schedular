@@ -64,6 +64,9 @@ jobs:
           -scheme 'Development' \
           -clonedSourcePackagesDirPath Build/SourcePackages
 
+      - name: Set IDESkipPackagePluginFingerprintValidatation
+        run: defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
+
       - name: Clean project
         run: |
           sudo xcode-select --reset
