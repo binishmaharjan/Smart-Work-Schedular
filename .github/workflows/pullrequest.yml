@@ -44,47 +44,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-deps-v1-
 
-      - name: Debug Xcode Environment
-        run: |
-          echo "Xcode version:"
-          xcodebuild -version
-          echo "Available Schemes:"
-          xcodebuild -list -workspace 'App/SmartWorkSchedular.xcworkspace'
-          echo "Derived Data Contents:"
-          ls -la ~/Library/Developer/Xcode/DerivedData/
-          echo "Current Directory:"
-          pwd
-          echo "GitHub Runner User:"
-          whoami
-
-      - name: Resolve Swift Packages
-        run: |
-          xcodebuild -resolvePackageDependencies \
-          -workspace 'App/SmartWorkSchedular.xcworkspace' \
-          -scheme 'Development' \
-          -clonedSourcePackagesDirPath Build/SourcePackages
-
       - name: Set IDESkipPackagePluginFingerprintValidatation
         run: defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
 
-      - name: Clean project
-        run: |
-          sudo xcode-select --reset
-          sudo xcodebuild -runFirstLaunch
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-          set -o pipefail && xcodebuild clean \
-          -workspace 'App/SmartWorkSchedular.xcworkspace' \
-          -scheme 'Development' \
-          -destination 'generic/platform=iOS' \
-          CODE_SIGNING_ALLOWED=NO | xcbeautify
-
       - name: Build the project
         run: |
-          set -o pipefail && xcodebuild build \
+          set -o pipefail && xcodebuild clean build \
           -workspace 'App/SmartWorkSchedular.xcworkspace' \
           -scheme 'Development' \
           -configuration 'Debug' \
           -destination 'generic/platform=iOS' \
-          -clonedSourcePackagesDirPath Build/SourcePackages \
           CODE_SIGNING_ALLOWED=NO \
-          -skipPackagePluginValidation
